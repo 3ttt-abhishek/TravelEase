@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Booking - TravelEase</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700;800&family=Inter:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif
+        }
+
+        body {
+            background: #f4f6fb;
+        }
+
+        .top {
+            text-align: center;
+            padding: 22px 18px 10px;
+            background: #f4f6fb;
+            border-bottom: 1px solid #eee
+        }
+
+        .top h1 {
+            font-size: 53px;
+            font-weight: 800
+        }
+
+        .top h1 b:first-child {
+            color: #004AAD
+        }
+
+        .top h1 b:last-child {
+            background: linear-gradient(90deg, #FF9800, #FF5722);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent
+        }
+
+        .steps {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 14px
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 15px;
+            font-weight: 700;
+            color: #94a3b8
+        }
+
+        .step span {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            border: 2px solid #e2e8f0;
+            background: #fff
+        }
+
+        .step.active {
+            color: #004AAD
+        }
+
+        .step.active span {
+            background: #004AAD;
+            color: #fff;
+            border-color: #004AAD
+        }
+
+        .line {
+            width: 35px;
+            height: 2px;
+            background: #e2e8f0
+        }
+
+        .main {
+            width: 95%;
+            max-width: 1150px;
+            margin: 18px auto 50px;
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 20px;
+            align-items: start
+        }
+
+        .hotel-card {
+            background: #fff;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 2px solid #eee;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+            display: flex;
+            flex-direction: column
+        }
+
+        .card-img {
+            width: 100%;
+            height: 230px;
+            overflow: hidden;
+            position: relative
+        }
+
+        .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 700
+        }
+
+        .card-rating {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #fff;
+            color: #ff9800;
+            padding: 8px 14px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 700
+        }
+
+        .card-body {
+            padding: 20px
+        }
+
+        .hotel-name {
+            font-size: 21px;
+            font-weight: 700;
+            color: #0d6efd;
+            margin-bottom: 6px
+        }
+
+        .hotel-loc {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 10px
+        }
+
+        .hotel-features {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 14px
+        }
+
+        .feat {
+            font-size: 11px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600
+        }
+
+        .feat.view {
+            background: #e0f2fe;
+            color: #0284c7
+        }
+
+        .feat.pool {
+            background: #dcfce7;
+            color: #15803d
+        }
+
+        .feat.breakfast {
+            background: #fef3c7;
+            color: #d97706
+        }
+
+        .rent-row {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 14px
+        }
+
+        .rent-row strong {
+            font-size: 26px;
+            font-weight: 800;
+            color: #ff5722
+        }
+
+        .visible-data,
+        .extra-data {
+            display: flex;
+            flex-direction: column;
+            gap: 8px
+        }
+
+        .extra-data {
+            display: none !important
+        }
+
+        .extra-data.open {
+            display: flex !important
+        }
+
+        .detail-mini-card {
+            padding: 10px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            display: flex;
+            gap: 8px;
+            border-left: 4px solid #0d6efd;
+            background: #F8FAFD
+        }
+
+        .mini-green {
+            border-left-color: #16a34a;
+            background: #f0fdf4
+        }
+
+        .mini-blue {
+            border-left-color: #0d6efd;
+            background: #eff6ff
+        }
+
+        .mini-orange {
+            border-left-color: #ff9800;
+            background: #fff7ed
+        }
+
+        .btn-row {
+            display: flex;
+            justify-content: center;
+            margin-top: 14px
+        }
+
+        .view-btn {
+            padding: 12px 28px;
+            border: 0;
+            background: linear-gradient(135deg, #FF9800, #FF5722);
+            color: #fff;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer
+        }
+
+        .right {
+            background: #fff;
+            border-radius: 18px;
+            padding: 22px;
+            border: 1px solid #e8ecf2;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .06)
+        }
+
+        .sec {
+            font-size: 11px;
+            font-weight: 800;
+            color: #004AAD;
+            margin: 18px 0 8px;
+            background: #eef4ff;
+            padding: 6px 10px;
+            border-radius: 6px
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px
+        }
+
+        .right label {
+            font-size: 10px;
+            font-weight: 700;
+            color: #475569;
+            margin-bottom: 5px;
+            display: block;
+            text-transform: uppercase
+        }
+
+        .right input {
+            width: 100%;
+            padding: 11px 12px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            outline: none;
+            font-size: 13px;
+            font-family: 'Inter'
+        }
+
+        .mob {
+            display: flex
+        }
+
+        .mob span {
+            padding: 11px 10px;
+            border: 1.5px solid #e2e8f0;
+            border-right: 0;
+            border-radius: 10px 0 0 10px;
+            background: #f8fafc;
+            font-size: 13px;
+            font-weight: 700
+        }
+
+        .mob input {
+            border-radius: 0 10px 10px 0
+        }
+
+        .counter {
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 9px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f8fafc
+        }
+
+        .cbtn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid #e2e8f0;
+            background: #fff;
+            color: #004AAD;
+            font-weight: 800;
+            cursor: pointer
+        }
+
+        .summary {
+            background: #f8fafc;
+            border: 1px dashed #cbd5e1;
+            border-radius: 12px;
+            padding: 12px;
+            margin-top: 12px
+        }
+
+        .srow {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-bottom: 5px;
+            color: #334155;
+            font-family: 'Inter'
+        }
+
+        .srow.total {
+            font-weight: 800;
+            color: #0f172a;
+            font-size: 15px;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 8px;
+            margin-top: 6px
+        }
+
+        .live {
+            background: linear-gradient(135deg, #004AAD, #1d6fff);
+            color: #fff;
+            padding: 12px 16px;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 12px
+        }
+
+        .paybtn {
+            width: 100%;
+            margin-top: 14px;
+            padding: 14px;
+            border: 0;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            color: #fff;
+            font-weight: 800;
+            cursor: pointer
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(10, 22, 50, .7);
+            backdrop-filter: blur(10px);
+            display: none;
+            z-index: 9999;
+            padding: 20px;
+            overflow-y: auto
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start
+        }
+
+        .box {
+            background: #fff;
+            width: 100%;
+            max-width: 520px;
+            border-radius: 24px;
+            position: relative;
+            margin: 20px auto;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, .3)
+        }
+
+        .box-header {
+            background: linear-gradient(135deg, #004AAD, #1d6fff);
+            padding: 20px;
+            text-align: center;
+            color: #fff;
+            position: relative;
+            border-radius: 24px 24px 0 0
+        }
+
+        .close {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            width: 32px;
+            height: 32px;
+            border: 0;
+            background: rgba(255, 255, 255, .2);
+            color: #fff;
+            border-radius: 50%;
+            cursor: pointer
+        }
+
+        .box-body {
+            padding: 22px
+        }
+
+        .ptotal {
+            background: linear-gradient(135deg, #eef4ff, #fff7ed);
+            border: 1px solid #dbe7ff;
+            padding: 14px 16px;
+            border-radius: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px
+        }
+
+        .ptotal strong {
+            color: #ff6a00;
+            font-size: 24px
+        }
+
+        .method {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 14px;
+            background: #fff;
+            cursor: pointer;
+            margin-bottom: 12px;
+            text-align: left
+        }
+
+        .method.active {
+            border-color: #16a34a;
+            background: #f0fdf4
+        }
+
+        .badge {
+            margin-left: auto;
+            background: #16a34a;
+            color: #fff;
+            font-size: 10px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 700
+        }
+
+        .upi-section {
+            border: 2px solid #e2e8f0;
+            padding: 16px;
+            border-radius: 14px;
+            margin-bottom: 16px;
+            background: #fff
+        }
+
+        .bar {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 12px 0
+        }
+
+        .fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #004AAD, #1d6fff);
+            transition: width.5s
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        @media(max-width:900px) {
+            .main {
+                grid-template-columns: 1fr
+            }
+
+            .row {
+                grid-template-columns: 1fr
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="top">
+        <h1><b>Book</b> <b>Your Hotel</b> 🛎️</h1>
+        <div class="steps">
+            <div class="step active"><span>1</span> Guest</div>
+            <div class="line"></div>
+            <div class="step"><span>2</span> Payment</div>
+            <div class="line"></div>
+            <div class="step"><span>3</span> Confirm</div>
+        </div>
+    </div>
+    <div class="main">
+        <div class="hotel-card" id="leftCard">
+            <div class="card-img"><img id="leftImg" src=""><span class="card-badge" id="leftBadge"></span><span
+                    class="card-rating">⭐ 4.8</span></div>
+            <div class="card-body">
+                <div class="hotel-name" id="leftName"></div>
+                <div class="hotel-loc" id="leftLoc"></div>
+                <div class="hotel-features" id="leftFeatures"></div>
+                <div class="rent-row">
+                    <div><strong id="leftPrice">₹0</strong><span> / night</span></div>
+                </div>
+                <div class="visible-data" id="leftVisible"></div>
+                <div class="extra-data" id="extraBox"></div>
+                <div class="btn-row"><button type="button" class="view-btn" id="viewBtn" onclick="toggleData()">View
+                        Itinerary ⬇️</button></div>
+            </div>
+        </div>
+        <div class="right">
+            <h2>Hotel Booking Details</h2>
+            <p class="sub">2 Adult included - Card price = Total</p>
+            <form id="bookingForm">
+                <div class="sec">👤 Guest Details</div>
+                <div class="row">
+                    <div><label>Full Name *</label><input id="fullName" required></div>
+                    <div><label>Mobile *</label>
+                        <div class="mob"><span>+91</span><input id="mobile" required maxlength="10"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div><label>Email *</label><input id="email" type="email" required></div>
+                    <div><label>City *</label><input id="city" required></div>
+                </div>
+                <div class="sec">👥 Adults / Children / Rooms / Nights - Auto Price</div>
+                <div class="row">
+                    <div class="counter">
+                        <div><b>Adults</b></div>
+                        <div><button type="button" class="cbtn" onclick="chg('guest',-1)">−</button><span
+                                id="guestCount" style="margin:0 8px;font-weight:800">2</span><button type="button"
+                                class="cbtn" onclick="chg('guest',1)">+</button></div>
+                    </div>
+                    <div class="counter">
+                        <div><b>Children</b></div>
+                        <div><button type="button" class="cbtn" onclick="chg('child',-1)">−</button><span
+                                id="childCount" style="margin:0 8px;font-weight:800">0</span><button type="button"
+                                class="cbtn" onclick="chg('child',1)">+</button></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="counter">
+                        <div><b>Rooms</b></div>
+                        <div><button type="button" class="cbtn" onclick="chg('room',-1)">−</button><span id="roomCount"
+                                style="margin:0 8px;font-weight:800">1</span><button type="button" class="cbtn"
+                                onclick="chg('room',1)">+</button></div>
+                    </div>
+                    <div
+                        style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center">
+                        <span style="font-size:11px;font-weight:700">Total Nights</span><strong id="nightsCount"
+                            style="color:#15803d">1 Night</strong></div>
+                </div>
+                <div class="sec">📅 Stay Dates - DD-MM-YY</div>
+                <div class="row">
+                    <div><label>Check-in *</label><input type="text" id="checkin_display" placeholder="DD-MM-YY"
+                            readonly required style="background:#fff;cursor:pointer"><input type="date" id="checkin"
+                            style="display:none" required></div>
+                    <div><label>Check-out *</label><input type="text" id="checkout_display" placeholder="DD-MM-YY"
+                            readonly required style="background:#fff;cursor:pointer"><input type="date" id="checkout"
+                            style="display:none" required></div>
+                </div>
+                <div class="summary">
+                    <div class="srow"><span>Base (<span id="s_nights">1</span>N × <span
+                                id="s_rooms">1</span>R)</span><span id="s_base">₹0</span></div>
+                    <div class="srow total"><span>Total Payable (Card Price)</span><span id="s_total">₹0</span></div>
+                </div>
+                <div class="live">
+                    <div>Total <strong id="liveAmount">₹0</strong>
+                        <div style="font-size:9px" id="liveBreakup"></div>
+                    </div>
+                    <div id="liveTrav" style="font-size:11px;text-align:right"></div>
+                </div>
+                <button class="paybtn" type="submit">Continue to Payment</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="paymentModal">
+        <div class="box">
+            <div class="box-header"><button class="close" onclick="closeModal()">✕</button>
+                <h2>Secure Payment</h2>
+                <p>100% Safe & Encrypted</p>
+            </div>
+            <div class="box-body">
+                <div id="paymentSelection">
+                    <div class="ptotal"><span>You Pay</span><strong id="modalTotal">₹0</strong></div>
+                    <button class="method active" onclick="openUPIOptions()">
+                        <div>💳</div>
+                        <div><b>UPI Payment</b><br><small style="color:#64748b">GPay, PhonePe, Paytm</small></div><span
+                            class="badge">RECOMMENDED</span>
+                    </button>
+                    <button class="method" onclick="showWorkProgress('Credit / Debit Card')">
+                        <div>💳</div>
+                        <div><b>Credit / Debit Card</b></div><span style="margin-left:auto">›</span>
+                    </button>
+                    <button class="method" onclick="showWorkProgress('Net Banking')">
+                        <div>🏦</div>
+                        <div><b>Net Banking</b></div><span style="margin-left:auto">›</span>
+                    </button>
+                    <button class="method" onclick="showWorkProgress('Wallet')">
+                        <div>👛</div>
+                        <div><b>Wallets</b></div><span style="margin-left:auto">›</span>
+                    </button>
+                </div>
+                <div id="upiOptions" style="display:none">
+                    <div class="ptotal"><span>Amount</span><strong id="upiAmount1">₹0</strong></div>
+                    <div class="upi-section"><b>UPI ID Se Pay</b><input id="userUpi"
+                            placeholder="Enter UPI ID (e.g. 9876543210@paytm)"
+                            style="width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;margin-top:10px"><button
+                            onclick="verifyUpi()"
+                            style="width:100%;margin-top:10px;padding:13px;background:#004AAD;color:#fff;border:0;border-radius:12px;font-weight:700">Verify
+                            & Pay →</button></div>
+
+                    <div class="upi-section"><b>🔳 QR Code Se Pay</b>
+                        <p style="font-size:11px;color:#64748b;margin-top:4px">Scan karke payment karo</p>
+                        <button id="genQrBtn" onclick="generateQR()"
+                            style="width:100%;margin-top:10px;padding:13px;background:#16a34a;color:#fff;border:0;border-radius:12px;font-weight:700">Generate
+                            QR Code</button>
+                        <div id="qrResult" style="display:none;text-align:center;margin-top:12px">
+                            <img id="qrImg"
+                                style="width:230px;height:230px;border:1px solid #eee;padding:10px;border-radius:16px;background:#fff;margin:0 auto;display:block">
+                            <!-- YAHAN SE TEXT HATA DIYA - REAL WEBSITE JAISA -->
+                            <button onclick="confirmQrPayment()"
+                                style="width:100%;margin-top:14px;padding:13px;background:#16a34a;color:#fff;border:0;border-radius:12px;font-weight:700">✅
+                                I Have Paid - Confirm</button>
+                        </div>
+                    </div>
+                    <button onclick="backToMethods()"
+                        style="width:100%;margin-top:12px;padding:10px;border:1px solid #e2e8f0;background:#fff;border-radius:10px">←
+                        Back to Methods</button>
+                </div>
+                <div id="workProgressBox" style="display:none;text-align:center;padding:20px">
+                    <div style="font-size:50px">🚧</div>
+                    <h3 style="color:#d97706;margin-top:10px">Work in Progress!</h3>
+                    <p id="workMsg" style="font-size:13px;color:#475569;margin-top:6px"></p>
+                    <div
+                        style="background:#fff7ed;border:1px solid #ffedd5;padding:10px;border-radius:10px;margin-top:12px;font-size:11px;color:#92400e">
+                        ⚠️ <span id="workMethodName"></span> payment abhi live nahi hai. Please UPI se payment kare.
+                    </div><button onclick="openUPIOptions()"
+                        style="width:100%;margin-top:14px;padding:13px;background:linear-gradient(135deg,#ff9800,#ff5722);color:#fff;border:0;border-radius:12px;font-weight:800">Pay
+                        with UPI →</button><button onclick="backToMethods()"
+                        style="width:100%;margin-top:8px;padding:10px;border:1px solid #e2e8f0;background:#fff;border-radius:10px">←
+                        Back</button>
+                </div>
+                <div id="processingBox" style="display:none;text-align:center;padding:30px 20px">
+                    <div
+                        style="width:60px;height:60px;border:4px solid #e2e8f0;border-top-color:#004AAD;border-radius:50%;margin:0 auto 16px;animation:spin.8s linear infinite">
+                    </div>
+                    <h3>Payment Verifying...</h3>
+                    <p style="font-size:12px;color:#64748b">Please wait</p>
+                    <div class="bar">
+                        <div class="fill" id="progFill"></div>
+                    </div>
+                </div>
+                <div id="ticketBox" style="display:none">
+                    <div id="ticket" style="border:2px dashed #004AAD;border-radius:16px;padding:18px;background:#fff">
+                        <div
+                            style="text-align:center;border-bottom:2px dashed #004AAD;padding-bottom:12px;margin-bottom:12px">
+                            <h2 style="color:#004AAD">TravelEase Hotels</h2>
+                            <p style="color:#16a34a;font-weight:800;font-size:14px">✓ PAYMENT VERIFIED</p>
+                            <h3 id="t_place" style="margin-top:6px"></h3>
+                            <p style="font-size:11px;color:#64748b">Booking ID: <strong id="t_id"
+                                    style="color:#0f172a"></strong> | Date: <span id="t_date"></span></p>
+                        </div>
+                        <div style="text-align:left;font-size:12px;line-height:22px;font-family:'Inter'"><b
+                                style="color:#004AAD;font-size:13px">🏨 HOTEL FULL DETAILS</b><br><b>Hotel Name:</b>
+                            <span id="t_hotel"></span><br><b>Location:</b> <span id="t_loc"></span><br><b>Badge:</b>
+                            <span id="t_badge"></span><br><b>Room Type:</b> <span id="t_roomType"></span><br><b>Price
+                                Per Night:</b> <span id="t_priceNight"
+                                style="color:#ff5722;font-weight:800"></span><br><b>Features:</b> <span
+                                id="t_features"></span><br><b>Amenities:</b><br>
+                            <div id="t_amenities"
+                                style="background:#f8fafc;padding:8px 10px;border-radius:8px;margin:4px 0;font-size:11px;color:#475569">
+                            </div><b>Check-in:</b> <span id="t_checkin"></span> | <b>Check-out:</b> <span
+                                id="t_checkout"></span><br><b>Total Nights:</b> <span id="t_nights"></span> | <b>Total
+                                Rooms:</b> <span id="t_rooms"></span><br><b>Adults in Booking:</b> <span
+                                id="t_adults_full"></span> | <b>Children:</b> <span id="t_children_full"></span><br>
+                            <hr style="margin:12px 0;border:0;border-top:1px dashed #e2e8f0"><b
+                                style="color:#004AAD;font-size:13px">👤 USER FULL DETAILS</b><br><b>Full Name:</b> <span
+                                id="t_name"></span><br><b>Mobile:</b> +91 <span id="t_mobile"></span><br><b>Email:</b>
+                            <span id="t_email"></span><br><b>City:</b> <span id="t_city"></span><br><b>Total Guests:</b>
+                            <span id="t_trav"></span><br><b>Payment Method:</b> <span
+                                id="t_payMethod"></span><br><b>Payment Status:</b> <span
+                                style="color:#16a34a;font-weight:800">SUCCESS ✓</span><br>
+                        </div>
+                        <div
+                            style="background:linear-gradient(135deg,#eef4ff,#fff7ed);border:1px solid #dbe7ff;padding:14px;border-radius:12px;margin-top:14px;display:flex;justify-content:space-between;align-items:center">
+                            <span style="font-weight:700">Total Paid (Card Price)</span><strong id="t_amount"
+                                style="color:#ff6a00;font-size:20px"></strong></div>
+                        <p style="font-size:9px;color:#94a3b8;text-align:center;margin-top:10px">This is computer
+                            generated receipt. Please carry valid ID proof at hotel.</p><button onclick="window.print()"
+                            style="width:100%;margin-top:14px;padding:14px;background:#004AAD;color:#fff;border:0;border-radius:12px;font-weight:800">🖨️
+                            Print Proof / Save PDF</button><button onclick="location.reload()"
+                            style="width:100%;margin-top:8px;padding:10px;border:1px solid #e2e8f0;background:#fff;border-radius:10px">New
+                            Booking</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const MY_UPI = "9889576557@upi";
+        const qp = new URLSearchParams(location.search);
+        let hotelName = qp.get('hotel') || "The Oberoi Cecil";
+        let rawPrice = (qp.get('price') || "0").toString().replace(/[₹,\s]/g, '');
+        let hotelPrice = parseInt(rawPrice) || 0;
+        let hotelLocation = qp.get('location') || "Himachal", hotelImg = qp.get('img') || "", hotelBadge = qp.get('badge') || "Himachal • 4.9★", hotelRoomType = qp.get('room') || "Deluxe Room", hotelFeatures = qp.get('features') || "Sea View|Private Pool|Breakfast", hotelAmenities = qp.get('amenities') || "1882 Heritage + Mall Road View|High Tea + Toy Train Experience|Heated Pool + Spa|Free Breakfast + WiFi";
+        let guests = 2, childs = 0, rooms = 1, nights = 1, total = 0, payMethod = "UPI";
+
+        function toggleData() { const box = document.getElementById('extraBox'); const btn = document.getElementById('viewBtn'); box.classList.toggle('open'); btn.textContent = box.classList.contains('open') ? "Hide Itinerary ⬆️" : "View Itinerary ⬇️"; }
+        function fmt(n) { return "₹" + Math.round(n).toLocaleString("en-IN") }
+        function formatDDMMYY(dateInput) { if (!dateInput) return ""; let d = new Date(dateInput); if (isNaN(d.getTime())) { let parts = dateInput.split('-'); if (parts.length === 3) { return `${parts[2].slice(0, 2)}-${parts[1]}-${parts[0].slice(-2)}`; } return dateInput; } let dd = String(d.getDate()).padStart(2, '0'); let mm = String(d.getMonth() + 1).padStart(2, '0'); let yy = String(d.getFullYear()).slice(-2); return `${dd}-${mm}-${yy}`; }
+        function renderLeft() {
+            document.getElementById('leftName').textContent = hotelName;
+            document.getElementById('leftLoc').textContent = "📍 " + hotelLocation;
+            document.getElementById('leftBadge').textContent = hotelBadge;
+            document.getElementById('leftPrice').textContent = hotelPrice > 0 ? fmt(hotelPrice) : "₹0";
+            let img = hotelImg; try { img = decodeURIComponent(img); } catch (e) { }
+            document.getElementById('leftImg').src = img || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600';
+            let featBox = document.getElementById('leftFeatures'); featBox.innerHTML = "";
+            hotelFeatures.split('|').filter(Boolean).forEach((f, i) => { let s = document.createElement('span'); s.className = 'feat ' + (i == 0 ? 'view' : i == 1 ? 'pool' : 'breakfast'); s.textContent = f; featBox.appendChild(s); });
+            let vis = document.getElementById('leftVisible'), extra = document.getElementById('extraBox'); vis.innerHTML = ""; extra.innerHTML = ""; extra.classList.remove('open');
+            let allAmens = hotelAmenities.split('|').map(s => s.trim()).filter(Boolean);
+            allAmens.forEach((it, i) => { let d = document.createElement('div'); d.className = 'detail-mini-card ' + (i % 3 == 0 ? 'mini-green' : i % 3 == 1 ? 'mini-blue' : 'mini-orange'); d.innerHTML = "✓ " + it; if (i < 3) vis.appendChild(d); else extra.appendChild(d); });
+        }
+        function calcNights() { let ci = checkin.value, co = checkout.value; if (ci && co) { let d1 = new Date(ci), d2 = new Date(co); let diff = Math.ceil((d2 - d1) / 86400000); nights = diff > 0 ? diff : 1; nightsCount.textContent = nights + " Night" + (nights > 1 ? 's' : ''); } else { nights = 1; nightsCount.textContent = "1 Night"; } }
+        function chg(t, v) { if (t == 'guest') { guests += v; if (guests < 1) guests = 1; guestCount.textContent = guests; } else if (t == 'child') { childs += v; if (childs < 0) childs = 0; childCount.textContent = childs; } else { rooms += v; if (rooms < 1) rooms = 1; roomCount.textContent = rooms; } update(); }
+        function update() {
+            calcNights();
+            if (hotelPrice === 0) { s_base.textContent = "₹0"; s_total.textContent = "₹0"; liveAmount.textContent = "₹0"; modalTotal.textContent = "₹0"; upiAmount1.textContent = "₹0"; return; }
+            let base = hotelPrice * rooms * nights; total = base;
+            s_nights.textContent = nights; s_rooms.textContent = rooms; s_base.textContent = fmt(base); s_total.textContent = fmt(total);
+            liveAmount.textContent = fmt(total); modalTotal.textContent = fmt(total); upiAmount1.textContent = fmt(total);
+            liveBreakup.textContent = fmt(hotelPrice) + " × " + nights + "N × " + rooms + "R = Card Price Only";
+            liveTrav.textContent = guests + " Adult, " + childs + " Child • " + rooms + " Room";
+        }
+        bookingForm.addEventListener('submit', e => { e.preventDefault(); if (!checkin.value || !checkout.value) { alert("Check-in aur Check-out date select karo"); return; } paymentModal.classList.add('active'); update(); });
+        function closeModal() { paymentModal.classList.remove('active'); }
+        function hideAll() { ['paymentSelection', 'upiOptions', 'workProgressBox', 'processingBox', 'ticketBox'].forEach(id => { let el = document.getElementById(id); if (el) el.style.display = 'none'; }); }
+        function backToMethods() { hideAll(); paymentSelection.style.display = 'block'; }
+        function openUPIOptions() { payMethod = "UPI"; hideAll(); upiOptions.style.display = 'block'; }
+        function showWorkProgress(m) { payMethod = m; hideAll(); workProgressBox.style.display = 'block'; document.getElementById('workMethodName').textContent = m; document.getElementById('workMsg').textContent = m + " is currently under maintenance. We are working hard to bring it live soon!"; }
+
+        // REAL WEBSITE JAISA QR - NAAM / UPI ID TEXT NAHI DIKHEGA
+        function generateQR() {
+            if (!total) return alert("Price nahi hai");
+            let link = `upi://pay?pa=${MY_UPI}&am=${total}&cu=INR&tn=${encodeURIComponent(hotelName)}`;
+            qrImg.src = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(link);
+            qrResult.style.display = 'block';
+            genQrBtn.style.display = 'none';
+        }
+
+        function verifyUpi() { if (!userUpi.value.includes('@')) { alert("Sahi UPI ID dalo - jaise 9876543210@paytm"); return; } payMethod = "UPI ID: " + userUpi.value; startProgress(); }
+        function confirmQrPayment() { payMethod = "UPI QR Code"; startProgress(); }
+        function startProgress() { hideAll(); processingBox.style.display = 'block'; let s = 0; let iv = setInterval(() => { s++; progFill.style.width = (s * 33) + "%"; if (s == 3) { clearInterval(iv); setTimeout(showTicket, 800); } }, 1000); }
+        function showTicket() {
+            hideAll(); ticketBox.style.display = 'block';
+            t_place.textContent = hotelName;
+            t_hotel.textContent = hotelName; t_loc.textContent = hotelLocation; t_badge.textContent = hotelBadge; t_roomType.textContent = hotelRoomType;
+            t_priceNight.textContent = fmt(hotelPrice) + " / night"; t_features.textContent = hotelFeatures.replace(/\|/g, ', ');
+            t_amenities.innerHTML = "• " + hotelAmenities.replace(/\|/g, '<br>• ');
+            t_date.textContent = formatDDMMYY(new Date());
+            t_checkin.textContent = formatDDMMYY(checkin.value);
+            t_checkout.textContent = formatDDMMYY(checkout.value);
+            t_nights.textContent = nights + " Nights"; t_rooms.textContent = rooms + " Room(s)";
+            t_adults_full.textContent = guests + " Adults"; t_children_full.textContent = childs + " Children";
+            t_name.textContent = fullName.value; t_mobile.textContent = mobile.value; t_email.textContent = email.value; t_city.textContent = city.value;
+            t_trav.textContent = guests + " Adults, " + childs + " Children, " + rooms + " Rooms";
+            t_payMethod.textContent = payMethod;
+            t_amount.textContent = fmt(total);
+            t_id.textContent = "HTL" + Date.now().toString().slice(-6);
+        }
+        document.addEventListener('DOMContentLoaded', () => {
+            renderLeft();
+            let today = new Date().toISOString().split('T')[0];
+            checkin.min = today; checkout.min = today;
+            checkin.value = ""; checkout.value = "";
+            checkin_display.value = ""; checkout_display.value = "";
+            function updateDisplay() { checkin_display.value = formatDDMMYY(checkin.value); checkout_display.value = formatDDMMYY(checkout.value); }
+            checkin_display.addEventListener('click', () => { try { checkin.showPicker() } catch (e) { checkin.click() } });
+            checkout_display.addEventListener('click', () => { try { checkout.showPicker() } catch (e) { checkout.click() } });
+            checkin.addEventListener('change', () => { checkout.min = checkin.value; updateDisplay(); update(); });
+            checkout.addEventListener('change', () => { updateDisplay(); update(); });
+            update();
+        });
+    </script>
+</body>
+
+</html>

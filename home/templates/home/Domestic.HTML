@@ -1,0 +1,3353 @@
+{% extends 'home/Master.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TravelEase - Domestic Packages</title>
+
+  {% load static %}
+
+  <!-- GOOGLE FONT - POPPINS -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: #f4f6fb;
+    }
+
+    .hero {
+      padding: 120px 0px 20px;
+      text-align: center;
+      background: #f4f6fb;
+    }
+
+    .hero h1 {
+      font-size: 52px;
+      font-weight: 800;
+      color: #0d47a1;
+      margin-bottom: 15px
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, #ff9800, #ff5722);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent
+    }
+
+    .hero p {
+      font-size: 17px;
+      color: #666;
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero p.line1 {
+      display: block;
+      font-weight: 600;
+      font-size: 20px;
+    }
+
+    .hero p.line2 {
+      display: block;
+      font-weight: 500;
+      font-size: 16px;
+      color: #888;
+      margin-top: 5px;
+    }
+
+    .container {
+      width: 95%;
+      max-width: 1400px;
+      margin: 40px auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      align-items: start;
+      grid-auto-rows: max-content;
+    }
+
+    .card {
+      background: white;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 2px solid #eee;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+      display: flex;
+      flex-direction: column;
+      height: 750px;
+      min-height: 750px;
+      position: relative;
+      transition: height 0.35s ease, transform .45s ease, box-shadow .45s ease;
+    }
+
+    .card.expanded {
+      height: auto !important;
+    }
+
+    .card:hover {
+      transform: translateY(-12px);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, .3);
+    }
+
+    .card-img {
+      width: 100%;
+      height: 240px;
+      flex-shrink: 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: .5s;
+    }
+
+    .card:hover .card-img img {
+      transform: scale(1.10)
+    }
+
+    .future-tag {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      z-index: 3;
+      background: linear-gradient(135deg, #ff9800, #ff5722);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 700
+    }
+
+    .rating-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      z-index: 3;
+      background: rgba(255, 255, 255, .96);
+      color: #ff9800;
+      padding: 8px 14px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 700
+    }
+
+    .card-content {
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .card-content h3 {
+      font-size: 25px;
+      font-weight: 700;
+      line-height: 1.3;
+      min-height: 65px;
+      height: auto;
+      overflow: hidden;
+      color: blue;
+    }
+
+    .days {
+      margin-top: 5px;
+      display: inline-flex;
+      gap: 6px;
+      width: max-content;
+      padding: 7px 14px;
+      border-radius: 25px;
+      background: linear-gradient(135deg, #ff9800, #ff5722);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 20px
+    }
+
+    .price {
+      font-size: 32px;
+      font-weight: 800;
+      color: #ff5722;
+      margin-bottom: 18px
+    }
+
+    .price span {
+      font-size: 14px;
+      color: #666;
+      font-weight: 500
+    }
+
+    .itinerary {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .itinerary li {
+      position: relative;
+      padding: 12px 15px 12px 42px;
+      margin-bottom: 10px;
+      background: #F8FAFD;
+      border-radius: 12px;
+      border-left: 4px solid #0d6efd;
+      color: #444;
+      font-size: 14px;
+      font-weight: 500;
+      transition: .35s
+    }
+
+    .itinerary li:hover {
+      background: #EEF5FF;
+      transform: translateX(6px);
+      border-left: 4px solid #ff9800
+    }
+
+    .itinerary li::before {
+      content: "📍";
+      position: absolute;
+      left: 15px;
+      top: 11px;
+      font-size: 18px
+    }
+
+    .extra-day {
+      display: none
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: auto;
+      padding-top: 20px;
+      flex-shrink: 0;
+    }
+
+    .btn,
+    .btn-book {
+      flex: 1;
+      padding: 15px;
+      border: none;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .4s;
+      color: #fff;
+      box-shadow: 0 6px 15px rgba(255, 87, 34, .25);
+      background: linear-gradient(135deg, #ff9800, #ff5722);
+      text-decoration: none;
+      text-align: center;
+      display: inline-block;
+    }
+
+    .btn:hover,
+    .btn-book:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(255, 87, 34, .35);
+      background: linear-gradient(135deg, #ff5722, #ff9800);
+    }
+
+    @media(max-width: 992px) {
+      .container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media(max-width: 600px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        font-size: 32px;
+      }
+
+      .hero p.line1 {
+        font-size: 18px;
+      }
+
+      .hero p.line2 {
+        font-size: 14px;
+      }
+    }
+
+    .card.expanded .extra-day {
+      display: block;
+    }
+
+
+
+    /* =========================================PACKAGE PAGINATION BUTTONS======================================== */
+
+.package-navigation{
+  width:95%;max-width:1400px;
+  margin:40px auto 60px;
+  display:flex;justify-content:center;align-items:center;
+  gap:12px;flex-wrap:wrap;
+}
+.package-navigation button{
+  border:none;outline:none;
+  padding:12px 22px;border-radius:50px;
+  background:#fff;
+  color:#0d47a1;
+  font-family:'Poppins',sans-serif;
+  font-size:14px;font-weight:700;
+  cursor:pointer;min-width:48px;
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+  transition:.3s;
+}
+.package-navigation button.active{
+  background:linear-gradient(135deg,#ff9800,#ff5722);
+  color:#fff;transform:scale(1.08);
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:992px){
+  .package-navigation{ gap:10px; }
+  .package-navigation button{ padding:10px 18px; font-size:13px; min-width:42px; }
+}
+@media(max-width:600px){
+  .package-navigation{
+    gap:8px;
+    padding:0 10px;
+  }
+  .package-navigation button{
+    padding:9px 14px;
+    font-size:12px;
+    min-width:38px;
+    flex:0 0 auto;
+  }
+  /* Previous / Next ko full width me niche la do mobile pe */
+  .package-navigation button:first-child,
+  .package-navigation button:last-child{
+    padding:10px 16px;
+    font-size:12px;
+  }
+}
+@media(max-width:380px){
+  .package-navigation{ gap:6px; }
+  .package-navigation button{
+    padding:8px 12px;
+    font-size:11px;
+    min-width:34px;
+  }
+}
+
+    /*================ WHY CHOOSE US SECTION ================*/
+.why-choose-section{background:#f4f6fb;padding:20px 20px 30px;text-align:center}
+.why-heading{margin-bottom:10px}
+.why-subheading{max-width:750px;margin:0 auto 35px;font-size:16px;color:#666}
+.why-container{max-width:1200px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:25px}
+.why-card{background:white;padding:30px 20px;border-radius:18px;text-align:center;box-shadow:0 10px 35px rgba(13,110,253,.06);border:1px solid white;transition:.4s}
+.why-card:hover{transform:translateY(-8px);box-shadow:0 10px 40px rgba(0,0,0,.2)}
+.why-icon{font-size:38px;margin-bottom:12px;display:inline-block}
+.why-card h3{font-size:17px;font-weight:700;color:#0d47a1;margin-bottom:8px}
+.why-card p{font-size:14px;color:#666;line-height:1.6}
+@media(max-width:1200px){.why-container,.services-container,.achievement-container{grid-template-columns:repeat(2,1fr)}}
+
+    /* ================= CUSTOMER REVIEWS ================= */
+    .reviews-section {
+      padding: 90px 7%;
+      background: #f8fafc;
+    }
+
+    .reviews-container {
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .reviews-heading {
+      text-align: center;
+      max-width: 750px;
+      margin: 40px auto 70px;
+    }
+
+    .reviews-heading .tag {
+      display: inline-block;
+      background: linear-gradient(90deg, #ff7a00, #ff5722);
+      color: white;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      margin-bottom: 20px;
+      padding: 8px 20px;
+      border-radius: 50px;
+      box-shadow: 0 6px 15px rgba(255, 87, 34, .25);
+    }
+
+    .why-heading {
+      font-family: 'Poppins', sans-serif;
+      font-size: 52px;
+      font-weight: 800;
+      margin-bottom: 15px;
+      line-height: 1.2;
+    }
+
+    .why-heading .blue {
+      color: #0d47a1;
+    }
+
+    .why-heading .orange {
+      color: #ff7a00;
+    }
+
+    .why-subheading {
+      font-family: 'Poppins', sans-serif;
+      font-size: 17px;
+      color: #666;
+      line-height: 1.7;
+    }
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+
+    .review-card {
+      background: white;
+      padding: 28px;
+      border-radius: 20px;
+      border: 1px solid #e8edf3;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      transition: 0.4s ease;
+    }
+
+    .review-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.10);
+    }
+
+    .review-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .customer-info {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+    }
+
+    .customer-info img {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #ff9800;
+    }
+
+    .customer-info h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 17px;
+      color: #172033;
+      margin: 0 0 3px;
+      font-weight: 700;
+    }
+
+    .customer-info span {
+      font-family: 'Poppins', sans-serif;
+      font-size: 12px;
+      color: #8992a3;
+    }
+
+    .review-rating {
+      color: #ff9800;
+      font-size: 16px;
+      letter-spacing: 1px;
+    }
+
+    .review-text {
+      font-family: 'Poppins', sans-serif;
+      color: #606978;
+      font-size: 15px;
+      line-height: 1.8;
+      margin: 25px 0;
+    }
+
+    .review-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #edf0f4;
+      padding-top: 17px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 12px;
+    }
+
+    .review-footer span:first-child {
+      color: #ff5722;
+      font-weight: 600;
+    }
+
+    .review-footer span:last-child {
+      color: #20a464;
+      font-weight: 600;
+    }
+
+    .overall-rating {
+      margin: 50px auto 0;
+      width: fit-content;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      background: #ffffff;
+      padding: 20px 35px;
+      border-radius: 18px;
+      border: 1px solid #e8edf3;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+    }
+
+    .rating-number {
+      font-family: 'Poppins', sans-serif;
+      font-size: 42px;
+      font-weight: 800;
+      color: black;
+    }
+
+    .big-stars {
+      color: #ff9800;
+      font-size: 20px;
+      letter-spacing: 2px;
+    }
+
+    .overall-rating p {
+      font-family: 'Poppins', sans-serif;
+      margin: 3px 0 0;
+      color: #7a8392;
+      font-size: 13px;
+    }
+
+    @media (max-width: 900px) {
+      .reviews-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .reviews-section {
+        padding: 65px 5%;
+      }
+
+      .why-heading {
+        font-size: 34px;
+      }
+
+      .reviews-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* =========== FAQ SECTION =========== */
+.faq-section {width: 100%;padding: 50px 8%;background: #f4f6fb;color: #fff;font-family: 'Poppins', sans-serif;}
+.faq-container {max-width: 900px;margin: 0 auto;}
+.faq-header {text-align: center;margin-bottom: 60px;}
+.faq-header h2 {font-size: 52px;font-weight: 800;color: #0d47a1;margin-bottom: 20px;line-height: 1.2;}
+.faq-header h2 span {background: linear-gradient(135deg, #ff9800, #ff5722);-webkit-background-clip: text;-webkit-text-fill-color: transparent;}
+.faq-header .desc {font-size: 17px;color: #444;max-width: 600px;margin: 0 auto;}
+.faq-wrapper {display: flex;flex-direction: column;gap: 18px;}
+.faq-item {background: transparent;border: none;border-radius: 0;overflow: hidden;transition: .4s ease;}
+.faq-question {width: 100%;padding: 22px 25px;background: white;border: 1px solid #e0e6f0;border-radius: 14px;color: #0d47a1;font-size: 16px;font-weight: 600;text-align: left;cursor: pointer;display: flex;justify-content: space-between;align-items: center;transition: .3s ease;}
+.faq-question:hover {transform: translateY(-2px);}
+.faq-icon {width: 32px;height: 32px;background: yellow;color: RED;font-size: 20px;font-weight: 400;border-radius: 50%;display: flex;align-items: center;justify-content: center;transition: .4s ease;min-width: 32px;}
+.faq-item.active .faq-icon {transform: rotate(45deg);background: linear-gradient(135deg, #ff9800, #ff5722);color: white;}
+.faq-answer {max-height: 0;overflow: hidden;transition: max-height .4s ease, padding .4s ease;background: white;border: 1px solid #e0e6f0;border-top: none;border-radius: 14px 14px;margin-top: -1px;}
+.faq-item.active .faq-answer {max-height: 300px;padding: 0 25px 22px 25px;}
+.faq-answer p {font-size: 15px;color: #444;line-height: 1.8;border-top: 1px solid #f0f2f7;padding-top: 18px;margin: 0;}
+@media(max-width:768px) {.faq-section {padding: 70px 5%;}.faq-header h2 {font-size: 34px;}.faq-question {font-size: 16px;padding: 18px 20px;}.faq-item.active .faq-answer {padding: 0 20px 20px 20px;}}
+
+  </style>
+</head>
+
+<body>
+  <section class="hero">
+    <h1>Domestic <span>Packages</span> ✈️</h1>
+    <p>
+      <span class="line1">Explore 100+ India's most beautiful destinations with exclusive travel packages</span>
+      <span class="line2">and unforgettable experiences</span>
+    </p>
+  </section>
+
+  <section class="container" id="packageContainer">
+    <!-- 1. MANALI PACKAGE -->
+    <div class="card">
+      <div class="card-img">
+        <img src="{% static 'home/Image/Domestic_Image/Image1.png' %}" alt="Manali">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.9</div>
+      </div>
+      <div class="card-content">
+        <h3>Manali Tour Package</h3>
+        <div class="days">⏰ 7 Days • 6 Nights</div>
+        <div class="price">₹12,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Mall Road + Hadimba Temple</li>
+          <li><b>Day 2:</b> Solang Valley</li>
+          <li><b>Day 3:</b> Rohtang Pass</li>
+          <li class="extra-day"><b>Day 4:</b> Vashisth Temple</li>
+          <li class="extra-day"><b>Day 5:</b> Old Manali</li>
+          <li class="extra-day"><b>Day 6:</b> Naggar Castle</li>
+          <li class="extra-day"><b>Day 7:</b> Jogini Waterfall</li>
+        </ul>
+        <div class="btn-group">
+          <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. GOA PACKAGE -->
+    <div class="card">
+      <div class="card-img">
+        <img src="{% static 'home/Image/Domestic_Image/Image2.png' %}" alt="Goa">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Goa Beach Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹9,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Baga Beach + Tito's Lane</li>
+          <li><b>Day 2:</b> North Goa Sightseeing</li>
+          <li><b>Day 3:</b> South Goa + Dudhsagar</li>
+          <li class="extra-day"><b>Day 4:</b> Water Sports + Cruise</li>
+          <li class="extra-day"><b>Day 5:</b> Shopping + Departure</li>
+        </ul>
+        <div class="btn-group">
+          <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. KASHMIR PACKAGE -->
+    <div class="card">
+      <div class="card-img">
+        <img src="{% static 'home/Image/Domestic_Image/Image3.png' %}" alt="Kashmir">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.9</div>
+      </div>
+      <div class="card-content">
+        <h3>Kashmir Heaven Package</h3>
+        <div class="days">⏰ 6 Days • 5 Nights</div>
+        <div class="price">₹15,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Srinagar + Dal Lake</li>
+          <li><b>Day 2:</b> Gulmarg Gondola</li>
+          <li><b>Day 3:</b> Pahalgam Valley</li>
+          <li class="extra-day"><b>Day 4:</b> Sonamarg</li>
+          <li class="extra-day"><b>Day 5:</b> Shikara Ride</li>
+          <li class="extra-day"><b>Day 6:</b> Local Market</li>
+        </ul>
+        <div class="btn-group">
+          <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. SHIMLA PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image4.png' %}" alt="Shimla">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Shimla Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹8,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Mall Road + Christ Church + Ridge</li>
+          <li><b>Day 2:</b> Kufri + Horse Riding + Indira Park</li>
+          <li><b>Day 3:</b> Jakhu Temple + Tara Devi Temple</li>
+          <li class="extra-day"><b>Day 4:</b> Naldehra + Mashobra Day Trip</li>
+          <li class="extra-day"><b>Day 5:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. MUSSOORIE PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image5.png' %}" alt="Mussoorie">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.7</div>
+      </div>
+      <div class="card-content">
+        <h3>Mussoorie Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹7,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Mall Road + Gun Hill + Company Garden</li>
+          <li><b>Day 2:</b> Kempty Falls + Bhatta Falls</li>
+          <li><b>Day 3:</b> Lal Tibba + Camel's Back Road</li>
+          <li class="extra-day"><b>Day 4:</b> Dhanaulti + Surkanda Devi Temple</li>
+          <li class="extra-day"><b>Day 5:</b> Local Sightseeing + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. NAINITAL PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image6.png' %}" alt="Nainital">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.9</div>
+      </div>
+      <div class="card-content">
+        <h3>Nainital Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹7,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Naini Lake Boating + Mall Road</li>
+          <li><b>Day 2:</b> Naina Devi Temple + Snow View Point</li>
+          <li><b>Day 3:</b> Eco Cave Gardens + Tiffin Top</li>
+          <li class="extra-day"><b>Day 4:</b> Sattal + Bhimtal Day Trip</li>
+          <li class="extra-day"><b>Day 5:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. RISHIKESH PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image7.png' %}" alt="Rishikesh">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Rishikesh Adventure Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹6,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Laxman Jhula + Ram Jhula + Ganga Aarti</li>
+          <li><b>Day 2:</b> River Rafting + Camping</li>
+          <li><b>Day 3:</b> Neelkanth Mahadev + Beatles Ashram</li>
+          <li class="extra-day"><b>Day 4:</b> Rajaji National Park + Vashishta Cave</li>
+          <li class="extra-day"><b>Day 5:</b> Yoga Session + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. AULI PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image8.png' %}" alt="Auli">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.9</div>
+      </div>
+      <div class="card-content">
+        <h3>Auli Ski Tour Package</h3>
+        <div class="days">⏰ 6 Days • 5 Nights</div>
+        <div class="price">₹14,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Rishikesh to Joshimath Drive</li>
+          <li><b>Day 2:</b> Joshimath + Auli Ropeway</li>
+          <li><b>Day 3:</b> Skiing + Nanda Devi Peak View</li>
+          <li class="extra-day"><b>Day 4:</b> Gurso Bugyal Trek</li>
+          <li class="extra-day"><b>Day 5:</b> Chattrakund + Kwani Bugyal</li>
+          <li class="extra-day"><b>Day 6:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9. DALHOUSIE PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image9.png' %}" alt="Dalhousie">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.6</div>
+      </div>
+      <div class="card-content">
+        <h3>Dalhousie Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹8,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Mall Road + St. John's Church</li>
+          <li><b>Day 2:</b> Khajjiar + Panchpula</li>
+          <li><b>Day 3:</b> Satdhara Falls + Subhash Baoli</li>
+          <li class="extra-day"><b>Day 4:</b> Chamba + Bhalei Mata Temple</li>
+          <li class="extra-day"><b>Day 5:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10. DHARAMSHALA PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image10.png' %}" alt="Dharamshala">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.7</div>
+      </div>
+      <div class="card-content">
+        <h3>Dharamshala Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹7,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> McLeod Ganj + Dal Lake</li>
+          <li><b>Day 2:</b> Bhagsu Falls + Triund Trek</li>
+          <li><b>Day 3:</b> Norbulingka Monastery + Cricket Stadium</li>
+          <li class="extra-day"><b>Day 4:</b> Palampur + Tea Gardens</li>
+          <li class="extra-day"><b>Day 5:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 11. MCLEOD GANJ PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image11.png' %}" alt="McLeod Ganj">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>McLeod Ganj Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹6,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Dalai Lama Temple + Bhagsu Waterfall</li>
+          <li><b>Day 2:</b> Naddi Village + Sunset Point</li>
+          <li><b>Day 3:</b> Triund Trek</li>
+          <li class="extra-day"><b>Day 4:</b> Tibetan Market + Monasteries</li>
+          <li class="extra-day"><b>Day 5:</b> Local Sightseeing + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 12. KASAULI PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image12.png' %}" alt="Kasauli">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.5</div>
+      </div>
+      <div class="card-content">
+        <h3>Kasauli Weekend Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹5,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Mall Road + Christ Church</li>
+          <li><b>Day 2:</b> Monkey Point + Gilbert Trail</li>
+          <li><b>Day 3:</b> Timber Trail + Sunset Point</li>
+          <li class="extra-day"><b>Day 4:</b> Chail + Gurudwara Day Trip</li>
+          <li class="extra-day"><b>Day 5:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 13. KULLU PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image13.png' %}" alt="Kullu">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.7</div>
+      </div>
+      <div class="card-content">
+        <h3>Kullu Valley Package</h3>
+        <div class="days">⏰ 6 Days • 5 Nights</div>
+        <div class="price">₹9,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Raghunath Temple + Kullu Market</li>
+          <li><b>Day 2:</b> Manikaran + Hot Springs</li>
+          <li><b>Day 3:</b> Great Himalayan National Park</li>
+          <li class="extra-day"><b>Day 4:</b> Bijli Mahadev Temple</li>
+          <li class="extra-day"><b>Day 5:</b> Kasol + Chalal Village</li>
+          <li class="extra-day"><b>Day 6:</b> Local Sightseeing + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 14. KASOL PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image14.png' %}" alt="Kasol">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Kasol Trip Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹5,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Parvati River + Chalal Village</li>
+          <li><b>Day 2:</b> Tosh Village + Trekking</li>
+          <li><b>Day 3:</b> Manikaran Sahib Gurudwara</li>
+          <li class="extra-day"><b>Day 4:</b> Malana Village Tour</li>
+          <li class="extra-day"><b>Day 5:</b> Local Exploration + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 15. CHAIL PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image15.png' %}" alt="Chail">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.6</div>
+      </div>
+      <div class="card-content">
+        <h3>Chail Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹6,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Chail Palace + Cricket Ground</li>
+          <li><b>Day 2:</b> Kali Ka Tibba + Nature Walk</li>
+          <li><b>Day 3:</b> Sadhupul Lake + Kufri</li>
+          <li class="extra-day"><b>Day 4:</b> Shimla Day Trip</li>
+          <li class="extra-day"><b>Day 5:</b> Local Sightseeing + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 16. KUFRI PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image16.png' %}" alt="Kufri">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.7</div>
+      </div>
+      <div class="card-content">
+        <h3>Kufri Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹6,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Himalayan Nature Park + Horse Riding</li>
+          <li><b>Day 2:</b> Indira Tourist Park + Mahasu Peak</li>
+          <li><b>Day 3:</b> Fagu + Naldehra Golf Course</li>
+          <li class="extra-day"><b>Day 4:</b> Shimla Mall Road + Ridge</li>
+          <li class="extra-day"><b>Day 5:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 17. LANSDOWNE PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image17.png' %}" alt="Lansdowne">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.5</div>
+      </div>
+      <div class="card-content">
+        <h3>Lansdowne Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹5,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Tip-in-Top + St. Mary's Church</li>
+          <li><b>Day 2:</b> Bhulla Lake + Tarkeshwar Mahadev</li>
+          <li><b>Day 3:</b> Garhwali Rifles War Memorial</li>
+          <li class="extra-day"><b>Day 4:</b> Kanvashram + Durga Devi Temple</li>
+          <li class="extra-day"><b>Day 5:</b> Local Sightseeing + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 18. RANIKHET PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image18.png' %}" alt="Ranikhet">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.6</div>
+      </div>
+      <div class="card-content">
+        <h3>Ranikhet Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹6,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Jhula Devi Temple + Golf Course</li>
+          <li><b>Day 2:</b> Chaubatia Gardens + Bhalu Dam</li>
+          <li><b>Day 3:</b> Almora Day Trip</li>
+          <li class="extra-day"><b>Day 4:</b> Kainchi Dham + Nainital</li>
+          <li class="extra-day"><b>Day 5:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 19. ALMORA PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image19.png' %}" alt="Almora">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.6</div>
+      </div>
+      <div class="card-content">
+        <h3>Almora Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹6,299 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Bright End Corner + Lala Bazar</li>
+          <li><b>Day 2:</b> Kasar Devi Temple + Zero Point</li>
+          <li><b>Day 3:</b> Binsar Wildlife Sanctuary</li>
+          <li class="extra-day"><b>Day 4:</b> Jageshwar Dham</li>
+          <li class="extra-day"><b>Day 5:</b> Local Sightseeing + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 20. MUKTESHWAR PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image20.png' %}" alt="Mukteshwar">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.7</div>
+      </div>
+      <div class="card-content">
+        <h3>Mukteshwar Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹6,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Mukteshwar Temple + Chauli Ki Jali</li>
+          <li><b>Day 2:</b> Bhalu Gaad Waterfall + Fruit Orchards</li>
+          <li><b>Day 3:</b> Nainital Day Trip</li>
+          <li class="extra-day"><b>Day 4:</b> Sattal + Bhimtal</li>
+          <li class="extra-day"><b>Day 5:</b> Local Sightseeing + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 21. MUNNAR PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image21.png' %}" alt="Munnar">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.9</div>
+      </div>
+      <div class="card-content">
+        <h3>Munnar Tour Package</h3>
+        <div class="days">⏰ 6 Days • 5 Nights</div>
+        <div class="price">₹11,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Tea Museum + Mattupetty Dam</li>
+          <li><b>Day 2:</b> Eravikulam National Park + Top Station</li>
+          <li><b>Day 3:</b> Anamudi Peak + Spice Gardens</li>
+          <li class="extra-day"><b>Day 4:</b> Kolukkumalai Tea Estate</li>
+          <li class="extra-day"><b>Day 5:</b> Attukal Waterfalls + Pothamedu Viewpoint</li>
+          <li class="extra-day"><b>Day 6:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 22. OOTY PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image22.png' %}" alt="Ooty">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Ooty Tour Package</h3>
+        <div class="days">⏰ 6 Days • 5 Nights</div>
+        <div class="price">₹10,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Ooty Lake + Botanical Gardens</li>
+          <li><b>Day 2:</b> Doddabetta Peak + Tea Factory</li>
+          <li><b>Day 3:</b> Toy Train + Rose Garden</li>
+          <li class="extra-day"><b>Day 4:</b> Coonoor Day Trip</li>
+          <li class="extra-day"><b>Day 5:</b> Avalanche Lake + Emerald Lake</li>
+          <li class="extra-day"><b>Day 6:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 23. KODAIKANAL PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image23.png' %}" alt="Kodaikanal">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Kodaikanal Tour Package</h3>
+        <div class="days">⏰ 6 Days • 5 Nights</div>
+        <div class="price">₹11,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Kodai Lake Boating + Bryant Park</li>
+          <li><b>Day 2:</b> Coaker's Walk + Pillar Rocks</li>
+          <li><b>Day 3:</b> Silver Cascade + Bear Shola Falls</li>
+          <li class="extra-day"><b>Day 4:</b> Green Valley View + Guna Caves</li>
+          <li class="extra-day"><b>Day 5:</b> Dolphin Nose + Poombarai Village</li>
+          <li class="extra-day"><b>Day 6:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 24. COORG PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image24.png' %}" alt="Coorg">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Coorg Tour Package</h3>
+        <div class="days">⏰ 6 Days • 5 Nights</div>
+        <div class="price">₹12,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Abbey Falls + Raja's Seat</li>
+          <li><b>Day 2:</b> Dubare Elephant Camp + Coffee Plantation</li>
+          <li><b>Day 3:</b> Talakaveri + Bhagamandala</li>
+          <li class="extra-day"><b>Day 4:</b> Nagarhole National Park Safari</li>
+          <li class="extra-day"><b>Day 5:</b> Iruppu Falls + Rajas Tomb</li>
+          <li class="extra-day"><b>Day 6:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 25. WAYANAD PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image25.png' %}" alt="Wayanad">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.7</div>
+      </div>
+      <div class="card-content">
+        <h3>Wayanad Tour Package</h3>
+        <div class="days">⏰ 6 Days • 5 Nights</div>
+        <div class="price">₹10,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Banasura Sagar Dam + Meenmutty Falls</li>
+          <li><b>Day 2:</b> Edakkal Caves + Soochipara Falls</li>
+          <li><b>Day 3:</b> Pookode Lake + Chembra Peak</li>
+          <li class="extra-day"><b>Day 4:</b> Wayanad Wildlife Sanctuary</li>
+          <li class="extra-day"><b>Day 5:</b> Lakkidi View Point + Chain Tree</li>
+          <li class="extra-day"><b>Day 6:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 26. COONOOR PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image26.png' %}" alt="Coonoor">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.6</div>
+      </div>
+      <div class="card-content">
+        <h3>Coonoor Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹7,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Sims Park + Lamb's Rock</li>
+          <li><b>Day 2:</b> Dolphin's Nose + Tea Estates</li>
+          <li><b>Day 3:</b> Ooty Day Trip</li>
+          <li class="extra-day"><b>Day 4:</b> Droog Fort + Law's Falls</li>
+          <li class="extra-day"><b>Day 5:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 27. YERCAUD PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image27.png' %}" alt="Yercaud">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.5</div>
+      </div>
+      <div class="card-content">
+        <h3>Yercaud Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹6,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Yercaud Lake + Anna Park</li>
+          <li><b>Day 2:</b> Pagoda Point + Lady's Seat</li>
+          <li><b>Day 3:</b> Kiliyur Falls + Botanical Garden</li>
+          <li class="extra-day"><b>Day 4:</b> Shevaroy Hills + Silk Farm</li>
+          <li class="extra-day"><b>Day 5:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 28. LONAVALA PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image28.png' %}" alt="Lonavala">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.7</div>
+      </div>
+      <div class="card-content">
+        <h3>Lonavala Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹5,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Bhushi Dam + Tiger's Leap</li>
+          <li><b>Day 2:</b> Karla Caves + Lohagad Fort</li>
+          <li><b>Day 3:</b> Khandala + Rajmachi Point</li>
+          <li class="extra-day"><b>Day 4:</b> Pawna Lake + Valvan Dam</li>
+          <li class="extra-day"><b>Day 5:</b> Local Sightseeing + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 29. ANDAMAN PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image29.png' %}" alt="Andaman">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.9</div>
+      </div>
+      <div class="card-content">
+        <h3>Andaman Tour Package</h3>
+        <div class="days">⏰ 7 Days • 6 Nights</div>
+        <div class="price">₹24,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Port Blair + Cellular Jail + Light Show</li>
+          <li><b>Day 2:</b> Ross Island + North Bay</li>
+          <li><b>Day 3:</b> Havelock Island + Radhanagar Beach</li>
+          <li class="extra-day"><b>Day 4:</b> Elephant Beach + Water Sports</li>
+          <li class="extra-day"><b>Day 5:</b> Neil Island + Natural Bridge</li>
+          <li class="extra-day"><b>Day 6:</b> Coral Reef + Scuba Diving</li>
+          <li class="extra-day"><b>Day 7:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 30. LAKSHADWEEP PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image30.png' %}" alt="Lakshadweep">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.9</div>
+      </div>
+      <div class="card-content">
+        <h3>Lakshadweep Tour Package</h3>
+        <div class="days">⏰ 6 Days • 5 Nights</div>
+        <div class="price">₹29,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Kochi to Agatti Flight + Resort Check-in</li>
+          <li><b>Day 2:</b> Bangaram Island Day Trip</li>
+          <li><b>Day 3:</b> Thinnakara Island + Snorkeling</li>
+          <li class="extra-day"><b>Day 4:</b> Scuba Diving + Kayaking</li>
+          <li class="extra-day"><b>Day 5:</b> Local Island Tour + Beach Walk</li>
+          <li class="extra-day"><b>Day 6:</b> Departure to Kochi</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 31. GOKARNA PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image31.png' %}" alt="Gokarna">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.7</div>
+      </div>
+      <div class="card-content">
+        <h3>Gokarna Beach Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹6,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Om Beach + Kudle Beach</li>
+          <li><b>Day 2:</b> Mahabaleshwar Temple + Paradise Beach</li>
+          <li><b>Day 3:</b> Half Moon Beach + Beach Trek</li>
+          <li class="extra-day"><b>Day 4:</b> Yana Rocks Day Trip</li>
+          <li class="extra-day"><b>Day 5:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 32. VARKALA PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image32.png' %}" alt="Varkala">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Varkala Beach Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹8,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Varkala Cliff + Varkala Beach</li>
+          <li><b>Day 2:</b> Janardanaswamy Temple + Helipad View</li>
+          <li><b>Day 3:</b> Kappil Beach + Black Sand Beach</li>
+          <li class="extra-day"><b>Day 4:</b> Ponnumthuruthu Island + Kayaking</li>
+          <li class="extra-day"><b>Day 5:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 33. KOVALAM PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image33.png' %}" alt="Kovalam">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Kovalam Beach Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹9,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Lighthouse Beach + Hawa Beach</li>
+          <li><b>Day 2:</b> Vizhinjam Rock Cut Cave Temple</li>
+          <li><b>Day 3:</b> Kovalam Art Gallery + Ayurvedic Spa</li>
+          <li class="extra-day"><b>Day 4:</b> Poovar Island + Backwaters</li>
+          <li class="extra-day"><b>Day 5:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 34. ALAPPUZHA PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image34.png' %}" alt="Alappuzha">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.7</div>
+      </div>
+      <div class="card-content">
+        <h3>Alappuzha Backwaters Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹10,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Alappuzha Beach + Sea Bridge</li>
+          <li><b>Day 2:</b> Houseboat Cruise in Backwaters</li>
+          <li><b>Day 3:</b> Marari Beach + Village Tour</li>
+          <li class="extra-day"><b>Day 4:</b> Kuttanad + Paddy Fields</li>
+          <li class="extra-day"><b>Day 5:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 35. ALLEPPEY PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image35.png' %}" alt="Alleppey">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Alleppey Houseboat Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹11,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Alleppey Backwaters + Houseboat Stay</li>
+          <li><b>Day 2:</b> Village Life + Canoe Ride</li>
+          <li><b>Day 3:</b> Kumarakom Bird Sanctuary</li>
+          <li class="extra-day"><b>Day 4:</b> Vembanad Lake + Local Villages</li>
+          <li class="extra-day"><b>Day 5:</b> Coir Factory + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 36. PONDICHERRY PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image36.png' %}" alt="Pondicherry">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.7</div>
+      </div>
+      <div class="card-content">
+        <h3>Pondicherry Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹7,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Promenade Beach + French Colony</li>
+          <li><b>Day 2:</b> Aurobindo Ashram + Auroville</li>
+          <li><b>Day 3:</b> Paradise Beach + Chunnambar Boat Ride</li>
+          <li class="extra-day"><b>Day 4:</b> Manakula Vinayagar Temple + Local Market</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 37. DIU PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image37.png' %}" alt="Diu">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.6</div>
+      </div>
+      <div class="card-content">
+        <h3>Diu Beach Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹7,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Nagoa Beach + Diu Fort</li>
+          <li><b>Day 2:</b> St. Paul's Church + Gangeshwar Temple</li>
+          <li><b>Day 3:</b> Chakratirth Beach + Sunset Point</li>
+          <li class="extra-day"><b>Day 4:</b> Naida Caves + Water Park</li>
+          <li class="extra-day"><b>Day 5:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 38. TARKARLI PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image38.png' %}" alt="Tarkarli">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.7</div>
+      </div>
+      <div class="card-content">
+        <h3>Tarkarli Beach Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹6,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Tarkarli Beach + Scuba Diving</li>
+          <li><b>Day 2:</b> Sindhudurg Fort + Boat Ride</li>
+          <li><b>Day 3:</b> Malvan Market + Local Cuisine</li>
+          <li class="extra-day"><b>Day 4:</b> Devbagh Beach + Backwaters</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 39. ALIBAUG PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image39.png' %}" alt="Alibaug">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.6</div>
+      </div>
+      <div class="card-content">
+        <h3>Alibaug Weekend Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹5,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Alibaug Beach + Kolaba Fort</li>
+          <li><b>Day 2:</b> Varsoli Beach + Water Sports</li>
+          <li><b>Day 3:</b> Kihim Beach + Akshi Beach</li>
+          <li class="extra-day"><b>Day 4:</b> Murud Janjira Fort Day Trip</li>
+          <li class="extra-day"><b>Day 5:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 40. MAHABALIPURAM PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image40.png' %}" alt="Mahabalipuram">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.7</div>
+      </div>
+      <div class="card-content">
+        <h3>Mahabalipuram Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹6,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Shore Temple + Five Rathas</li>
+          <li><b>Day 2:</b> Arjuna's Penance + Krishna's Butter Ball</li>
+          <li><b>Day 3:</b> Mahabalipuram Beach + Sculpture Museum</li>
+          <li class="extra-day"><b>Day 4:</b> Covelong Beach + DakshinaChitra</li>
+          <li class="extra-day"><b>Day 5:</b> Chennai Day Trip + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 41. PURI PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image41.png' %}" alt="Puri">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Puri Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹6,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Jagannath Temple + Puri Beach</li>
+          <li><b>Day 2:</b> Konark Sun Temple + Chandrabhaga Beach</li>
+          <li><b>Day 3:</b> Nandankanan Zoo + Dhauli Hills</li>
+          <li class="extra-day"><b>Day 4:</b> Chilika Lake + Dolphin Point</li>
+          <li class="extra-day"><b>Day 5:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 42. DIGHA PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image42.png' %}" alt="Digha">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.5</div>
+      </div>
+      <div class="card-content">
+        <h3>Digha Beach Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹4,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> New Digha Beach + Marine Aquarium</li>
+          <li><b>Day 2:</b> Old Digha Beach + Amrabati Park</li>
+          <li><b>Day 3:</b> Shankarpur Beach + Tajpur Beach</li>
+          <li class="extra-day"><b>Day 4:</b> Mandarmani Day Trip</li>
+          <li class="extra-day"><b>Day 5:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 43. VIZAG PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image43.png' %}" alt="Vizag">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.7</div>
+      </div>
+      <div class="card-content">
+        <h3>Vizag Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹7,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> RK Beach + Submarine Museum</li>
+          <li><b>Day 2:</b> Kailasagiri + VUDA Park</li>
+          <li><b>Day 3:</b> Araku Valley + Borra Caves</li>
+          <li class="extra-day"><b>Day 4:</b> Rushikonda Beach + Bhimli Beach</li>
+          <li class="extra-day"><b>Day 5:</b> Simhachalam Temple + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 44. VARANASI PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image44.png' %}" alt="Varanasi">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.9</div>
+      </div>
+      <div class="card-content">
+        <h3>Varanasi Spiritual Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹8,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Kashi Vishwanath Temple + Ganga Aarti</li>
+          <li><b>Day 2:</b> Sarnath + Dhamek Stupa</li>
+          <li><b>Day 3:</b> Boat Ride + Ghats Tour</li>
+          <li class="extra-day"><b>Day 4:</b> Bharat Mata Temple + Tulsi Manas Temple</li>
+          <li class="extra-day"><b>Day 5:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 45. AYODHYA PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image45.png' %}" alt="Ayodhya">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.9</div>
+      </div>
+      <div class="card-content">
+        <h3>Ayodhya Darshan Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹7,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Ram Janmabhoomi + Hanuman Garhi</li>
+          <li><b>Day 2:</b> Kanak Bhawan + Nageshwarnath Temple</li>
+          <li><b>Day 3:</b> Saryu River + Ram ki Paidi</li>
+          <li class="extra-day"><b>Day 4:</b> Guptar Ghat + Local Temples</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 46. MATHURA PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image46.png' %}" alt="Mathura">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Mathura Vrindavan Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹6,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Krishna Janmabhoomi + Dwarkadhish Temple</li>
+          <li><b>Day 2:</b> Banke Bihari Temple + Radha Raman Temple</li>
+          <li><b>Day 3:</b> ISKCON Temple + Prem Mandir</li>
+          <li class="extra-day"><b>Day 4:</b> Govardhan Parikrama + Kusum Sarovar</li>
+          <li class="extra-day"><b>Day 5:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 47. VRINDAVAN PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image47.png' %}" alt="Vrindavan">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Vrindavan Devotional Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹6,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Banke Bihari + Radha Vallabh Temple</li>
+          <li><b>Day 2:</b> Prem Mandir + ISKCON Temple</li>
+          <li><b>Day 3:</b> Nidhivan + Seva Kunj</li>
+          <li class="extra-day"><b>Day 4:</b> Barsana + Nandgaon Day Trip</li>
+          <li class="extra-day"><b>Day 5:</b> Mathura + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 48. HARIDWAR PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image48.png' %}" alt="Haridwar">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Haridwar Spiritual Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹5,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Har Ki Pauri + Ganga Aarti</li>
+          <li><b>Day 2:</b> Mansa Devi Temple + Chandi Devi Temple</li>
+          <li><b>Day 3:</b> Rishikesh + Laxman Jhula</li>
+          <li class="extra-day"><b>Day 4:</b> Bharat Mata Mandir + Patanjali Yogpeeth</li>
+          <li class="extra-day"><b>Day 5:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 49. KEDARNATH PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image49.png' %}" alt="Kedarnath">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.9</div>
+      </div>
+      <div class="card-content">
+        <h3>Kedarnath Yatra Package</h3>
+        <div class="days">⏰ 6 Days • 5 Nights</div>
+        <div class="price">₹15,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Haridwar to Guptkashi Drive</li>
+          <li><b>Day 2:</b> Guptkashi to Kedarnath Trek</li>
+          <li><b>Day 3:</b> Kedarnath Temple Darshan</li>
+          <li class="extra-day"><b>Day 4:</b> Bhairavnath Temple + Return Trek</li>
+          <li class="extra-day"><b>Day 5:</b> Guptkashi Local Sightseeing</li>
+          <li class="extra-day"><b>Day 6:</b> Return to Haridwar</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 50. BADRINATH PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image50.png' %}" alt="Badrinath">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.9</div>
+      </div>
+      <div class="card-content">
+        <h3>Badrinath Dham Package</h3>
+        <div class="days">⏰ 6 Days • 5 Nights</div>
+        <div class="price">₹14,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Haridwar to Joshimath Drive</li>
+          <li><b>Day 2:</b> Joshimath to Badrinath</li>
+          <li><b>Day 3:</b> Badrinath Temple + Mana Village</li>
+          <li class="extra-day"><b>Day 4:</b> Tapt Kund + Narad Kund</li>
+          <li class="extra-day"><b>Day 5:</b> Vyas Gufa + Bheem Pul</li>
+          <li class="extra-day"><b>Day 6:</b> Return to Haridwar</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 51. RAMESWARAM PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image51.png' %}" alt="Rameswaram">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Rameswaram Darshan Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹9,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Ramanathaswamy Temple + Agni Teertham</li>
+          <li><b>Day 2:</b> Pamban Bridge + Dhanushkodi</li>
+          <li><b>Day 3:</b> Gandhamadhana Parvatham</li>
+          <li class="extra-day"><b>Day 4:</b> Local Temples + Market</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 52. MADURAI PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image52.png' %}" alt="Madurai">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Madurai Temple Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹8,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Meenakshi Temple + Thousand Pillar Hall</li>
+          <li><b>Day 2:</b> Thirumalai Nayakkar Palace</li>
+          <li><b>Day 3:</b> Gandhi Memorial Museum</li>
+          <li class="extra-day"><b>Day 4:</b> Alagar Kovil + Local Temples</li>
+          <li class="extra-day"><b>Day 5:</b> Shopping + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 53. TIRUPATI PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image53.png' %}" alt="Tirupati">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.9</div>
+      </div>
+      <div class="card-content">
+        <h3>Tirupati Balaji Darshan Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹7,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Tirumala Balaji Temple Darshan</li>
+          <li><b>Day 2:</b> Padmavathi Temple + Srinivasa Mangapuram</li>
+          <li><b>Day 3:</b> Talakona Waterfalls</li>
+          <li class="extra-day"><b>Day 4:</b> Chandragiri Fort + Local Temples</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 54. SHIRDI PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image54.png' %}" alt="Shirdi">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.9</div>
+      </div>
+      <div class="card-content">
+        <h3>Shirdi Sai Darshan Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹6,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Sai Baba Temple + Samadhi Mandir</li>
+          <li><b>Day 2:</b> Dwarkamai + Chavadi</li>
+          <li><b>Day 3:</b> Shani Shingnapur Day Trip</li>
+          <li class="extra-day"><b>Day 4:</b> Lendi Garden + Gurusthan</li>
+          <li class="extra-day"><b>Day 5:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 55. UJJAIN PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image55.png' %}" alt="Ujjain">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Ujjain Mahakal Darshan Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹6,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Mahakaleshwar Temple + Bhasma Aarti</li>
+          <li><b>Day 2:</b> Kal Bhairav Temple + Harsiddhi Temple</li>
+          <li><b>Day 3:</b> Ram Ghat + Shipra River</li>
+          <li class="extra-day"><b>Day 4:</b> Omkareshwar Day Trip</li>
+          <li class="extra-day"><b>Day 5:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 56. AMRITSAR PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image56.png' %}" alt="Amritsar">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.9</div>
+      </div>
+      <div class="card-content">
+        <h3>Amritsar Golden Temple Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹7,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Golden Temple + Langar</li>
+          <li><b>Day 2:</b> Wagah Border Ceremony</li>
+          <li><b>Day 3:</b> Jallianwala Bagh + Gobindgarh Fort</li>
+          <li class="extra-day"><b>Day 4:</b> Durgiana Temple + Hall Bazaar</li>
+          <li class="extra-day"><b>Day 5:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 57. BODH GAYA PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image57.png' %}" alt="Bodh Gaya">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Bodh Gaya Spiritual Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹7,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Mahabodhi Temple + Bodhi Tree</li>
+          <li><b>Day 2:</b> Great Buddha Statue + Thai Monastery</li>
+          <li><b>Day 3:</b> Japanese Temple + Tibetan Monastery</li>
+          <li class="extra-day"><b>Day 4:</b> Rajgir + Nalanda Day Trip</li>
+          <li class="extra-day"><b>Day 5:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 58. SARNATH PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image58.png' %}" alt="Sarnath">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.7</div>
+      </div>
+      <div class="card-content">
+        <h3>Sarnath Buddhist Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹6,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Dhamek Stupa + Ashoka Pillar</li>
+          <li><b>Day 2:</b> Sarnath Museum + Chaukhandi Stupa</li>
+          <li><b>Day 3:</b> Mulagandha Kuti Vihar</li>
+          <li class="extra-day"><b>Day 4:</b> Varanasi Ghats + Kashi Vishwanath</li>
+          <li class="extra-day"><b>Day 5:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 59. AGRA PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image59.png' %}" alt="Agra">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.9</div>
+      </div>
+      <div class="card-content">
+        <h3>Agra Heritage Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹7,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Taj Mahal + Agra Fort</li>
+          <li><b>Day 2:</b> Fatehpur Sikri Day Trip</li>
+          <li><b>Day 3:</b> Itmad-ud-Daulah + Mehtab Bagh</li>
+          <li class="extra-day"><b>Day 4:</b> Akbar's Tomb + Local Market</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 60. JAIPUR PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image60.png' %}" alt="Jaipur">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Jaipur Pink City Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹8,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Amer Fort + Elephant Ride</li>
+          <li><b>Day 2:</b> City Palace + Hawa Mahal</li>
+          <li><b>Day 3:</b> Jantar Mantar + Albert Hall</li>
+          <li class="extra-day"><b>Day 4:</b> Nahargarh Fort + Local Bazaars</li>
+          <li class="extra-day"><b>Day 5:</b> Shopping + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 61. JODHPUR PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image61.png' %}" alt="Jodhpur">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.7</div>
+      </div>
+      <div class="card-content">
+        <h3>Jodhpur Blue City Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹8,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Mehrangarh Fort + Jaswant Thada</li>
+          <li><b>Day 2:</b> Umaid Bhawan Palace + Clock Tower</li>
+          <li><b>Day 3:</b> Mandore Gardens + Balsamand Lake</li>
+          <li class="extra-day"><b>Day 4:</b> Village Safari + Local Crafts</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 62. UDAIPUR PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image62.png' %}" alt="Udaipur">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.9</div>
+      </div>
+      <div class="card-content">
+        <h3>Udaipur Lake City Package</h3>
+        <div class="days">⏰ 6 Days • 5 Nights</div>
+        <div class="price">₹10,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> City Palace + Lake Pichola Boat Ride</li>
+          <li><b>Day 2:</b> Jagdish Temple + Saheliyon Ki Bari</li>
+          <li><b>Day 3:</b> Fatehsagar Lake + Sajjangarh Palace</li>
+          <li class="extra-day"><b>Day 4:</b> Kumbhalgarh Fort Day Trip</li>
+          <li class="extra-day"><b>Day 5:</b> Ranakpur Jain Temple</li>
+          <li class="extra-day"><b>Day 6:</b> Local Market + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 63. JAISALMER PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image63.png' %}" alt="Jaisalmer">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Jaisalmer Desert Safari Package</h3>
+        <div class="days">⏰ 6 Days • 5 Nights</div>
+        <div class="price">₹11,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Jaisalmer Fort + Patwon Ki Haveli</li>
+          <li><b>Day 2:</b> Gadisar Lake + Bada Bagh</li>
+          <li><b>Day 3:</b> Sam Sand Dunes + Camel Safari</li>
+          <li class="extra-day"><b>Day 4:</b> Desert Camp + Cultural Program</li>
+          <li class="extra-day"><b>Day 5:</b> Kuldhara Village + Tanot Mata Temple</li>
+          <li class="extra-day"><b>Day 6:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 64. BIKANER PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image64.png' %}" alt="Bikaner">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.6</div>
+      </div>
+      <div class="card-content">
+        <h3>Bikaner Heritage Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹7,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Junagarh Fort + Lalgarh Palace</li>
+          <li><b>Day 2:</b> Karni Mata Temple + Camel Farm</li>
+          <li><b>Day 3:</b> Gajner Palace + Desert Safari</li>
+          <li class="extra-day"><b>Day 4:</b> Bhandasar Jain Temple + Local Market</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 65. PUSHKAR PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image65.png' %}" alt="Pushkar">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.7</div>
+      </div>
+      <div class="card-content">
+        <h3>Pushkar Spiritual Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹6,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Brahma Temple + Pushkar Lake</li>
+          <li><b>Day 2:</b> Savitri Temple + Rose Garden</li>
+          <li><b>Day 3:</b> Ajmer Sharif Dargah Day Trip</li>
+          <li class="extra-day"><b>Day 4:</b> Camel Fair Ground + Local Bazaar</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 66. DELHI PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image66.png' %}" alt="Delhi">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Delhi City Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹9,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Red Fort + Jama Masjid + Chandni Chowk</li>
+          <li><b>Day 2:</b> Qutub Minar + Lotus Temple + Akshardham</li>
+          <li><b>Day 3:</b> India Gate + Rashtrapati Bhavan</li>
+          <li class="extra-day"><b>Day 4:</b> Humayun Tomb + Lodhi Garden</li>
+          <li class="extra-day"><b>Day 5:</b> Shopping + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 67. LUCKNOW PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image67.png' %}" alt="Lucknow">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.7</div>
+      </div>
+      <div class="card-content">
+        <h3>Lucknow Nawabi Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹6,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Bara Imambara + Chota Imambara</li>
+          <li><b>Day 2:</b> Rumi Darwaza + British Residency</li>
+          <li><b>Day 3:</b> Ambedkar Park + Gomti Nagar</li>
+          <li class="extra-day"><b>Day 4:</b> Hazratganj + Chowk Market</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 68. HYDERABAD PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image68.png' %}" alt="Hyderabad">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Hyderabad City Tour Package</h3>
+        <div class="days">⏰ 6 Days • 5 Nights</div>
+        <div class="price">₹10,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Charminar + Mecca Masjid</li>
+          <li><b>Day 2:</b> Golconda Fort + Qutub Shahi Tombs</li>
+          <li><b>Day 3:</b> Ramoji Film City</li>
+          <li class="extra-day"><b>Day 4:</b> Hussain Sagar + Birla Mandir</li>
+          <li class="extra-day"><b>Day 5:</b> Salar Jung Museum + Laad Bazaar</li>
+          <li class="extra-day"><b>Day 6:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 69. MYSORE PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image69.png' %}" alt="Mysore">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Mysore Palace Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹8,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Mysore Palace + Chamundi Hills</li>
+          <li><b>Day 2:</b> Brindavan Gardens + KRS Dam</li>
+          <li><b>Day 3:</b> Srirangapatna + Tipu Sultan Palace</li>
+          <li class="extra-day"><b>Day 4:</b> Mysore Zoo + St. Philomena Church</li>
+          <li class="extra-day"><b>Day 5:</b> Shopping + Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 70. HAMPI PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image70.png' %}" alt="Hampi">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.9</div>
+      </div>
+      <div class="card-content">
+        <h3>Hampi Heritage Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹9,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Virupaksha Temple + Hemakuta Hill</li>
+          <li><b>Day 2:</b> Vittala Temple + Stone Chariot</li>
+          <li><b>Day 3:</b> Royal Enclosure + Elephant Stables</li>
+          <li class="extra-day"><b>Day 4:</b> Matanga Hill + Lotus Mahal</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 71. KHAJURAHO PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image71.png' %}" alt="Khajuraho">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Khajuraho Temples Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹8,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Western Group of Temples</li>
+          <li><b>Day 2:</b> Eastern Group + Jain Temples</li>
+          <li><b>Day 3:</b> Southern Group + Light & Sound Show</li>
+          <li class="extra-day"><b>Day 4:</b> Raneh Falls + Panna National Park</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 72. ORCHHA PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image72.png' %}" alt="Orchha">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.7</div>
+      </div>
+      <div class="card-content">
+        <h3>Orchha Heritage Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹6,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Orchha Fort + Jahangir Mahal</li>
+          <li><b>Day 2:</b> Ram Raja Temple + Chaturbhuj Temple</li>
+          <li><b>Day 3:</b> Chhatris + Betwa River</li>
+          <li class="extra-day"><b>Day 4:</b> Jhansi Fort Day Trip</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 73. AJANTA PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image73.png' %}" alt="Ajanta">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.9</div>
+      </div>
+      <div class="card-content">
+        <h3>Ajanta Caves Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹9,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Ajanta Caves + Paintings</li>
+          <li><b>Day 2:</b> Local Village + Handicrafts</li>
+          <li><b>Day 3:</b> Ellora Caves Day Trip</li>
+          <li class="extra-day"><b>Day 4:</b> Bibi Ka Maqbara + Aurangabad</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 74. ELLORA PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image74.png' %}" alt="Ellora">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.9</div>
+      </div>
+      <div class="card-content">
+        <h3>Ellora Caves Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹9,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Kailasa Temple + Buddhist Caves</li>
+          <li><b>Day 2:</b> Hindu Caves + Jain Caves</li>
+          <li><b>Day 3:</b> Daulatabad Fort</li>
+          <li class="extra-day"><b>Day 4:</b> Ajanta Caves Day Trip</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 75. CHITTORGARH PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image75.png' %}" alt="Chittorgarh">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.7</div>
+      </div>
+      <div class="card-content">
+        <h3>Chittorgarh Fort Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹7,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Chittorgarh Fort + Vijay Stambh</li>
+          <li><b>Day 2:</b> Rana Kumbha Palace + Meera Temple</li>
+          <li><b>Day 3:</b> Fateh Prakash Palace</li>
+          <li class="extra-day"><b>Day 4:</b> Local Market + Museums</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 76. FATEHPUR SIKRI PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image76.png' %}" alt="Fatehpur Sikri">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Fatehpur Sikri Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹6,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Buland Darwaza + Jama Masjid</li>
+          <li><b>Day 2:</b> Panch Mahal + Diwan-e-Khas</li>
+          <li><b>Day 3:</b> Salim Chishti Dargah</li>
+          <li class="extra-day"><b>Day 4:</b> Agra Taj Mahal Day Trip</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 77. MAHESHWAR PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image77.png' %}" alt="Maheshwar">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.6</div>
+      </div>
+      <div class="card-content">
+        <h3>Maheshwar Heritage Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹5,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Maheshwar Fort + Narmada Ghat</li>
+          <li><b>Day 2:</b> Rajeshwar Temple</li>
+          <li><b>Day 3:</b> Handloom Weaving + Local Market</li>
+          <li class="extra-day"><b>Day 4:</b> Omkareshwar Day Trip</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 78. MANDU PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image78.png' %}" alt="Mandu">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.7</div>
+      </div>
+      <div class="card-content">
+        <h3>Mandu Heritage Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹6,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Jahaz Mahal + Hindola Mahal</li>
+          <li><b>Day 2:</b> Rani Roopmati Pavilion</li>
+          <li><b>Day 3:</b> Jami Masjid + Hoshang Shah Tomb</li>
+          <li class="extra-day"><b>Day 4:</b> Baz Bahadur Palace + Narmada View</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 79. JIM CORBETT PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image79.png' %}" alt="Jim Corbett">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Jim Corbett Safari Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹12,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Dhikala Zone Safari</li>
+          <li><b>Day 2:</b> Bijrani Zone Safari + Nature Walk</li>
+          <li><b>Day 3:</b> Corbett Museum + Garjiya Temple</li>
+          <li class="extra-day"><b>Day 4:</b> River Rafting + Jhirna Zone</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 80. RANTHAMBORE PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image80.png' %}" alt="Ranthambore">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.9</div>
+      </div>
+      <div class="card-content">
+        <h3>Ranthambore Tiger Safari Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹14,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Ranthambore Fort + Tiger Safari</li>
+          <li><b>Day 2:</b> Morning + Evening Safari</li>
+          <li><b>Day 3:</b> Padam Talab + Malik Lake</li>
+          <li class="extra-day"><b>Day 4:</b> Village Safari + Local Culture</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 81. KAZIRANGA PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image81.png' %}" alt="Kaziranga">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.9</div>
+      </div>
+      <div class="card-content">
+        <h3>Kaziranga Wildlife Package</h3>
+        <div class="days">⏰ 6 Days • 5 Nights</div>
+        <div class="price">₹16,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Central Zone Jeep Safari</li>
+          <li><b>Day 2:</b> Western Zone Safari + Elephant Ride</li>
+          <li><b>Day 3:</b> Eastern Zone + Bird Watching</li>
+          <li class="extra-day"><b>Day 4:</b> Tea Garden + Local Village</li>
+          <li class="extra-day"><b>Day 5:</b> Kaziranga National Orchid Park</li>
+          <li class="extra-day"><b>Day 6:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 82. BANDHAVGARH PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image82.png' %}" alt="Bandhavgarh">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.9</div>
+      </div>
+      <div class="card-content">
+        <h3>Bandhavgarh Tiger Safari Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹15,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Tala Zone Safari</li>
+          <li><b>Day 2:</b> Magdhi Zone + Bandhavgarh Fort</li>
+          <li><b>Day 3:</b> Khitauli Zone Safari</li>
+          <li class="extra-day"><b>Day 4:</b> Nature Walk + Bird Watching</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 83. KANHA PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image83.png' %}" alt="Kanha">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Kanha National Park Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹14,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Kanha Zone Safari</li>
+          <li><b>Day 2:</b> Kisli Zone + Bamni Dadar</li>
+          <li><b>Day 3:</b> Mukki Zone Safari</li>
+          <li class="extra-day"><b>Day 4:</b> Nature Trail + Local Village</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 84. SUNDARBANS PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image84.png' %}" alt="Sundarbans">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Sundarbans Tiger Package</h3>
+        <div class="days">⏰ 6 Days • 5 Nights</div>
+        <div class="price">₹17,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Boat Safari + Mangrove Forest</li>
+          <li><b>Day 2:</b> Sajnekhali Wildlife Sanctuary</li>
+          <li><b>Day 3:</b> Sudhanyakhali Watch Tower</li>
+          <li class="extra-day"><b>Day 4:</b> Dobanki Canopy Walk</li>
+          <li class="extra-day"><b>Day 5:</b> Local Village + Cultural Show</li>
+          <li class="extra-day"><b>Day 6:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 85. GIR NATIONAL PARK PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image85.png' %}" alt="Gir">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.9</div>
+      </div>
+      <div class="card-content">
+        <h3>Gir National Park Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹15,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Gir Jungle Safari + Lion Tracking</li>
+          <li><b>Day 2:</b> Devalia Safari Park</li>
+          <li><b>Day 3:</b> Kamleshwar Dam + Crocodile Breeding Farm</li>
+          <li class="extra-day"><b>Day 4:</b> Nature Trail + Tribal Village</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 86. PERIYAR PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image86.png' %}" alt="Periyar">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Periyar Wildlife Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹11,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Periyar Lake Boat Safari</li>
+          <li><b>Day 2:</b> Bamboo Rafting + Jungle Patrol</li>
+          <li><b>Day 3:</b> Spice Plantation Tour</li>
+          <li class="extra-day"><b>Day 4:</b> Elephant Ride + Tribal Village</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 87. VALLEY OF FLOWERS PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image87.png' %}" alt="Valley of Flowers">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.9</div>
+      </div>
+      <div class="card-content">
+        <h3>Valley of Flowers Package</h3>
+        <div class="days">⏰ 7 Days • 6 Nights</div>
+        <div class="price">₹18,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Rishikesh to Govindghat Drive</li>
+          <li><b>Day 2:</b> Govindghat to Ghangaria Trek</li>
+          <li><b>Day 3:</b> Valley of Flowers Trek</li>
+          <li class="extra-day"><b>Day 4:</b> Hemkund Sahib Trek</li>
+          <li class="extra-day"><b>Day 5:</b> Return to Govindghat</li>
+          <li class="extra-day"><b>Day 6:</b> Badrinath Darshan</li>
+          <li class="extra-day"><b>Day 7:</b> Return to Rishikesh</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 88. SPITI VALLEY PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image88.png' %}" alt="Spiti">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.9</div>
+      </div>
+      <div class="card-content">
+        <h3>Spiti Valley Adventure Package</h3>
+        <div class="days">⏰ 7 Days • 6 Nights</div>
+        <div class="price">₹19,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Shimla to Sarahan Drive</li>
+          <li><b>Day 2:</b> Sarahan to Kalpa + Sangla</li>
+          <li><b>Day 3:</b> Kalpa to Tabo Monastery</li>
+          <li class="extra-day"><b>Day 4:</b> Tabo to Kaza + Key Monastery</li>
+          <li class="extra-day"><b>Day 5:</b> Kaza + Kibber + Chicham Bridge</li>
+          <li class="extra-day"><b>Day 6:</b> Kaza to Chandratal Lake</li>
+          <li class="extra-day"><b>Day 7:</b> Return to Manali</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 89. TAWANG PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image89.png' %}" alt="Tawang">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Tawang Tour Package</h3>
+        <div class="days">⏰ 6 Days • 5 Nights</div>
+        <div class="price">₹17,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Guwahati to Bomdila Drive</li>
+          <li><b>Day 2:</b> Bomdila to Dirang + Local Sightseeing</li>
+          <li><b>Day 3:</b> Dirang to Tawang + Sela Pass</li>
+          <li class="extra-day"><b>Day 4:</b> Tawang Monastery + War Memorial</li>
+          <li class="extra-day"><b>Day 5:</b> Bumla Pass + Madhuri Lake</li>
+          <li class="extra-day"><b>Day 6:</b> Return to Guwahati</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 90. ZIRO VALLEY PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image90.png' %}" alt="Ziro">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.7</div>
+      </div>
+      <div class="card-content">
+        <h3>Ziro Valley Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹13,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Guwahati to Ziro Drive</li>
+          <li><b>Day 2:</b> Ziro Valley + Apatani Tribal Village</li>
+          <li><b>Day 3:</b> Pine Grove + Tarin Fish Farm</li>
+          <li class="extra-day"><b>Day 4:</b> Meghna Cave + Local Market</li>
+          <li class="extra-day"><b>Day 5:</b> Return to Guwahati</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 91. SHILLONG PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image91.png' %}" alt="Shillong">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Shillong Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹12,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Shillong Peak + Ward's Lake</li>
+          <li><b>Day 2:</b> Elephant Falls + Lady Hydari Park</li>
+          <li><b>Day 3:</b> Cherrapunji Day Trip</li>
+          <li class="extra-day"><b>Day 4:</b> Dawki + Mawlynnong Village</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 92. CHERRAPUNJI PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image92.png' %}" alt="Cherrapunji">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Cherrapunji Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹13,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Nohkalikai Falls + Seven Sisters Falls</li>
+          <li><b>Day 2:</b> Mawsmai Cave + Thangkharang Park</li>
+          <li><b>Day 3:</b> Living Root Bridge + Eco Park</li>
+          <li class="extra-day"><b>Day 4:</b> Dawki River + Bangladesh Border</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 93. DARJEELING PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image93.png' %}" alt="Darjeeling">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.9</div>
+      </div>
+      <div class="card-content">
+        <h3>Darjeeling Tour Package</h3>
+        <div class="days">⏰ 6 Days • 5 Nights</div>
+        <div class="price">₹14,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Mall Road + Chowrasta</li>
+          <li><b>Day 2:</b> Tiger Hill Sunrise + Batasia Loop</li>
+          <li><b>Day 3:</b> Toy Train + Tea Garden</li>
+          <li class="extra-day"><b>Day 4:</b> Himalayan Zoo + Peace Pagoda</li>
+          <li class="extra-day"><b>Day 5:</b> Mirik Lake Day Trip</li>
+          <li class="extra-day"><b>Day 6:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 94. GANGTOK PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image94.png' %}" alt="Gangtok">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.9</div>
+      </div>
+      <div class="card-content">
+        <h3>Gangtok Tour Package</h3>
+        <div class="days">⏰ 6 Days • 5 Nights</div>
+        <div class="price">₹15,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> MG Marg + Enchey Monastery</li>
+          <li><b>Day 2:</b> Tsomgo Lake + Baba Mandir</li>
+          <li><b>Day 3:</b> Nathula Pass + Ganesh Tok</li>
+          <li class="extra-day"><b>Day 4:</b> Rumtek Monastery + Flower Show</li>
+          <li class="extra-day"><b>Day 5:</b> Pelling Day Trip</li>
+          <li class="extra-day"><b>Day 6:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 95. PELLING PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image95.png' %}" alt="Pelling">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Pelling Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹13,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Pemayangtse Monastery + Rabdentse Ruins</li>
+          <li><b>Day 2:</b> Khecheopalri Lake + Kanchenjunga Falls</li>
+          <li><b>Day 3:</b> Sky Walk + Rimbi Waterfall</li>
+          <li class="extra-day"><b>Day 4:</b> Local Sightseeing + Market</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 96. KALIMPONG PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image96.png' %}" alt="Kalimpong">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.7</div>
+      </div>
+      <div class="card-content">
+        <h3>Kalimpong Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹12,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Durpin Dara + Zang Dog Palri Monastery</li>
+          <li><b>Day 2:</b> Deolo Hill + Flower Nursery</li>
+          <li><b>Day 3:</b> Lava + Lolegaon Day Trip</li>
+          <li class="extra-day"><b>Day 4:</b> Local Market + Handicraft Center</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 97. MOUNT ABU PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image97.png' %}" alt="Mount Abu">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.7</div>
+      </div>
+      <div class="card-content">
+        <h3>Mount Abu Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹8,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Nakki Lake + Toad Rock</li>
+          <li><b>Day 2:</b> Dilwara Temples + Brahma Kumaris</li>
+          <li><b>Day 3:</b> Sunset Point + Honeymoon Point</li>
+          <li class="extra-day"><b>Day 4:</b> Guru Shikhar + Achalgarh Fort</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 98. SAPUTARA PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image98.png' %}" alt="Saputara">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.6</div>
+      </div>
+      <div class="card-content">
+        <h3>Saputara Hill Station Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹7,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Saputara Lake + Boat Ride</li>
+          <li><b>Day 2:</b> Sunset Point + Governor's Hill</li>
+          <li><b>Day 3:</b> Artist Village + Tribal Museum</li>
+          <li class="extra-day"><b>Day 4:</b> Gira Falls + Ropeway</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 99. PACHMARHI PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image99.png' %}" alt="Pachmarhi">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.7</div>
+      </div>
+      <div class="card-content">
+        <h3>Pachmarhi Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹8,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Bee Falls + Handi Khoh</li>
+          <li><b>Day 2:</b> Pandav Caves + Jatmai Temple</li>
+          <li><b>Day 3:</b> Satpura National Park Safari</li>
+          <li class="extra-day"><b>Day 4:</b> Dhoopgarh Sunset + Rajendra Giri</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 100. MAHABALESHWAR PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image100.png' %}" alt="Mahabaleshwar">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Mahabaleshwar Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹9,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Venna Lake + Strawberry Farms</li>
+          <li><b>Day 2:</b> Wilson Point + Elephant's Head Point</li>
+          <li><b>Day 3:</b> Pratapgarh Fort + Mapro Garden</li>
+          <li class="extra-day"><b>Day 4:</b> Lingmala Waterfall + Panchgani</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 101. NASHIK PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image101.png' %}" alt="Nashik">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.7</div>
+      </div>
+      <div class="card-content">
+        <h3>Nashik Spiritual Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹7,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Trimbakeshwar Temple + Panchavati</li>
+          <li><b>Day 2:</b> Sula Vineyards + Wine Tasting</li>
+          <li><b>Day 3:</b> Kalaram Temple + Ramkund</li>
+          <li class="extra-day"><b>Day 4:</b> Saptashrungi Devi Temple</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 102. RANN OF KUTCH PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image102.png' %}" alt="Rann of Kutch">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.9</div>
+      </div>
+      <div class="card-content">
+        <h3>Rann of Kutch Package</h3>
+        <div class="days">⏰ 6 Days • 5 Nights</div>
+        <div class="price">₹16,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Bhuj + Aina Mahal + Prag Mahal</li>
+          <li><b>Day 2:</b> White Desert + Tent City</li>
+          <li><b>Day 3:</b> Mandvi Beach + Vijay Vilas Palace</li>
+          <li class="extra-day"><b>Day 4:</b> Kala Dungar + India Bridge</li>
+          <li class="extra-day"><b>Day 5:</b> Handicraft Village Tour</li>
+          <li class="extra-day"><b>Day 6:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 103. DHANAULTI PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image103.png' %}" alt="Dhanaulti">
+        <div class="future-tag">🏆 Featured Package</div>
+        <div class="rating-badge">⭐ 4.7</div>
+      </div>
+      <div class="card-content">
+        <h3>Dhanaulti Tour Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹7,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Eco Park + Apple Orchard</li>
+          <li><b>Day 2:</b> Surkanda Devi Temple</li>
+          <li><b>Day 3:</b> Mussoorie Day Trip</li>
+          <li class="extra-day"><b>Day 4:</b> Adventure Park + Nature Walk</li>
+          <li class="extra-day"><b>Day 5:</b> Departure</li>
+        </ul>
+        <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+    </li>
+    </ul>
+    </div>
+    </div>
+
+    <!-- 104. SPITI VALLEY PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image104.png' %}" alt="Spiti Valley">
+        <div class="future-tag">🏆 Best Seller</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Spiti Valley Package</h3>
+        <div class="days">⏰ 8 Days • 7 Nights</div>
+        <div class="price">₹22,499 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Delhi to Shimla Drive</li>
+          <li><b>Day 2:</b> Shimla to Sarahan</li>
+          <li><b>Day 3:</b> Sarahan to Sangla Valley</li>
+          <li class="extra-day"><b>Day 4:</b> Sangla to Kalpa</li>
+          <li class="extra-day"><b>Day 5:</b> Kalpa to Tabo to Kaza</li>
+          <li class="extra-day"><b>Day 6:</b> Kaza Local + Key Monastery</li>
+          <li class="extra-day"><b>Day 7:</b> Chandratal Lake Visit</li>
+          <li class="extra-day"><b>Day 8:</b> Return to Delhi</li>
+        </ul>
+        <div class="btn-group">
+          <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 105. ANDAMAN BEACH PACKAGE -->
+    <div class="card">
+      <div class="card-img"><img src="{% static 'home/Image/Domestic_Image/Image105.png' %}" alt="Andaman">
+        <div class="future-tag">🏆 Best Seller</div>
+        <div class="rating-badge">⭐ 4.9</div>
+      </div>
+      <div class="card-content">
+        <h3>Andaman Beach Package</h3>
+        <div class="days">⏰ 6 Days • 5 Nights</div>
+        <div class="price">₹24,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Port Blair Arrival + Cellular Jail</li>
+          <li><b>Day 2:</b> Ross Island + North Bay</li>
+          <li><b>Day 3:</b> Havelock Island + Radhanagar Beach</li>
+          <li class="extra-day"><b>Day 4:</b> Elephant Beach Water Sports</li>
+          <li class="extra-day"><b>Day 5:</b> Neil Island Trip</li>
+          <li class="extra-day"><b>Day 6:</b> Departure from Port Blair</li>
+        </ul>
+        <div class="btn-group">
+          <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="package-navigation" id="packagePagination"></div>
+
+  <!-- WHY CHOOSE US SECTION -->
+<section class="why-choose-section">
+<h1 class="why-heading"><span class="blue">Why Choose</span> <span class="orange">TravelEase</span></h1>
+<p class="why-subheading">Trusted by thousands of travelers for a reason. Here’s what makes us different.</p>
+<div class="why-container">
+<div class="why-card"><div class="why-icon">✈️</div><h3>Best Price Guarantee</h3><p>Lowest prices on flights & hotels. Found cheaper? We’ll match it.</p></div>
+<div class="why-card"><div class="why-icon">🛡️</div><h3>Safe & Secure Booking</h3><p>100% secure payments and verified partners. Fully protected.</p></div>
+<div class="why-card"><div class="why-icon">📞</div><h3>24/7 Customer Support</h3><p>Real experts available round the clock before, during & after trip.</p></div>
+<div class="why-card"><div class="why-icon">🎯</div><h3>Customized Packages</h3><p>Solo to Group - personalized trips as per your budget & choice.</p></div>
+<div class="why-card"><div class="why-icon">⭐</div><h3>10K+ Happy Travelers</h3><p>Trusted by 10,000+ customers with 4.9★ real reviews.</p></div>
+<div class="why-card"><div class="why-icon">🌍</div><h3>500+ Destinations</h3><p>Hill stations to beaches, India to abroad - 500+ locations.</p></div>
+<div class="why-card"><div class="why-icon">💸</div><h3>No Hidden Charges</h3><p>What you see is what you pay. 100% transparency, zero surprises.</p></div>
+<div class="why-card"><div class="why-icon">⚡</div><h3>Instant Booking</h3><p>2-minute confirmation + Free cancellation on most packages.</p></div>
+</div>
+</section>
+
+  <!-- ================= CUSTOMER REVIEWS SECTION ================= -->
+
+  <div class="reviews-container">
+
+    <!-- Section Heading - NEW STYLE -->
+    <div class="reviews-heading">
+      <h2 class="why-heading">
+        <span class="blue">What Our</span>
+        <span class="orange">Customers Say</span>
+      </h2>
+      <p class="why-subheading">
+        Our customers' experiences inspire us to make every journey
+        more comfortable, memorable, and enjoyable.
+      </p>
+    </div>
+
+    <!-- Reviews -->
+    <div class="reviews-grid">
+
+      <!-- Review 1 -->
+      <div class="review-card">
+        <div class="review-top">
+          <div class="customer-info">
+            <img src="https://i.pravatar.cc/100?img=12" alt="Rahul Sharma">
+            <div>
+              <h3>Rahul Sharma</h3>
+              <span>Delhi, India</span>
+            </div>
+          </div>
+          <div class="review-rating">★★★★★</div>
+        </div>
+        <p class="review-text">
+          "TravelEase made our Manali trip absolutely amazing.
+          Everything was perfectly planned and the hotel was
+          excellent. Highly recommended!"
+        </p>
+        <div class="review-footer">
+          <span>📍 Manali</span>
+          <span>✓ Verified Traveller</span>
+        </div>
+      </div>
+
+      <!-- Review 2 -->
+      <div class="review-card">
+        <div class="review-top">
+          <div class="customer-info">
+            <img src="https://i.pravatar.cc/100?img=47" alt="Priya Singh">
+            <div>
+              <h3>Priya Singh</h3>
+              <span>Mumbai, India</span>
+            </div>
+          </div>
+          <div class="review-rating">★★★★★</div>
+        </div>
+        <p class="review-text">
+          "Our Goa vacation was wonderful! The booking process
+          was simple and the TravelEase team was very helpful
+          throughout our journey."
+        </p>
+        <div class="review-footer">
+          <span>📍 Goa</span>
+          <span>✓ Verified Traveller</span>
+        </div>
+      </div>
+
+      <!-- Review 3 -->
+      <div class="review-card">
+        <div class="review-top">
+          <div class="customer-info">
+            <img src="https://i.pravatar.cc/100?img=33" alt="Amit Verma">
+            <div>
+              <h3>Amit Verma</h3>
+              <span>Lucknow, India</span>
+            </div>
+          </div>
+          <div class="review-rating">★★★</div>
+        </div>
+        <p class="review-text">
+          "Kashmir was a dream destination for us and TravelEase
+          made it even better. Great service, beautiful hotels
+          and a well-organized itinerary."
+        </p>
+        <div class="review-footer">
+          <span>📍 Kashmir</span>
+          <span>✓ Verified Traveller</span>
+        </div>
+      </div>
+        <!-- Review 4 - NEW -->
+    <div class="review-card">
+      <div class="review-top">
+        <div class="customer-info">
+          <img src="https://i.pravatar.cc/100?img=56" alt="Sneha Patel">
+          <div>
+            <h3>Sneha Patel</h3>
+            <span>Toronto, Canada 🇨🇦</span>
+          </div>
+        </div>
+        <div class="review-rating">★★★★★</div>
+      </div>
+      <p class="review-text">
+        "Australia tour was beyond expectations! Great itinerary, 
+        5-star hotels and kangaroo island visit was the highlight. 
+        TravelEase team is super professional."
+      </p>
+      <div class="review-footer">
+        <span>📍 Australia</span>
+        <span>✓ Verified International Traveller</span>
+      </div>
+    </div>
+    <!-- Review 5 -->
+<div class="review-card">
+  <div class="review-top">
+    <div class="customer-info">
+      <img src="https://i.pravatar.cc/100?img=65" alt="Karan Mehta">
+      <div>
+        <h3>Karan Mehta</h3>
+        <span>Singapore 🇸🇬</span>
+      </div>
+    </div>
+    <div class="review-rating">★★★</div>
+  </div>
+  <p class="review-text">
+    "Our Thailand + Singapore package was super smooth! 
+    No visa tension, perfect hotel location and amazing city tours. 
+    TravelEase really knows how to handle international trips."
+  </p>
+  <div class="review-footer">
+    <span>📍 Thailand & Singapore</span>
+    <span>✓ Verified International Traveller</span>
+  </div>
+</div>
+
+<!-- Review 6 -->
+<div class="review-card">
+  <div class="review-top">
+    <div class="customer-info">
+      <img src="https://i.pravatar.cc/100?img=8" alt="Ananya Reddy">
+      <div>
+        <h3>Ananya Reddy</h3>
+        <span>Manchester, UK 🇬🇧</span>
+      </div>
+    </div>
+    <div class="review-rating">★★★★★</div>
+  </div>
+  <p class="review-text">
+    "Egypt trip was a lifetime experience! Pyramids, Nile Cruise 
+    and desert safari everything was on point. The local guide 
+    arranged by TravelEase was excellent. 10/10 service."
+  </p>
+  <div class="review-footer">
+    <span>📍 Egypt</span>
+    <span>✓ Verified International Traveller</span>
+  </div>
+</div>
+</div>
+
+    <!-- Bottom Rating -->
+    <div class="overall-rating">
+      <div class="rating-number">4.9</div>
+      <div>
+        <div class="big-stars">★★★★★</div>
+        <p>Based on 1,250+ customer reviews</p>
+      </div>
+    </div>
+  </div>
+  </section>
+
+  <!-- =========== FAQ SECTION =========== -->
+  <section class="faq-section">
+<div class="faq-container">
+<div class="faq-header"><h2>Frequently <span>Asked Questions</span></h2><p class="desc">Everything you need to know about booking your luxury journey with us</p></div>
+<div class="faq-wrapper">
+<div class="faq-item"><button class="faq-question"><span>How far in advance should I book my luxury trip?</span><span class="faq-icon">+</span></button><div class="faq-answer"><p>We recommend booking 3-6 months in advance for peak seasons and private jet charters. However, our team can arrange last-minute luxury trips within 72 hours based on availability.</p></div></div>
+<div class="faq-item"><button class="faq-question"><span>Are your prices negotiable? Do you offer payment plans?</span><span class="faq-icon">+</span></button><div class="faq-answer"><p>Yes! We offer flexible payment plans and best price guarantee. Found a lower price? We'll beat it and add exclusive perks worth $1000+. Speak to your travel curator for details.</p></div></div>
+<div class="faq-item"><button class="faq-question"><span>What if I need to cancel or change my booking?</span><span class="faq-icon">+</span></button><div class="faq-answer"><p>Your comfort is priority. We offer free changes up to 14 days before travel. Cancellations are handled case-by-case with our partners to get you maximum refunds and credits.</p></div></div>
+<div class="faq-item"><button class="faq-question"><span>Do you provide 24/7 support during my trip?</span><span class="faq-icon">+</span></button><div class="faq-answer"><p>Absolutely. Every client gets a dedicated travel curator + 24/7 emergency hotline. Lost passport, flight delay, medical emergency - we handle everything instantly, anywhere in the world.</p></div></div>
+<div class="faq-item"><button class="faq-question"><span>How do you ensure privacy and security for VIP clients?</span><span class="faq-icon">+</span></button><div class="faq-answer"><p>We use bank-level encryption for all bookings. NDAs available for high-profile clients. Private jet terminals, discreet hotels, and security coordination can be arranged on request.</p></div></div>
+</div>
+</div>
+</section>
+
+<script>
+function toggleDays(btn){
+  const card = btn.closest('.card');
+  const extras = card.querySelectorAll('.extra-day');
+  const isOpen = card.classList.contains('open');
+
+  if(!isOpen){
+    extras.forEach(e=> e.style.display='block'); // flex ki jagah block
+    card.classList.add('open');
+    card.classList.add('expanded'); // height ke liye
+    btn.innerHTML='Hide Itinerary ⬆️';
+  } else {
+    extras.forEach(e=> e.style.display='none');
+    card.classList.remove('open');
+    card.classList.remove('expanded');
+    btn.innerHTML='View Itinerary ⬇️';
+  }
+}
+
+function bookNowLink(el){
+  const card = el.closest('.card');
+  const place = card.querySelector('h3').innerText.trim();
+  const price = card.querySelector('.price').innerText.replace(/[^0-9]/g, '');
+  const days = card.querySelector('.days').innerText.replace(/[^0-9A-Za-z\s•\-]/g,'').trim();
+  const imgTag = card.querySelector('.card-img img');
+  const imgSrc = imgTag ? imgTag.getAttribute('src') : "";
+  localStorage.setItem('lastPackageImg', imgSrc);
+  localStorage.setItem('lastPackagePlace', place);
+  let iti = [];
+  card.querySelectorAll('.itinerary li').forEach(li=> iti.push(li.innerText.replace(/📍|⏰/g,'').trim()));
+  const params = new URLSearchParams({place, price, days, img: imgSrc, iti: iti.join(' | ')});
+  el.href = `../booknow/?${params.toString()}`;
+  return true;
+}
+
+/* 15 - 15 - 15 Pagination - Responsive */
+document.addEventListener('DOMContentLoaded', function () {
+  const allCards = document.querySelectorAll('.container .card');
+  const paginationBox = document.getElementById('packagePagination');
+  if(!paginationBox || allCards.length === 0) return;
+
+  const perPage = 15;
+  let currentPageNum = 1;
+
+  function showPageNum(page){
+    currentPageNum = page;
+    let start = (page-1)*perPage;
+    let end = start + perPage;
+    allCards.forEach((card, idx)=>{
+      card.style.display = (idx>=start && idx<end) ? "flex" : "none";
+    });
+    renderPageNumbers();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function renderPageNumbers(){
+    let totalPages = Math.ceil(allCards.length / perPage);
+    paginationBox.innerHTML="";
+
+    let prev = document.createElement("button");
+    prev.innerHTML="‹ Previous";
+    prev.disabled = currentPageNum===1;
+    prev.onclick=()=>{ if(currentPageNum>1) showPageNum(currentPageNum-1); };
+    paginationBox.appendChild(prev);
+
+    // Mobile pe 1 2 3... dikhane ke liye limit
+    let maxVisible = window.innerWidth < 600 ? 3 : totalPages;
+    let startPage = Math.max(1, currentPageNum - 1);
+    let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+
+    for(let i=startPage; i<=endPage; i++){
+      let btn = document.createElement("button");
+      btn.innerText=i;
+      if(i===currentPageNum) btn.classList.add("active");
+      btn.onclick=()=>showPageNum(i);
+      paginationBox.appendChild(btn);
+    }
+
+    let next = document.createElement("button");
+    next.innerHTML="Next ›";
+    next.disabled = currentPageNum===totalPages;
+    next.onclick=()=>{ if(currentPageNum<totalPages) showPageNum(currentPageNum+1); };
+    paginationBox.appendChild(next);
+  }
+
+  showPageNum(1);
+  window.addEventListener('resize', ()=> renderPageNumbers());
+});
+
+
+/*................FQ.................*/
+const faqItems = document.querySelectorAll('.faq-item');
+faqItems.forEach(item => {
+const question = item.querySelector('.faq-question');
+question.addEventListener('click', () => {
+faqItems.forEach(otherItem => {
+if (otherItem !== item) {
+otherItem.classList.remove('active');
+}
+});
+item.classList.toggle('active');
+});
+});
+</script>
+</body>
+</html>
+{% endblock %}

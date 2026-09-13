@@ -1,0 +1,2000 @@
+{% extends 'home/Master.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TravelEase - Domestic & International Hotels</title>
+
+    {% load static %}
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+    * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins', sans-serif }
+body { background:#f4f6fb; color:#172033; padding:0 }
+.domestic-wrap { max-width:1220px; margin:0 auto; padding:0 28px; width:100%; }
+.domestic-heading { text-align:center; margin-bottom:35px; padding:100px 0px 0px; }
+.domestic-heading h2 { font-size:52px; font-weight:800; line-height:1.3; margin-bottom:7px }
+.domestic-heading h2 .blue { color:#004aad }
+.domestic-heading h2 .orange { color:#ff7200 }
+.domestic-heading p { color:#6d7583; font-size:18px; margin-top:0 }
+.hotel-grid { width:100%; display:grid; grid-template-columns:repeat(3, 1fr); gap:24px; align-items:start; }
+.hotel-card { background:#fff; border-radius:22px; overflow:hidden; box-shadow:0 10px 28px rgba(0,0,0,.07); transition:.3s ease; display:flex; flex-direction:column; height:auto; border:1px solid #eef2ff }
+.hotel-card:hover { transform:translateY(-6px); box-shadow:0 16px 35px rgba(0,0,0,.12) }
+.hotel-card.active-expand { height:auto; box-shadow:0 18px 45px rgba(0,0,0,.18); z-index:5; }
+.hotel-card.hidden { display:none !important }
+.card-img { width:100%; height:240px; overflow:hidden; position:relative }
+.card-img img { width:100%; height:100%; object-fit:cover; display:block; transition:.4s ease }
+.hotel-card:hover .card-img img { transform:scale(1.08) }
+.card-badge { position:absolute; top:12px; left:12px; background:linear-gradient(135deg,#ff9800,#ff5722); color:#fff; font-size:10px; font-weight:700; padding:6px 12px; border-radius:20px; box-shadow:0 3px 10px rgba(0,0,0,.15) }
+.card-rating { position:absolute; top:12px; right:12px; background:#fff; color:#ff7200; font-size:11px; font-weight:700; padding:5px 10px; border-radius:20px; box-shadow:0 3px 10px rgba(0,0,0,.1) }
+.card-body { padding:16px 18px 18px; display:flex; flex-direction:column; }
+.hotel-name { font-size:19px; font-weight:800; color:#2196f3; margin-bottom:3px }
+.hotel-loc { font-size:13px; color:#666; margin-bottom:10px }
+.hotel-features { display:flex; flex-wrap:wrap; gap:7px; margin-bottom:12px }
+.feat { font-size:11px; font-weight:600; padding:5px 10px; border-radius:20px }
+.feat.wifi { background:#e3f0ff; color:#0b5ed7; border:1px solid #b9d7ff }
+.feat.pool { background:#e6fff1; color:#0d8a4a; border:1px solid #a3e9c1 }
+.feat.breakfast { background:#fff3db; color:#b45309; border:1px solid #ffde9e }
+.feat.view { background:#ffe9f0; color:#d61f5a; border:1px solid #ffb6cc }
+.rent-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px }
+.rent-row strong { font-size:22px; color:#f44336; font-weight:800 }
+.rent-row span { font-size:12px; color:#7c8593 }
+.room-type { background:#f5f7fa; padding:5px 9px; border-radius:6px; font-weight:600; font-size:12px }
+.visible-data { margin-top:2px }
+.detail-mini-card { background:#f8fafc; border:1px solid #e9eef5; border-radius:10px; padding:8px 10px; margin-bottom:8px; display:flex; gap:8px; align-items:center; font-size:13px; color:#334155; font-weight:500; transition:.25s ease; border-left:3px solid #2196f3 }
+.detail-mini-card:hover { background:#fff; transform:translateX(3px) }
+.detail-mini-card i { width:20px; height:20px; border-radius:50%; display:grid; place-items:center; font-size:10px; font-style:normal; flex-shrink:0 }
+.mini-green i { background:#dcfce7; color:#15803d; border:1px solid #86efac }
+.mini-blue i { background:#dbeafe; color:#1d4ed8; border:1px solid #93c5fd }
+.mini-orange i { background:#ffedd5; color:#c2410c; border:1px solid #fdba74 }
+.extra-data { max-height:0; overflow:hidden; transition:max-height .4s ease, opacity .3s ease; opacity:0 }
+.extra-data.open { max-height:500px; opacity:1; margin-top:0 }
+.btn-row { display:flex; gap:10px; margin-top:12px; padding-top:12px; }
+.view-btn,.book-btn,.btn-book { flex:1; height:44px; min-height:44px; max-height:44px; padding:0 10px !important; border-radius:50px !important; font-size:14px !important; font-weight:700 !important; cursor:pointer; text-align:center; text-decoration:none !important; transition:.25s ease; display:flex !important; justify-content:center; align-items:center; border:none !important; background:linear-gradient(90deg,#ff9800,#ff5722) !important; color:#fff !important; box-shadow:0 6px 15px rgba(255,87,34,.25) !important; line-height:1; }
+.view-btn:hover,.book-btn:hover,.btn-book:hover { transform:translateY(-3px); box-shadow:0 10px 20px rgba(255,87,34,.35) !important; }
+
+/* ===== NUMBER PAGINATION 6-6 WALA ===== */
+.pagination-wrap{
+  width:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+  margin:34px auto 60px;
+  flex-wrap:wrap;
+}
+.pg-btn{
+  min-width:42px;
+  height:42px;
+  padding:0 14px;
+  border-radius:50px;
+  border:1px solid #e2e8f0;
+  background:#fff;
+  color:#334155;
+  font-weight:700;
+  font-size:14px;
+  cursor:pointer;
+  transition:.2s ease;
+  box-shadow:0 3px 10px rgba(0,0,0,.05);
+}
+.pg-btn:hover{
+  transform:translateY(-2px);
+  background: linear-gradient(90deg, #ffb300, #ff7200);
+  color:#fff;
+  border-color: transparent;
+  box-shadow:0 8px 18px rgba(255,114,0,.3);
+}
+.pg-btn.active{
+  background: linear-gradient(90deg, #ffb300, #ff7200);
+  color:#fff;
+  border-color: transparent;
+  box-shadow:0 8px 18px rgba(255,114,0,.3);
+}
+.pg-btn:disabled{ opacity:.4; cursor:not-allowed; transform:none }
+
+@media(max-width:900px) {
+  .domestic-wrap { padding:0 22px }
+  .hotel-grid { grid-template-columns:repeat(2, 1fr) }
+}
+@media(max-width:600px) {
+  .domestic-wrap { padding:0 15px }
+  .hotel-grid { grid-template-columns:1fr }
+}
+</style>
+</head>
+
+<body>
+    <!-- DOMESTIC SECTION - FINAL LUXURY EDITION 1-30 -->
+    <div class="domestic-wrap" id="domesticTop">
+        <div class="domestic-heading">
+            <h2><span class="blue">Popular </span> <span class="orange">Domestic Hotels</span>🛎️</h2>
+            <p>Handpicked stays across India, crafted for comfort, convenience, and memorable journeys</p>
+        </div>
+        <div class="hotel-grid" id="domesticGrid">
+
+            <!-- 1 Goa - Taj Exotica Resort & Spa -->
+            <div class="hotel-card">
+                <div class="card-img"><img src="{% static 'home/Image/Domestic_Hotel/Image1.png' %}"><span
+                        class="card-badge">Goa • 4.9★</span><span class="card-rating">⭐ 4.8</span></div>
+                <div class="card-body">
+                    <div class="hotel-name">Taj Exotica Resort & Spa</div>
+                    <div class="hotel-loc">📍 Goa</div>
+                    <div class="hotel-features"><span class="feat view">Sea View</span><span class="feat pool">Private
+                            Pool</span><span class="feat breakfast">Breakfast</span></div>
+                    <div class="rent-row">
+                        <div><strong>₹24,999</strong><span> / night</span></div><span class="room-type">Luxury
+                            Villa</span>
+                    </div>
+                    <div class="visible-data">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Private Beach + Butler Service</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Jiva Spa + Yoga Pavilion</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Sunset Cruise + Dolphin Watch</div>
+                    </div>
+                    <div class="extra-data" id="d1">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Infinity Pool + Jacuzzi Villa</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Portuguese Architecture + Golf</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Seafood Grill + Beach BBQ</div>
+                        <div class="detail-mini-card mini-green"><i>✓</i>Airport Pickup + Free Breakfast</div>
+                    </div>
+                    <div class="btn-row">
+                        <button class="view-btn" onclick="toggleData('d1',this)">View Itinerary ⬇️</button>
+                        <a href="/hotel-booking/" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2 Manali - The Himalayan -->
+            <div class="hotel-card">
+                <div class="card-img"><img src="{% static 'home/Image/Domestic_Hotel/Image2.png' %}"><span
+                        class="card-badge">Manali • 4.8★</span></div>
+                <div class="card-body">
+                    <div class="hotel-name">The Himalayan</div>
+                    <div class="hotel-loc">📍 Himachal</div>
+                    <div class="hotel-features"><span class="feat view">Mountain</span><span
+                            class="feat heater">Heater</span><span class="feat breakfast">Breakfast</span></div>
+                    <div class="rent-row">
+                        <div><strong>₹18,999</strong><span> / night</span></div><span class="room-type">Royal
+                            Cottage</span>
+                    </div>
+                    <div class="visible-data">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Rohtang Snow View + Bonfire</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Norwegian Wood Cottage + Fireplace</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Skiing + River Rafting</div>
+                    </div>
+                    <div class="extra-data" id="d2">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Heated Pool + Jacuzzi</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Apple Orchard + Trout Fishing</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Paragliding + Solang Valley Tour</div>
+                        <div class="detail-mini-card mini-green"><i>✓</i>Multi-cuisine + Bar + Spa</div>
+                    </div>
+                    <div class="btn-row">
+                        <button class="view-btn" onclick="toggleData('d2',this)">View Itinerary ⬇️</button>
+                        <a href="/hotel-booking/" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3 Jaipur - Rambagh Palace -->
+            <div class="hotel-card">
+                <div class="card-img"><img src="{% static 'home/Image/Domestic_Hotel/Image3.png' %}"><span
+                        class="card-badge">Jaipur • 4.9★</span></div>
+                <div class="card-body">
+                    <div class="hotel-name">Rambagh Palace</div>
+                    <div class="hotel-loc">📍 Jaipur, Rajasthan</div>
+                    <div class="rent-row">
+                        <div><strong>₹45,999</strong><span> / night</span></div><span class="room-type">Palace
+                            Suite</span>
+                    </div>
+                    <div class="visible-data">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Former Maharaja Residence + Vintage Cars</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Elephant Polo + Horse Carriage</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Jiva Spa + Private Pool</div>
+                    </div>
+                    <div class="extra-data" id="d3">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Amer Fort Private Dinner</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Rajasthani Thali + Champagne Brunch</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Butler + Palace Tour + Yoga</div>
+                        <div class="detail-mini-card mini-green"><i>✓</i>Heritage Walk + Gem Palace Shopping</div>
+                    </div>
+                    <div class="btn-row">
+                        <button class="view-btn" onclick="toggleData('d3',this)">View Itinerary ⬇️</button>
+                        <a href="/hotel-booking/" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4 Srinagar -->
+            <div class="hotel-card">
+                <div class="card-img"><img src="{% static 'home/Image/Domestic_Hotel/Image4.png' %}"><span
+                        class="card-badge">Kashmir • 4.8★</span></div>
+                <div class="card-body">
+                    <div class="hotel-name">The LaLiT Grand Palace</div>
+                    <div class="hotel-loc">📍 Srinagar</div>
+                    <div class="rent-row">
+                        <div><strong>₹19,999</strong><span> / night</span></div><span class="room-type">Heritage Lake
+                            View</span>
+                    </div>
+                    <div class="visible-data">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Maharaja Hari Singh Palace + 1910 Built</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Dal Lake + Shikara Private Ride</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Kashmiri Wazwan + Kahwa</div>
+                    </div>
+                    <div class="extra-data" id="d4">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Gulmarg Gondola VIP Pass</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Heated Pool + Spa + Snow View</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Carpet Weaving Demo + Shikara</div>
+                        <div class="detail-mini-card mini-green"><i>✓</i>Butler + Airport Transfer</div>
+                    </div>
+                    <div class="btn-row">
+                        <button class="view-btn" onclick="toggleData('d4',this)">View Itinerary ⬇️</button>
+                        <a href="/hotel-booking/" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5 Shimla -->
+            <div class="hotel-card">
+                <div class="card-img"><img src="{% static 'home/Image/Domestic_Hotel/Image5.png' %}"><span
+                        class="card-badge">Shimla • 4.7★</span></div>
+                <div class="card-body">
+                    <div class="hotel-name">The Oberoi Cecil</div>
+                    <div class="hotel-loc">📍 Himachal</div>
+                    <div class="rent-row">
+                        <div><strong>₹22,999</strong><span> / night</span></div><span class="room-type">Colonial
+                            Suite</span>
+                    </div>
+                    <div class="visible-data">
+                        <div class="detail-mini-card mini-green"><i>✓</i>1882 Heritage + Mall Road View</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>High Tea + Toy Train Experience</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Heated Pool + Spa</div>
+                    </div>
+                    <div class="extra-data" id="d5">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Fireplace + Butler + Library Bar</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Kufri Skiing + Ice Skating</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Colonial Walk + Museum Tour</div>
+                        <div class="detail-mini-card mini-green"><i>✓</i>Oberoi Spa + Gym</div>
+                    </div>
+                    <div class="btn-row">
+                        <button class="view-btn" onclick="toggleData('d5',this)">View Itinerary ⬇️</button>
+                        <a href="/hotel-booking/" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6 Udaipur -->
+            <div class="hotel-card">
+                <div class="card-img"><img src="{% static 'home/Image/Domestic_Hotel/Image6.png' %}"><span
+                        class="card-badge">Udaipur • 5.0★</span></div>
+                <div class="card-body">
+                    <div class="hotel-name">The Leela Palace Udaipur</div>
+                    <div class="hotel-loc">📍 Rajasthan</div>
+                    <div class="rent-row">
+                        <div><strong>₹52,999</strong><span> / night</span></div><span class="room-type">Lake View
+                            Suite</span>
+                    </div>
+                    <div class="visible-data">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Lake Pichola Private Boat + Palace</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Esya Spa + Infinity Pool</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Jag Mandir Dinner + Heritage Walk</div>
+                    </div>
+                    <div class="extra-data" id="d6">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Private Lake View + Butler</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>City Palace VIP Access + Vintage Car</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Rajasthani Folk Dance + Cooking Class</div>
+                        <div class="detail-mini-card mini-green"><i>✓</i>Sheesh Mahal Restaurant</div>
+                    </div>
+                    <div class="btn-row">
+                        <button class="view-btn" onclick="toggleData('d6',this)">View Itinerary ⬇️</button>
+                        <a href="/hotel-booking/" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7 Agra -->
+            <div class="hotel-card">
+                <div class="card-img"><img src="{% static 'home/Image/Domestic_Hotel/Image7.png' %}"><span
+                        class="card-badge">Agra • 4.9★</span></div>
+                <div class="card-body">
+                    <div class="hotel-name">The Oberoi Amarvilas</div>
+                    <div class="hotel-loc">📍 Uttar Pradesh</div>
+                    <div class="rent-row">
+                        <div><strong>₹32,999</strong><span> / night</span></div><span class="room-type">Taj View
+                            Suite</span>
+                    </div>
+                    <div class="visible-data">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Taj Mahal View From Every Room + Balcony</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Private Sunrise Taj Tour</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Mughal Theme Spa + Pool</div>
+                    </div>
+                    <div class="extra-data" id="d7">
+                        <div class="detail-mini-card mini-green"><i>✓</i>600m From Taj + Golf Cart</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Espresso Butler + 24/7 Room Service</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Bellevue + Esphahan Dining</div>
+                        <div class="detail-mini-card mini-green"><i>✓</i>Cooking Class + Marble Workshop</div>
+                    </div>
+                    <div class="btn-row">
+                        <button class="view-btn" onclick="toggleData('d7',this)">View Itinerary ⬇️</button>
+                        <a href="/hotel-booking/" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8 Delhi -->
+            <div class="hotel-card">
+                <div class="card-img"><img src="{% static 'home/Image/Domestic_Hotel/Image8.png' %}"><span
+                        class="card-badge">Delhi • 4.8★</span></div>
+                <div class="card-body">
+                    <div class="hotel-name">The Imperial New Delhi</div>
+                    <div class="hotel-loc">📍 New Delhi</div>
+                    <div class="rent-row">
+                        <div><strong>₹18,999</strong><span> / night</span></div><span class="room-type">Heritage
+                            Room</span>
+                    </div>
+                    <div class="visible-data">
+                        <div class="detail-mini-card mini-green"><i>✓</i>1931 Heritage + Lutyens Delhi + Museum Art
+                        </div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>1911 Restaurant + Spice Route</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Imperial Spa + Outdoor Pool</div>
+                    </div>
+                    <div class="extra-data" id="d8">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Chanakya + Janpath Shopping + Butler</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Vintage Car City Tour + High Tea</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Patiala Peg Bar + 24/7 Gym</div>
+                        <div class="detail-mini-card mini-green"><i>✓</i>Largest Art Collection Hotel in India</div>
+                    </div>
+                    <div class="btn-row">
+                        <button class="view-btn" onclick="toggleData('d8',this)">View Itinerary ⬇️</button>
+                        <a href="/hotel-booking/" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 9 Mumbai -->
+            <div class="hotel-card">
+                <div class="card-img"><img src="{% static 'home/Image/Domestic_Hotel/Image9.png' %}"><span
+                        class="card-badge">Mumbai • 4.9★</span></div>
+                <div class="card-body">
+                    <div class="hotel-name">The Taj Mahal Palace</div>
+                    <div class="hotel-loc">📍 Maharashtra</div>
+                    <div class="rent-row">
+                        <div><strong>₹28,999</strong><span> / night</span></div><span class="room-type">Sea View
+                            Suite</span>
+                    </div>
+                    <div class="visible-data">
+                        <div class="detail-mini-card mini-green"><i>✓</i>1903 Heritage + Gateway of India View</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Harbour Bar + Yacht Cruise</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Jiva Spa + Outdoor Pool</div>
+                    </div>
+                    <div class="extra-data" id="d9">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Butler + Private City Tour</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Masala Kraft + Wasabi Michelin</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Bollywood Tour + Dharavi Art</div>
+                        <div class="detail-mini-card mini-green"><i>✓</i>Infinity Pool + Gym + Heritage Walk</div>
+                    </div>
+                    <div class="btn-row">
+                        <button class="view-btn" onclick="toggleData('d9',this)">View Itinerary ⬇️</button>
+                        <a href="/hotel-booking/" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 10 Rishikesh -->
+            <div class="hotel-card">
+                <div class="card-img"><img src="{% static 'home/Image/Domestic_Hotel/Image10.png' %}"><span
+                        class="card-badge">Rishikesh • 4.8★</span></div>
+                <div class="card-body">
+                    <div class="hotel-name">Taj Rishikesh Resort & Spa</div>
+                    <div class="hotel-loc">📍 Uttarakhand</div>
+                    <div class="rent-row">
+                        <div><strong>₹22,999</strong><span> / night</span></div><span class="room-type">River View
+                            Villa</span>
+                    </div>
+                    <div class="visible-data">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Ganga + Himalayan View + Private Beach</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Jiva Spa + Yoga + Meditation</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>White Water Rafting + Trekking</div>
+                    </div>
+                    <div class="extra-data" id="d10">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Infinity Pool + Ganga Aarti Private</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Organic Farm + Cooking Class</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Beatles Ashram Tour + Butler</div>
+                        <div class="detail-mini-card mini-green"><i>✓</i>Ayurveda + Naturopathy Treatment</div>
+                    </div>
+                    <div class="btn-row">
+                        <button class="view-btn" onclick="toggleData('d10',this)">View Itinerary ⬇️</button>
+                        <a href="/hotel-booking/" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 11 Mussoorie -->
+            <div class="hotel-card">
+                <div class="card-img"><img src="{% static 'home/Image/Domestic_Hotel/Image11.png' %}"><span
+                        class="card-badge">Mussoorie • 4.7★</span></div>
+                <div class="card-body">
+                    <div class="hotel-name">JW Marriott Mussoorie Resort & Spa</div>
+                    <div class="hotel-loc">📍 Uttarakhand</div>
+                    <div class="rent-row">
+                        <div><strong>₹18,999</strong><span> / night</span></div><span class="room-type">Valley View
+                            Suite</span>
+                    </div>
+                    <div class="visible-data">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Doon Valley + Himalayan View</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Spa by Bodhi + Heated Indoor Pool</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>JW Garden + Bonfire + Kids Club</div>
+                    </div>
+                    <div class="extra-data" id="d11">
+                        <div class="detail-mini-card mini-green"><i>✓</i>6 Restaurants + Bar + Private Dining</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Kempty Falls + Mall Road Private Tour</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Trekking + Paragliding + Spa</div>
+                        <div class="detail-mini-card mini-green"><i>✓</i>Butler + Airport Transfer + Gym</div>
+                    </div>
+                    <div class="btn-row">
+                        <button class="view-btn" onclick="toggleData('d11',this)">View Itinerary ⬇️</button>
+                        <a href="/hotel-booking/" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 12 Nainital -->
+            <div class="hotel-card">
+                <div class="card-img"><img src="{% static 'home/Image/Domestic_Hotel/Image12.png' %}"><span
+                        class="card-badge">Nainital • 4.7★</span></div>
+                <div class="card-body">
+                    <div class="hotel-name">The Naini Retreat</div>
+                    <div class="hotel-loc">📍 Uttarakhand</div>
+                    <div class="rent-row">
+                        <div><strong>₹15,999</strong><span> / night</span></div><span class="room-type">Heritage Lake
+                            View</span>
+                    </div>
+                    <div class="visible-data">
+                        <div class="detail-mini-card mini-green"><i>✓</i>150 Year Old Heritage + Naini Lake View</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Colonial Fireplace + Butler Service</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Boating + Cable Car VIP Pass</div>
+                    </div>
+                    <div class="extra-data" id="d12">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Heated Pool + Spa + Vintage Bar</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>High Tea + Mall Road Walk</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Himalayan Trek + Bird Watching</div>
+                        <div class="detail-mini-card mini-green"><i>✓</i>Private Dining + Bonfire</div>
+                    </div>
+                    <div class="btn-row">
+                        <button class="view-btn" onclick="toggleData('d12',this)">View Itinerary ⬇️</button>
+                        <a href="/hotel-booking/" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 13 Darjeeling -->
+            <div class="hotel-card">
+                <div class="card-img"><img src="{% static 'home/Image/Domestic_Hotel/Image13.png' %}"><span
+                        class="card-badge">Darjeeling • 4.8★</span></div>
+                <div class="card-body">
+                    <div class="hotel-name">Mayfair Darjeeling</div>
+                    <div class="hotel-loc">📍 West Bengal</div>
+                    <div class="rent-row">
+                        <div><strong>₹16,999</strong><span> / night</span></div><span class="room-type">Colonial
+                            Suite</span>
+                    </div>
+                    <div class="visible-data">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Kanchenjunga View + Tea Estate</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Heritage 1920 + Fireplace</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Spa + Heated Pool + Gym</div>
+                    </div>
+                    <div class="extra-data" id="d13">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Toy Train Joy Ride + VIP Pass</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Tea Tasting + Factory Tour</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Sunrise Tiger Hill Private Tour</div>
+                        <div class="detail-mini-card mini-green"><i>✓</i>Butler + Library + Bar</div>
+                    </div>
+                    <div class="btn-row">
+                        <button class="view-btn" onclick="toggleData('d13',this)">View Itinerary ⬇️</button>
+                        <a href="/hotel-booking/" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 14 Ooty -->
+            <div class="hotel-card">
+                <div class="card-img"><img src="{% static 'home/Image/Domestic_Hotel/Image14.png' %}"><span
+                        class="card-badge">Ooty • 4.7★</span></div>
+                <div class="card-body">
+                    <div class="hotel-name">Savoy Ooty - IHCL</div>
+                    <div class="hotel-loc">📍 Tamil Nadu</div>
+                    <div class="rent-row">
+                        <div><strong>₹14,999</strong><span> / night</span></div><span class="room-type">Heritage
+                            Cottage</span>
+                    </div>
+                    <div class="visible-data">
+                        <div class="detail-mini-card mini-green"><i>✓</i>1829 Heritage + English Cottage + Fireplace
+                        </div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Botanical Garden + Toy Train View</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>High Tea + Spa</div>
+                    </div>
+                    <div class="extra-data" id="d14">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Heated Indoor Pool + Billiards</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Horse Riding + Trekking</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Dining + Bar + Bonfire</div>
+                        <div class="detail-mini-card mini-green"><i>✓</i>Butler + Vintage Car Tour</div>
+                    </div>
+                    <div class="btn-row">
+                        <button class="view-btn" onclick="toggleData('d14',this)">View Itinerary ⬇️</button>
+                        <a href="/hotel-booking/" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 15 Munnar -->
+            <div class="hotel-card">
+                <div class="card-img"><img src="{% static 'home/Image/Domestic_Hotel/Image15.png' %}"><span
+                        class="card-badge">Munnar • 4.8★</span></div>
+                <div class="card-body">
+                    <div class="hotel-name">Tea County Munnar</div>
+                    <div class="hotel-loc">📍 Kerala</div>
+                    <div class="rent-row">
+                        <div><strong>₹8,999</strong><span> / night</span></div><span class="room-type">Tea Valley
+                            View</span>
+                    </div>
+                    <div class="visible-data">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Tea Plantation + Valley View + Trekking</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Ayurveda Spa + Yoga</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Eravikulam National Park Safari</div>
+                    </div>
+                    <div class="extra-data" id="d15">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Infinity Pool + Tea Factory Tour</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Jeep Safari + Photography</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Plantation Walk + Bird Watching</div>
+                        <div class="detail-mini-card mini-green"><i>✓</i>Restaurant + Bonfire + Butler</div>
+                    </div>
+                    <div class="btn-row">
+                        <button class="view-btn" onclick="toggleData('d15',this)">View Itinerary ⬇️</button>
+                        <a href="/hotel-booking/" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 16 Kochi -->
+            <div class="hotel-card">
+                <div class="card-img"><img src="{% static 'home/Image/Domestic_Hotel/Image16.png' %}"><span
+                        class="card-badge">Kochi • 4.9★</span></div>
+                <div class="card-body">
+                    <div class="hotel-name">Taj Malabar Resort & Spa, Cochin</div>
+                    <div class="hotel-loc">📍 Kerala</div>
+                    <div class="rent-row">
+                        <div><strong>₹22,999</strong><span> / night</span></div><span class="room-type">Heritage Sea
+                            View</span>
+                    </div>
+                    <div class="visible-data">
+                        <div class="detail-mini-card mini-green"><i>✓</i>1885 Heritage + Cochin Harbour View</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Jiva Spa + Infinity Pool</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Kathakali Show + Seafood Grill</div>
+                    </div>
+                    <div class="extra-data" id="d16">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Private Yacht + Butler</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Fort Kochi Heritage Walk</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Ayurveda + Yoga</div>
+                    </div>
+                    <div class="btn-row"><button class="view-btn" onclick="toggleData('d16',this)">View Itinerary
+                            ⬇️</button><a href="/hotel-booking/" class="btn-book"
+                            onclick="return bookNowLink(this)">Book Now ✈️</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 17 Amritsar -->
+            <div class="hotel-card">
+                <div class="card-img"><img src="{% static 'home/Image/Domestic_Hotel/Image17.png' %}"><span
+                        class="card-badge">Amritsar • 4.8★</span></div>
+                <div class="card-body">
+                    <div class="hotel-name">Taj Swarna, Amritsar</div>
+                    <div class="hotel-loc">📍 Punjab</div>
+                    <div class="rent-row">
+                        <div><strong>₹12,999</strong><span> / night</span></div><span class="room-type">Luxury City
+                            View</span>
+                    </div>
+                    <div class="visible-data">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Golden Temple View</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Wagah Border VIP</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Jiva Spa + Rooftop Pool</div>
+                    </div>
+                    <div class="extra-data" id="d17">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Kulcha Cooking Class</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Heritage Walk</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Butler + Gym</div>
+                    </div>
+                    <div class="btn-row"><button class="view-btn" onclick="toggleData('d17',this)">View Itinerary
+                            ⬇️</button><a href="/hotel-booking/" class="btn-book"
+                            onclick="return bookNowLink(this)">Book Now ✈️</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 18 Varanasi -->
+            <div class="hotel-card">
+                <div class="card-img"><img src="{% static 'home/Image/Domestic_Hotel/Image18.png' %}"><span
+                        class="card-badge">Varanasi • 5.0★</span></div>
+                <div class="card-body">
+                    <div class="hotel-name">Taj Nadesar Palace</div>
+                    <div class="hotel-loc">📍 Uttar Pradesh</div>
+                    <div class="rent-row">
+                        <div><strong>₹35,999</strong><span> / night</span></div><span class="room-type">Royal Palace
+                            Suite</span>
+                    </div>
+                    <div class="visible-data">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Maharaja Palace 1835</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Private Ganga Aarti</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Jiva Spa + Private Pool</div>
+                    </div>
+                    <div class="extra-data" id="d18">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Benaras Ghat Tour</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Silk Weaving + Sitar</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Butler + Yoga</div>
+                    </div>
+                    <div class="btn-row"><button class="view-btn" onclick="toggleData('d18',this)">View Itinerary
+                            ⬇️</button><a href="/hotel-booking/" class="btn-book"
+                            onclick="return bookNowLink(this)">Book Now ✈️</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 19 Jaisalmer -->
+            <div class="hotel-card">
+                <div class="card-img"><img src="{% static 'home/Image/Domestic_Hotel/Image19.png' %}"><span
+                        class="card-badge">Jaisalmer • 4.9★</span></div>
+                <div class="card-body">
+                    <div class="hotel-name">Suryagarh Jaisalmer</div>
+                    <div class="hotel-loc">📍 Rajasthan</div>
+                    <div class="rent-row">
+                        <div><strong>₹28,999</strong><span> / night</span></div><span class="room-type">Fort
+                            Suite</span>
+                    </div>
+                    <div class="visible-data">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Thar Desert Fort</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Camel Safari + Camping</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Folk Show</div>
+                    </div>
+                    <div class="extra-data" id="d19">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Desert Pool + Spa</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Dune Dinner + Stargazing</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Jeep Safari</div>
+                    </div>
+                    <div class="btn-row"><button class="view-btn" onclick="toggleData('d19',this)">View Itinerary
+                            ⬇️</button><a href="/hotel-booking/" class="btn-book"
+                            onclick="return bookNowLink(this)">Book Now ✈️</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 20 Jodhpur -->
+            <div class="hotel-card">
+                <div class="card-img"><img src="{% static 'home/Image/Domestic_Hotel/Image20.png' %}"><span
+                        class="card-badge">Jodhpur • 5.0★</span></div>
+                <div class="card-body">
+                    <div class="hotel-name">Umaid Bhawan Palace</div>
+                    <div class="hotel-loc">📍 Rajasthan</div>
+                    <div class="rent-row">
+                        <div><strong>₹62,999</strong><span> / night</span></div><span class="room-type">Maharaja
+                            Suite</span>
+                    </div>
+                    <div class="visible-data">
+                        <div class="detail-mini-card mini-green"><i>✓</i>World's 6th Largest Palace</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Private Museum + Vintage Cars</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Jiva Spa</div>
+                    </div>
+                    <div class="extra-data" id="d20">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Mehrangarh Fort Dinner</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Royal Butler + Polo</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Blue City Walk</div>
+                    </div>
+                    <div class="btn-row"><button class="view-btn" onclick="toggleData('d20',this)">View Itinerary
+                            ⬇️</button><a href="/hotel-booking/" class="btn-book"
+                            onclick="return bookNowLink(this)">Book Now ✈️</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 21 Coorg -->
+            <div class="hotel-card">
+                <div class="card-img"><img src="{% static 'home/Image/Domestic_Hotel/Image21.png' %}"><span
+                        class="card-badge">Coorg • 4.9★</span></div>
+                <div class="card-body">
+                    <div class="hotel-name">Evolve Back Coorg</div>
+                    <div class="hotel-loc">📍 Karnataka</div>
+                    <div class="rent-row">
+                        <div><strong>₹32,999</strong><span> / night</span></div><span class="room-type">Pool Villa
+                            Estate</span>
+                    </div>
+                    <div class="visible-data">
+                        <div class="detail-mini-card mini-green"><i>✓</i>300 Acre Coffee Plantation</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Ayurveda Spa</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Plantation Trail</div>
+                    </div>
+                    <div class="extra-data" id="d21">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Infinity Pool + Jacuzzi</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Coffee Brewing Class</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Jeep Safari</div>
+                    </div>
+                    <div class="btn-row"><button class="view-btn" onclick="toggleData('d21',this)">View Itinerary
+                            ⬇️</button><a href="/hotel-booking/" class="btn-book"
+                            onclick="return bookNowLink(this)">Book Now ✈️</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 22 Wayanad -->
+            <div class="hotel-card">
+                <div class="card-img"><img src="{% static 'home/Image/Domestic_Hotel/Image22.png' %}"><span
+                        class="card-badge">Wayanad • 4.7★</span></div>
+                <div class="card-body">
+                    <div class="hotel-name">Vythiri Resort</div>
+                    <div class="hotel-loc">📍 Kerala</div>
+                    <div class="rent-row">
+                        <div><strong>₹12,999</strong><span> / night</span></div><span class="room-type">Tree
+                            House</span>
+                    </div>
+                    <div class="visible-data">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Rainforest Tree House</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Wildlife Safari</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Ayurveda Spa</div>
+                    </div>
+                    <div class="extra-data" id="d22">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Infinity Pool</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Bamboo Rafting</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Organic Farm</div>
+                    </div>
+                    <div class="btn-row"><button class="view-btn" onclick="toggleData('d22',this)">View Itinerary
+                            ⬇️</button><a href="/hotel-booking/" class="btn-book"
+                            onclick="return bookNowLink(this)">Book Now ✈️</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 23 Andaman -->
+            <div class="hotel-card">
+                <div class="card-img"><img src="{% static 'home/Image/Domestic_Hotel/Image23.png' %}"><span
+                        class="card-badge">Andaman • 5.0★</span></div>
+                <div class="card-body">
+                    <div class="hotel-name">Taj Exotica Andamans</div>
+                    <div class="hotel-loc">📍 Port Blair</div>
+                    <div class="rent-row">
+                        <div><strong>₹38,999</strong><span> / night</span></div><span class="room-type">Ocean
+                            Villa</span>
+                    </div>
+                    <div class="visible-data">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Radhanagar Beach No.1 Asia</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Jiva Spa + Scuba</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Dolphin Cruise</div>
+                    </div>
+                    <div class="extra-data" id="d23">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Infinity Pool + Butler</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Private Island Picnic</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Ross Island Tour</div>
+                    </div>
+                    <div class="btn-row"><button class="view-btn" onclick="toggleData('d23',this)">View Itinerary
+                            ⬇️</button><a href="/hotel-booking/" class="btn-book"
+                            onclick="return bookNowLink(this)">Book Now ✈️</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 24 Pondicherry -->
+            <div class="hotel-card">
+                <div class="card-img"><img src="{% static 'home/Image/Domestic_Hotel/Image24.png' %}"><span
+                        class="card-badge">Pondicherry • 4.8★</span></div>
+                <div class="card-body">
+                    <div class="hotel-name">Palais de Mahe - CGH Earth</div>
+                    <div class="hotel-loc">📍 Puducherry</div>
+                    <div class="rent-row">
+                        <div><strong>₹14,999</strong><span> / night</span></div><span class="room-type">French Heritage
+                            Suite</span>
+                    </div>
+                    <div class="visible-data">
+                        <div class="detail-mini-card mini-green"><i>✓</i>French Colonial 19th Century</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Rooftop Pool + Sea View</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>French Cafe + Wine</div>
+                    </div>
+                    <div class="extra-data" id="d24">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Heritage Walk + Cycle Tour</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Spa + Yoga</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Private Beach</div>
+                    </div>
+                    <div class="btn-row"><button class="view-btn" onclick="toggleData('d24',this)">View Itinerary
+                            ⬇️</button><a href="/hotel-booking/" class="btn-book"
+                            onclick="return bookNowLink(this)">Book Now ✈️</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 25 Hyderabad -->
+            <div class="hotel-card">
+                <div class="card-img"><img src="{% static 'home/Image/Domestic_Hotel/Image25.png' %}"><span
+                        class="card-badge">Hyderabad • 5.0★</span></div>
+                <div class="card-body">
+                    <div class="hotel-name">Taj Falaknuma Palace</div>
+                    <div class="hotel-loc">📍 Telangana</div>
+                    <div class="rent-row">
+                        <div><strong>₹55,999</strong><span> / night</span></div><span class="room-type">Nizam
+                            Suite</span>
+                    </div>
+                    <div class="visible-data">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Nizam Palace 1894</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>101 Seater Dining Hall</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Jiva Spa + Pool</div>
+                    </div>
+                    <div class="extra-data" id="d25">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Butler + Palace Tour</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Hyderabadi Biryani Feast</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Vintage Car Tour</div>
+                    </div>
+                    <div class="btn-row"><button class="view-btn" onclick="toggleData('d25',this)">View Itinerary
+                            ⬇️</button><a href="/hotel-booking/" class="btn-book"
+                            onclick="return bookNowLink(this)">Book Now ✈️</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 26 Bengaluru -->
+            <div class="hotel-card">
+                <div class="card-img"><img src="{% static 'home/Image/Domestic_Hotel/Image26.png' %}"><span
+                        class="card-badge">Bengaluru • 4.8★</span></div>
+                <div class="card-body">
+                    <div class="hotel-name">The Leela Palace Bengaluru</div>
+                    <div class="hotel-loc">📍 Karnataka</div>
+                    <div class="rent-row">
+                        <div><strong>₹18,999</strong><span> / night</span></div><span class="room-type">Royal Club
+                            Suite</span>
+                    </div>
+                    <div class="visible-data">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Mysore Palace Inspired</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Esya Spa + Rooftop Pool</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>5 Restaurants</div>
+                    </div>
+                    <div class="extra-data" id="d26">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Private Lake + Butler</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Business Center</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Cigar Lounge</div>
+                    </div>
+                    <div class="btn-row"><button class="view-btn" onclick="toggleData('d26',this)">View Itinerary
+                            ⬇️</button><a href="/hotel-booking/" class="btn-book"
+                            onclick="return bookNowLink(this)">Book Now ✈️</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 27 Kolkata -->
+            <div class="hotel-card">
+                <div class="card-img"><img src="{% static 'home/Image/Domestic_Hotel/Image27.png' %}"><span
+                        class="card-badge">Kolkata • 4.8★</span></div>
+                <div class="card-body">
+                    <div class="hotel-name">The Oberoi Grand Kolkata</div>
+                    <div class="hotel-loc">📍 West Bengal</div>
+                    <div class="rent-row">
+                        <div><strong>₹16,999</strong><span> / night</span></div><span class="room-type">Heritage
+                            Premier</span>
+                    </div>
+                    <div class="visible-data">
+                        <div class="detail-mini-card mini-green"><i>✓</i>1880 Grand Dame of Chowringhee</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Bengal Sweets Cooking Class</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Pool + Spa</div>
+                    </div>
+                    <div class="extra-data" id="d27">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Victoria Memorial Tour</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Howrah Bridge + Tram</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Bar + 3 Restaurants</div>
+                    </div>
+                    <div class="btn-row"><button class="view-btn" onclick="toggleData('d27',this)">View Itinerary
+                            ⬇️</button><a href="/hotel-booking/" class="btn-book"
+                            onclick="return bookNowLink(this)">Book Now ✈️</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 28 Chennai -->
+            <div class="hotel-card">
+                <div class="card-img"><img src="{% static 'home/Image/Domestic_Hotel/Image28.png' %}"><span
+                        class="card-badge">Chennai • 4.8★</span></div>
+                <div class="card-body">
+                    <div class="hotel-name">The Leela Palace Chennai</div>
+                    <div class="hotel-loc">📍 Tamil Nadu</div>
+                    <div class="rent-row">
+                        <div><strong>₹22,999</strong><span> / night</span></div><span class="room-type">Sea View
+                            Suite</span>
+                    </div>
+                    <div class="visible-data">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Bay of Bengal + Private Beach</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Esya Spa + Rooftop Pool</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Chettinad Cuisine</div>
+                    </div>
+                    <div class="extra-data" id="d28">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Mahabalipuram Tour</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Butler + Limo</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Bharatnatyam Class</div>
+                    </div>
+                    <div class="btn-row"><button class="view-btn" onclick="toggleData('d28',this)">View Itinerary
+                            ⬇️</button><a href="/hotel-booking/" class="btn-book"
+                            onclick="return bookNowLink(this)">Book Now ✈️</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 29 Lonavala -->
+            <div class="hotel-card">
+                <div class="card-img"><img src="{% static 'home/Image/Domestic_Hotel/Image29.png' %}"><span
+                        class="card-badge">Lonavala • 4.6★</span></div>
+                <div class="card-body">
+                    <div class="hotel-name">Fariyas Resort Lonavala</div>
+                    <div class="hotel-loc">📍 Maharashtra</div>
+                    <div class="rent-row">
+                        <div><strong>₹11,999</strong><span> / night</span></div><span class="room-type">Valley View
+                            Suite</span>
+                    </div>
+                    <div class="visible-data">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Sahyadri Valley + Waterpark</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>4 Pools + Wave Pool</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Tiger Point Tour</div>
+                    </div>
+                    <div class="extra-data" id="d29">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Boating + ATV + Zip Line</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>5 Restaurants + Bar</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Bonfire + DJ Night</div>
+                    </div>
+                    <div class="btn-row"><button class="view-btn" onclick="toggleData('d29',this)">View Itinerary
+                            ⬇️</button><a href="/hotel-booking/" class="btn-book"
+                            onclick="return bookNowLink(this)">Book Now ✈️</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 30 Mount Abu -->
+            <div class="hotel-card">
+                <div class="card-img"><img src="{% static 'home/Image/Domestic_Hotel/Image30.png' %}"><span
+                        class="card-badge">Mount Abu • 4.7★</span></div>
+                <div class="card-body">
+                    <div class="hotel-name">The Jaipur House - Mount Abu</div>
+                    <div class="hotel-loc">📍 Rajasthan</div>
+                    <div class="rent-row">
+                        <div><strong>₹9,999</strong><span> / night</span></div><span class="room-type">Heritage Lake
+                            View</span>
+                    </div>
+                    <div class="visible-data">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Nakki Lake View + 1921 Heritage</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Dilwara Temple Tour</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Rooftop Pool + Spa</div>
+                    </div>
+                    <div class="extra-data" id="d30">
+                        <div class="detail-mini-card mini-green"><i>✓</i>Boating + Trekking</div>
+                        <div class="detail-mini-card mini-blue"><i>✓</i>Rajasthani Thali + Bar</div>
+                        <div class="detail-mini-card mini-orange"><i>✓</i>Butler + Heritage Walk</div>
+                    </div>
+                    <div class="btn-row"><button class="view-btn" onclick="toggleData('d30',this)">View Itinerary
+                            ⬇️</button><a href="/hotel-booking/" class="btn-book"
+                            onclick="return bookNowLink(this)">Book Now ✈️</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+          <div class="pagination-wrap" id="domesticPagination"></div>
+</div>
+
+        <!-- INTERNATIONAL SECTION - FINAL LUXURY EDITION 1-30 -->
+        <div class="domestic-wrap" id="internationalTop">
+            <div class="domestic-heading">
+                <h2><span class="blue">Popular </span> <span class="orange">International Hotels</span>🛎️</h2>
+                <p>Discover extraordinary stays around the world, where luxury, comfort, and unforgettable experiences meet</p>
+            </div>
+            <div class="hotel-grid" id="internationalGrid">
+
+                <!-- 1 -->
+                <div class="hotel-card">
+                    <div class="card-img"><img src="{% static 'home/Image/International_Hotel/Image1.png' %}"><span
+                            class="card-badge">Dubai • 4.9★</span></div>
+                    <div class="card-body">
+                        <div class="hotel-name">Burj Al Arab Jumeirah</div>
+                        <div class="hotel-loc">📍 Dubai, UAE</div>
+                        <div class="hotel-features"><span class="feat view">Burj View</span><span
+                                class="feat pool">Infinity
+                                Pool</span><span class="feat breakfast">Breakfast</span></div>
+                        <div class="rent-row">
+                            <div><strong>₹12,499</strong><span> / night</span></div><span
+                                class="room-type">Luxury</span>
+                        </div>
+                        <div class="visible-data">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Private Beach Access</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Helicopter Transfer</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Butler Service 24/7</div>
+                        </div>
+                        <div class="extra-data" id="i1">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Infinity Pool + Jacuzzi</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Burj Khalifa View Suite</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>9 Signature Restaurants</div>
+                            <div class="detail-mini-card mini-green"><i>✓</i>Spa + Gold Plated Interiors</div>
+                        </div>
+                        <div class="btn-row"><button class="view-btn" onclick="toggleData('i1',this)">View Itinerary
+                                ⬇️</button><a href="/hotel-booking/" class="book-btn" onclick="return bookNowLink(this)"
+                                target="_blank">Book Now ✈️</a></div>
+                    </div>
+                </div>
+
+                <!-- 2 -->
+                <div class="hotel-card">
+                    <div class="card-img"><img src="{% static 'home/Image/International_Hotel/Image2.png' %}"><span
+                            class="card-badge">Singapore • 4.8★</span></div>
+                    <div class="card-body">
+                        <div class="hotel-name">Marina Bay Sands</div>
+                        <div class="hotel-loc">📍 Singapore</div>
+                        <div class="hotel-features"><span class="feat view">City View</span><span
+                                class="feat pool">Rooftop
+                                Pool</span><span class="feat breakfast">Breakfast</span></div>
+                        <div class="rent-row">
+                            <div><strong>₹14,999</strong><span> / night</span></div><span
+                                class="room-type">Premium</span>
+                        </div>
+                        <div class="visible-data">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Infinity Pool 57th Floor</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Casino Access</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>SkyPark Observatory</div>
+                        </div>
+                        <div class="extra-data" id="i2">
+                            <div class="detail-mini-card mini-green"><i>✓</i>ArtScience Museum Entry</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Free WiFi + Minibar</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Celebrity Chef Restaurants</div>
+                            <div class="detail-mini-card mini-green"><i>✓</i>Spa + Fitness Center</div>
+                        </div>
+                        <div class="btn-row"><button class="view-btn" onclick="toggleData('i2',this)">View Itinerary
+                                ⬇️</button><a href="/hotel-booking/" class="book-btn" onclick="return bookNowLink(this)"
+                                target="_blank">Book Now ✈️</a></div>
+                    </div>
+                </div>
+
+                <!-- 3 -->
+                <div class="hotel-card">
+                    <div class="card-img"><img src="{% static 'home/Image/International_Hotel/Image3.png' %}"><span
+                            class="card-badge">Bangkok • 4.8★</span></div>
+                    <div class="card-body">
+                        <div class="hotel-name">Mandarin Oriental Bangkok</div>
+                        <div class="hotel-loc">📍 Bangkok, Thailand</div>
+                        <div class="hotel-features"><span class="feat view">River View</span><span
+                                class="feat pool">Spa</span><span class="feat breakfast">Breakfast</span></div>
+                        <div class="rent-row">
+                            <div><strong>₹6,999</strong><span> / night</span></div><span class="room-type">Luxury</span>
+                        </div>
+                        <div class="visible-data">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Chao Phraya River Cruise</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Thai Cooking Class</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Author's Lounge High Tea</div>
+                        </div>
+                        <div class="extra-data" id="i3">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Oriental Spa + Thai Massage</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>2 Outdoor Pools + Gym</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Butler + Limo Service</div>
+                            <div class="detail-mini-card mini-green"><i>✓</i>Rooftop Bar + Riverside Dining</div>
+                        </div>
+                        <div class="btn-row"><button class="view-btn" onclick="toggleData('i3',this)">View Itinerary
+                                ⬇️</button><a href="/hotel-booking/" class="book-btn" onclick="return bookNowLink(this)"
+                                target="_blank">Book Now ✈️</a></div>
+                    </div>
+                </div>
+
+                <!-- 4 -->
+                <div class="hotel-card">
+                    <div class="card-img"><img src="{% static 'home/Image/International_Hotel/Image4.png' %}"><span
+                            class="card-badge">Bali • 4.9★</span></div>
+                    <div class="card-body">
+                        <div class="hotel-name">Four Seasons Resort Bali</div>
+                        <div class="hotel-loc">📍 Bali, Indonesia</div>
+                        <div class="rent-row">
+                            <div><strong>₹8,499</strong><span> / night</span></div><span class="room-type">Beach
+                                Villa</span>
+                        </div>
+                        <div class="visible-data">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Private Beach + Surf Lesson</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Rice Terrace Trekking</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Balinese Spa Ritual</div>
+                        </div>
+                        <div class="extra-data" id="i4">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Private Villa + Plunge Pool</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Sunset Kecak Dance Show</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Floating Breakfast</div>
+                            <div class="detail-mini-card mini-green"><i>✓</i>Yoga + Meditation Deck</div>
+                        </div>
+                        <div class="btn-row"><button class="view-btn" onclick="toggleData('i4',this)">View Itinerary
+                                ⬇️</button><a href="/hotel-booking/" class="book-btn" onclick="return bookNowLink(this)"
+                                target="_blank">Book Now ✈️</a></div>
+                    </div>
+                </div>
+
+                <!-- 5 -->
+                <div class="hotel-card">
+                    <div class="card-img"><img src="{% static 'home/Image/International_Hotel/Image5.png' %}"><span
+                            class="card-badge">Maldives • 5.0★</span></div>
+                    <div class="card-body">
+                        <div class="hotel-name">Soneva Jani</div>
+                        <div class="hotel-loc">📍 Male, Maldives</div>
+                        <div class="rent-row">
+                            <div><strong>₹24,999</strong><span> / night</span></div><span class="room-type">Water
+                                Villa</span>
+                        </div>
+                        <div class="visible-data">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Overwater Slide + Private Pool</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Observatory + Stargazing</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>No Shoes Luxury Concept</div>
+                        </div>
+                        <div class="extra-data" id="i5">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Private Cinema Paradiso</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Snorkeling with Mantas</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Personal Mr. Friday Butler</div>
+                            <div class="detail-mini-card mini-green"><i>✓</i>All Inclusive + Spa</div>
+                        </div>
+                        <div class="btn-row"><button class="view-btn" onclick="toggleData('i5',this)">View Itinerary
+                                ⬇️</button><a href="/hotel-booking/" class="book-btn" onclick="return bookNowLink(this)"
+                                target="_blank">Book Now ✈️</a></div>
+                    </div>
+                </div>
+
+                <!-- 6 -->
+                <div class="hotel-card">
+                    <div class="card-img"><img src="{% static 'home/Image/International_Hotel/Image6.png' %}"><span
+                            class="card-badge">Phuket • 4.8★</span></div>
+                    <div class="card-body">
+                        <div class="hotel-name">The Shore at Katathani</div>
+                        <div class="hotel-loc">📍 Phuket, Thailand</div>
+                        <div class="rent-row">
+                            <div><strong>₹7,499</strong><span> / night</span></div><span class="room-type">Deluxe</span>
+                        </div>
+                        <div class="visible-data">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Adults Only Infinity Pool</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Kata Noi Beach Front</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Sunset BBQ Dinner</div>
+                        </div>
+                        <div class="extra-data" id="i6">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Private Pool Villa + Jacuzzi</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Thai Massage + Yoga</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Island Hopping Speedboat</div>
+                            <div class="detail-mini-card mini-green"><i>✓</i>Free Minibar + Breakfast</div>
+                        </div>
+                        <div class="btn-row"><button class="view-btn" onclick="toggleData('i6',this)">View Itinerary
+                                ⬇️</button><a href="/hotel-booking/" class="book-btn" onclick="return bookNowLink(this)"
+                                target="_blank">Book Now ✈️</a></div>
+                    </div>
+                </div>
+
+                <!-- 7 -->
+                <div class="hotel-card">
+                    <div class="card-img"><img src="{% static 'home/Image/International_Hotel/Image7.png' %}"><span
+                            class="card-badge">Kuala Lumpur • 4.7★</span></div>
+                    <div class="card-body">
+                        <div class="hotel-name">Mandarin Oriental Kuala Lumpur</div>
+                        <div class="hotel-loc">📍 Malaysia</div>
+                        <div class="rent-row">
+                            <div><strong>₹5,999</strong><span> / night</span></div><span class="room-type">City
+                                View</span>
+                        </div>
+                        <div class="visible-data">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Petronas Towers Direct Access</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>KLCC Park View</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Mandarin Spa + Jacuzzi</div>
+                        </div>
+                        <div class="extra-data" id="i7">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Rooftop Pool + City Skyline</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>7 Restaurants + Bar</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Club Lounge + Afternoon Tea</div>
+                            <div class="detail-mini-card mini-green"><i>✓</i>Gym + Free Airport Transfer</div>
+                        </div>
+                        <div class="btn-row"><button class="view-btn" onclick="toggleData('i7',this)">View Itinerary
+                                ⬇️</button><a href="/hotel-booking/" class="book-btn" onclick="return bookNowLink(this)"
+                                target="_blank">Book Now ✈️</a></div>
+                    </div>
+                </div>
+
+                <!-- 8 -->
+                <div class="hotel-card">
+                    <div class="card-img"><img src="{% static 'home/Image/International_Hotel/Image8.png' %}"><span
+                            class="card-badge">Paris • 4.9★</span></div>
+                    <div class="card-body">
+                        <div class="hotel-name">The Ritz Paris</div>
+                        <div class="hotel-loc">📍 Paris, France</div>
+                        <div class="rent-row">
+                            <div><strong>₹16,999</strong><span> / night</span></div><span
+                                class="room-type">Luxury</span>
+                        </div>
+                        <div class="visible-data">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Coco Chanel Suite</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Hemingway Bar Access</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Place Vendome View</div>
+                        </div>
+                        <div class="extra-data" id="i8">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Chanel Spa + Indoor Pool</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Michelin Star Dining</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Private Pastry Class</div>
+                            <div class="detail-mini-card mini-green"><i>✓</i>Limousine + Butler</div>
+                        </div>
+                        <div class="btn-row"><button class="view-btn" onclick="toggleData('i8',this)">View Itinerary
+                                ⬇️</button><a href="/hotel-booking/" class="book-btn" onclick="return bookNowLink(this)"
+                                target="_blank">Book Now ✈️</a></div>
+                    </div>
+                </div>
+
+                <!-- 9 -->
+                <div class="hotel-card">
+                    <div class="card-img"><img src="{% static 'home/Image/International_Hotel/Image9.png' %}"><span
+                            class="card-badge">London • 4.8★</span></div>
+                    <div class="card-body">
+                        <div class="hotel-name">The Savoy</div>
+                        <div class="hotel-loc">📍 London, UK</div>
+                        <div class="rent-row">
+                            <div><strong>₹15,499</strong><span> / night</span></div><span
+                                class="room-type">Premium</span>
+                        </div>
+                        <div class="visible-data">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Thames River View + Butler</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>American Bar - World's Best</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Gordon Ramsay Restaurant</div>
+                        </div>
+                        <div class="extra-data" id="i9">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Afternoon Tea + Spa</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Rooftop Pool + Gym</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Rolls Royce Transfer</div>
+                            <div class="detail-mini-card mini-green"><i>✓</i>West End Theatre Tickets</div>
+                        </div>
+                        <div class="btn-row"><button class="view-btn" onclick="toggleData('i9',this)">View Itinerary
+                                ⬇️</button><a href="/hotel-booking/" class="book-btn" onclick="return bookNowLink(this)"
+                                target="_blank">Book Now ✈️</a></div>
+                    </div>
+                </div>
+
+                <!-- 10 -->
+                <div class="hotel-card">
+                    <div class="card-img"><img src="{% static 'home/Image/International_Hotel/Image10.png' %}"><span
+                            class="card-badge">Rome • 4.8★</span></div>
+                    <div class="card-body">
+                        <div class="hotel-name">Hotel de Russie</div>
+                        <div class="hotel-loc">📍 Rome, Italy</div>
+                        <div class="rent-row">
+                            <div><strong>₹12,999</strong><span> / night</span></div><span
+                                class="room-type">Deluxe</span>
+                        </div>
+                        <div class="visible-data">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Secret Garden + Spanish Steps</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Rooftop Stravinskij Bar</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>De Russie Spa</div>
+                        </div>
+                        <div class="extra-data" id="i10">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Private Art Tour Vatican</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Ferrari Test Drive</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Italian Cooking Masterclass</div>
+                            <div class="detail-mini-card mini-green"><i>✓</i>Personal Shopper + Butler</div>
+                        </div>
+                        <div class="btn-row"><button class="view-btn" onclick="toggleData('i10',this)">View Itinerary
+                                ⬇️</button><a href="/hotel-booking/" class="book-btn" onclick="return bookNowLink(this)"
+                                target="_blank">Book Now ✈️</a></div>
+                    </div>
+                </div>
+
+                <!-- 11 -->
+                <div class="hotel-card">
+                    <div class="card-img"><img src="{% static 'home/Image/International_Hotel/Image11.png' %}"><span
+                            class="card-badge">Venice • 4.9★</span></div>
+                    <div class="card-body">
+                        <div class="hotel-name">Hotel Danieli</div>
+                        <div class="hotel-loc">📍 Venice, Italy</div>
+                        <div class="hotel-features"><span class="feat view">Canal View</span><span
+                                class="feat pool">Rooftop</span><span class="feat breakfast">Breakfast</span></div>
+                        <div class="rent-row">
+                            <div><strong>₹58,999</strong><span> / night</span></div><span class="room-type">Canal
+                                View</span>
+                        </div>
+                        <div class="visible-data">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Gondola Private + Opera Tickets</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Doge's Palace VIP Entry</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Lagoon View Terrace</div>
+                        </div>
+                        <div class="extra-data" id="i11">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Murano Glass Factory Tour</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Rooftop Restaurant + Bar</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>24/7 Butler + Free WiFi</div>
+                            <div class="detail-mini-card mini-green"><i>✓</i>Spa + Historic 14th Century Palace</div>
+                        </div>
+                        <div class="btn-row"><button class="view-btn" onclick="toggleData('i11',this)">View Itinerary
+                                ⬇️</button><a href="/hotel-booking/" class="book-btn" onclick="return bookNowLink(this)"
+                                target="_blank">Book Now ✈️</a></div>
+                    </div>
+                </div>
+
+                <!-- 12 -->
+                <div class="hotel-card">
+                    <div class="card-img"><img src="{% static 'home/Image/International_Hotel/Image12.png' %}"><span
+                            class="card-badge">Istanbul • 4.8★</span></div>
+                    <div class="card-body">
+                        <div class="hotel-name">Çırağan Palace Kempinski</div>
+                        <div class="hotel-loc">📍 Istanbul, Turkey</div>
+                        <div class="hotel-features"><span class="feat view">Bosphorus</span><span
+                                class="feat pool">Pool</span><span class="feat breakfast">Breakfast</span></div>
+                        <div class="rent-row">
+                            <div><strong>₹38,999</strong><span> / night</span></div><span class="room-type">Palace Sea
+                                View</span>
+                        </div>
+                        <div class="visible-data">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Ottoman Palace Stay</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Bosphorus Yacht Cruise</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Hagia Sophia Private Tour</div>
+                        </div>
+                        <div class="extra-data" id="i12">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Infinity Pool on Bosphorus</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Turkish Hammam + Spa</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Helicopter City Tour</div>
+                            <div class="detail-mini-card mini-green"><i>✓</i>Blue Mosque View + Butler</div>
+                        </div>
+                        <div class="btn-row"><button class="view-btn" onclick="toggleData('i12',this)">View Itinerary
+                                ⬇️</button><a href="/hotel-booking/" class="book-btn" onclick="return bookNowLink(this)"
+                                target="_blank">Book Now ✈️</a></div>
+                    </div>
+                </div>
+
+                <!-- 13 -->
+                <div class="hotel-card">
+                    <div class="card-img"><img src="{% static 'home/Image/International_Hotel/Image13.png' %}"><span
+                            class="card-badge">Tokyo • 4.9★</span></div>
+                    <div class="card-body">
+                        <div class="hotel-name">The Peninsula Tokyo</div>
+                        <div class="hotel-loc">📍 Tokyo, Japan</div>
+                        <div class="rent-row">
+                            <div><strong>₹48,999</strong><span> / night</span></div><span
+                                class="room-type">Premium</span>
+                        </div>
+                        <div class="visible-data">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Imperial Palace View + Helicopter</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Mt Fuji Day Trip + Bullet Train</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Sushi Masterclass</div>
+                        </div>
+                        <div class="extra-data" id="i13">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Peninsula Spa + Indoor Pool</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Michelin 2-Star Restaurant</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Rolls Royce Phantom Service</div>
+                            <div class="detail-mini-card mini-green"><i>✓</i>Tea Ceremony + Kimono Experience</div>
+                        </div>
+                        <div class="btn-row"><button class="view-btn" onclick="toggleData('i13',this)">View Itinerary
+                                ⬇️</button><a href="/hotel-booking/" class="book-btn" onclick="return bookNowLink(this)"
+                                target="_blank">Book Now ✈️</a></div>
+                    </div>
+                </div>
+
+                <!-- 14 -->
+                <div class="hotel-card">
+                    <div class="card-img"><img src="{% static 'home/Image/International_Hotel/Image14.png' %}"><span
+                            class="card-badge">Seoul • 4.8★</span></div>
+                    <div class="card-body">
+                        <div class="hotel-name">The Shilla Seoul</div>
+                        <div class="hotel-loc">📍 Seoul, South Korea</div>
+                        <div class="rent-row">
+                            <div><strong>₹32,999</strong><span> / night</span></div><span
+                                class="room-type">Deluxe</span>
+                        </div>
+                        <div class="visible-data">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Namsan Tower View + Hanbok Wear</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>K-Beauty Spa + Treatment</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Duty Free VIP Shopping</div>
+                        </div>
+                        <div class="extra-data" id="i14">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Indoor Pool + Sauna</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Gyeongbok Palace Tour</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>K-Pop Concert Tickets</div>
+                            <div class="detail-mini-card mini-green"><i>✓</i>3 Michelin Restaurants</div>
+                        </div>
+                        <div class="btn-row"><button class="view-btn" onclick="toggleData('i14',this)">View Itinerary
+                                ⬇️</button><a href="/hotel-booking/" class="book-btn" onclick="return bookNowLink(this)"
+                                target="_blank">Book Now ✈️</a></div>
+                    </div>
+                </div>
+
+                <!-- 15 -->
+                <div class="hotel-card">
+                    <div class="card-img"><img src="{% static 'home/Image/International_Hotel/Image15.png' %}"><span
+                            class="card-badge">Hong Kong • 4.8★</span></div>
+                    <div class="card-body">
+                        <div class="hotel-name">The Peninsula Hong Kong</div>
+                        <div class="hotel-loc">📍 Hong Kong</div>
+                        <div class="rent-row">
+                            <div><strong>₹45,999</strong><span> / night</span></div><span class="room-type">Harbour
+                                View</span>
+                        </div>
+                        <div class="visible-data">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Victoria Harbour + Rolls Royce Fleet</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Helicopter Harbor Tour</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Afternoon Tea Heritage Lobby</div>
+                        </div>
+                        <div class="extra-data" id="i15">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Harbour Rooftop Pool + Spa</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>8 Michelin Stars Dining</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Private Yacht + Disneyland VIP</div>
+                            <div class="detail-mini-card mini-green"><i>✓</i>Peninsula Academy Experiences</div>
+                        </div>
+                        <div class="btn-row"><button class="view-btn" onclick="toggleData('i15',this)">View Itinerary
+                                ⬇️</button><a href="/hotel-booking/" class="book-btn" onclick="return bookNowLink(this)"
+                                target="_blank">Book Now ✈️</a></div>
+                    </div>
+                </div>
+
+                <!-- 16 -->
+                <div class="hotel-card">
+                    <div class="card-img"><img src="{% static 'home/Image/International_Hotel/Image16.png' %}"><span
+                            class="card-badge">Abu Dhabi • 4.9★</span></div>
+                    <div class="card-body">
+                        <div class="hotel-name">Emirates Palace Mandarin Oriental</div>
+                        <div class="hotel-loc">📍 Abu Dhabi, UAE</div>
+                        <div class="rent-row">
+                            <div><strong>₹72,999</strong><span> / night</span></div><span
+                                class="room-type">Luxury</span>
+                        </div>
+                        <div class="visible-data">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Gold Cappuccino + Private Beach</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Sheikh Zayed Mosque VIP Tour</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Private Marina + Yacht</div>
+                        </div>
+                        <div class="extra-data" id="i16">
+                            <div class="detail-mini-card mini-green"><i>✓</i>1.3km Private Beach + Pools</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Falcon Show + Desert Safari</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Anantara Spa + Gold Treatment</div>
+                            <div class="detail-mini-card mini-green"><i>✓</i>Ferrari World VIP Pass</div>
+                        </div>
+                        <div class="btn-row"><button class="view-btn" onclick="toggleData('i16',this)">View Itinerary
+                                ⬇️</button><a href="/hotel-booking/" class="book-btn" onclick="return bookNowLink(this)"
+                                target="_blank">Book Now ✈️</a></div>
+                    </div>
+                </div>
+
+                <!-- 17 -->
+                <div class="hotel-card">
+                    <div class="card-img"><img src="{% static 'home/Image/International_Hotel/Image17.png' %}"><span
+                            class="card-badge">Doha • 4.8★</span></div>
+                    <div class="card-body">
+                        <div class="hotel-name">The St. Regis Doha</div>
+                        <div class="hotel-loc">📍 Doha, Qatar</div>
+                        <div class="rent-row">
+                            <div><strong>₹35,999</strong><span> / night</span></div><span class="room-type">Sea
+                                View</span>
+                        </div>
+                        <div class="visible-data">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Private Beach + Butler Service</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Olympic Size Pool + Spa</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Desert Safari + Camel Ride</div>
+                        </div>
+                        <div class="extra-data" id="i17">
+                            <div class="detail-mini-card mini-green"><i>✓</i>6 Restaurants + Gordon Ramsay</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Remede Spa + Jacuzzi</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Yacht Cruise + Pearl Diving</div>
+                            <div class="detail-mini-card mini-green"><i>✓</i>Buggy Tour + Souq Waqif Tour</div>
+                        </div>
+                        <div class="btn-row"><button class="view-btn" onclick="toggleData('i17',this)">View Itinerary
+                                ⬇️</button><a href="/hotel-booking/" class="book-btn" onclick="return bookNowLink(this)"
+                                target="_blank">Book Now ✈️</a></div>
+                    </div>
+                </div>
+
+                <!-- 18 -->
+                <div class="hotel-card">
+                    <div class="card-img"><img src="{% static 'home/Image/International_Hotel/Image18.png' %}"><span
+                            class="card-badge">Mauritius • 4.9★</span></div>
+                    <div class="card-body">
+                        <div class="hotel-name">One&Only Le Saint Géran</div>
+                        <div class="hotel-loc">📍 Mauritius</div>
+                        <div class="rent-row">
+                            <div><strong>₹82,999</strong><span> / night</span></div><span class="room-type">Beach
+                                Villa</span>
+                        </div>
+                        <div class="visible-data">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Private Lagoon + Water Ski</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Golf Course + Butler</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Sunset Catamaran Cruise</div>
+                        </div>
+                        <div class="extra-data" id="i18">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Chenot Spa + Wellness</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Private Pool Villa + Beach</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Underwater Sea Walk</div>
+                            <div class="detail-mini-card mini-green"><i>✓</i>KidsOnly Club + All Meals</div>
+                        </div>
+                        <div class="btn-row"><button class="view-btn" onclick="toggleData('i18',this)">View Itinerary
+                                ⬇️</button><a href="/hotel-booking/" class="book-btn" onclick="return bookNowLink(this)"
+                                target="_blank">Book Now ✈️</a></div>
+                    </div>
+                </div>
+
+                <!-- 19 -->
+                <div class="hotel-card">
+                    <div class="card-img"><img src="{% static 'home/Image/International_Hotel/Image19.png' %}"><span
+                            class="card-badge">Seychelles • 5.0★</span></div>
+                    <div class="card-body">
+                        <div class="hotel-name">Four Seasons Resort Seychelles</div>
+                        <div class="hotel-loc">📍 Seychelles</div>
+                        <div class="rent-row">
+                            <div><strong>₹95,999</strong><span> / night</span></div><span class="room-type">Ocean
+                                Villa</span>
+                        </div>
+                        <div class="visible-data">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Treehouse Villa + Private Pool</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Giant Tortoise Sanctuary</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Scuba + Coral Reef Tour</div>
+                        </div>
+                        <div class="extra-data" id="i19">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Hilltop Spa + Infinity Pool</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Private Island Picnic</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Sunset Fishing + Butler</div>
+                            <div class="detail-mini-card mini-green"><i>✓</i>All Inclusive + Jungle Zip Line</div>
+                        </div>
+                        <div class="btn-row"><button class="view-btn" onclick="toggleData('i19',this)">View Itinerary
+                                ⬇️</button><a href="/hotel-booking/" class="book-btn" onclick="return bookNowLink(this)"
+                                target="_blank">Book Now ✈️</a></div>
+                    </div>
+                </div>
+
+                <!-- 20 -->
+                <div class="hotel-card">
+                    <div class="card-img"><img src="{% static 'home/Image/International_Hotel/Image20.png' %}"><span
+                            class="card-badge">Colombo • 4.7★</span></div>
+                    <div class="card-body">
+                        <div class="hotel-name">Shangri-La Colombo</div>
+                        <div class="hotel-loc">📍 Sri Lanka</div>
+                        <div class="rent-row">
+                            <div><strong>₹12,999</strong><span> / night</span></div><span
+                                class="room-type">Deluxe</span>
+                        </div>
+                        <div class="visible-data">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Indian Ocean View + High Tea</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>CHI Spa + Infinity Pool</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Galle Face Green Walk</div>
+                        </div>
+                        <div class="extra-data" id="i20">
+                            <div class="detail-mini-card mini-green"><i>✓</i>5 Restaurants + Bar</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Colombo City Tour + Temple</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Gym + Kids Club</div>
+                            <div class="detail-mini-card mini-green"><i>✓</i>Airport Limo + Butler</div>
+                        </div>
+                        <div class="btn-row"><button class="view-btn" onclick="toggleData('i20',this)">View Itinerary
+                                ⬇️</button><a href="/hotel-booking/" class="book-btn" onclick="return bookNowLink(this)"
+                                target="_blank">Book Now ✈️</a></div>
+                    </div>
+                </div>
+
+                <!-- 21 -->
+                <div class="hotel-card">
+                    <div class="card-img"><img src="{% static 'home/Image/International_Hotel/Image21.png' %}"><span
+                            class="card-badge">Kathmandu • 4.8★</span></div>
+                    <div class="card-body">
+                        <div class="hotel-name">The Dwarika's Hotel</div>
+                        <div class="hotel-loc">📍 Nepal</div>
+                        <div class="rent-row">
+                            <div><strong>₹22,999</strong><span> / night</span></div><span class="room-type">Heritage
+                                Suite</span>
+                        </div>
+                        <div class="visible-data">
+                            <div class="detail-mini-card mini-green"><i>✓</i>UNESCO Heritage Wood Carvings</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Everest Mountain Flight</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Ayurvedic Pancha Karma Spa</div>
+                        </div>
+                        <div class="extra-data" id="i21">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Heated Pool + Himalayan View</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Pashupatinath Private Puja</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Newari Cooking Class</div>
+                            <div class="detail-mini-card mini-green"><i>✓</i>Private Library + Butler</div>
+                        </div>
+                        <div class="btn-row"><button class="view-btn" onclick="toggleData('i21',this)">View Itinerary
+                                ⬇️</button><a href="/hotel-booking/" class="book-btn" onclick="return bookNowLink(this)"
+                                target="_blank">Book Now ✈️</a></div>
+                    </div>
+                </div>
+
+                <!-- 22 -->
+                <div class="hotel-card">
+                    <div class="card-img"><img src="{% static 'home/Image/International_Hotel/Image22.png' %}"><span
+                            class="card-badge">Cairo • 4.8★</span></div>
+                    <div class="card-body">
+                        <div class="hotel-name">Four Seasons Hotel Cairo</div>
+                        <div class="hotel-loc">📍 Egypt</div>
+                        <div class="rent-row">
+                            <div><strong>₹28,999</strong><span> / night</span></div><span class="room-type">Pyramid
+                                View</span>
+                        </div>
+                        <div class="visible-data">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Nile River + Pyramid View Suite</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Private Giza Pyramids Tour</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Luxury Nile Felucca Cruise</div>
+                        </div>
+                        <div class="extra-data" id="i22">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Rooftop Pool + Spa</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>5 Restaurants + Shisha Lounge</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Egyptian Museum VIP Access</div>
+                            <div class="detail-mini-card mini-green"><i>✓</i>Private Butler + Limo</div>
+                        </div>
+                        <div class="btn-row"><button class="view-btn" onclick="toggleData('i22',this)">View Itinerary
+                                ⬇️</button><a href="/hotel-booking/" class="book-btn" onclick="return bookNowLink(this)"
+                                target="_blank">Book Now ✈️</a></div>
+                    </div>
+                </div>
+
+                <!-- 23 -->
+                <div class="hotel-card">
+                    <div class="card-img"><img src="{% static 'home/Image/International_Hotel/Image23.png' %}"><span
+                            class="card-badge">Barcelona • 4.8★</span></div>
+                    <div class="card-body">
+                        <div class="hotel-name">Hotel Arts Barcelona</div>
+                        <div class="hotel-loc">📍 Spain</div>
+                        <div class="rent-row">
+                            <div><strong>₹42,999</strong><span> / night</span></div><span class="room-type">Beach
+                                View</span>
+                        </div>
+                        <div class="visible-data">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Mediterranean Beach Front</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Sagrada Familia Skip Line</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Rooftop Pool + DJ Nights</div>
+                        </div>
+                        <div class="extra-data" id="i23">
+                            <div class="detail-mini-card mini-green"><i>✓</i>43rd Floor Spa + Gym</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>2 Michelin Star Enoteca</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Tapas Tour + Flamenco Show</div>
+                            <div class="detail-mini-card mini-green"><i>✓</i>Private Yacht + Butler</div>
+                        </div>
+                        <div class="btn-row"><button class="view-btn" onclick="toggleData('i23',this)">View Itinerary
+                                ⬇️</button><a href="/hotel-booking/" class="book-btn" onclick="return bookNowLink(this)"
+                                target="_blank">Book Now ✈️</a></div>
+                    </div>
+                </div>
+
+                <!-- 24 -->
+                <div class="hotel-card">
+                    <div class="card-img"><img src="{% static 'home/Image/International_Hotel/Image24.png' %}"><span
+                            class="card-badge">Amsterdam • 4.8★</span></div>
+                    <div class="card-body">
+                        <div class="hotel-name">Hotel Okura Amsterdam</div>
+                        <div class="hotel-loc">📍 Netherlands</div>
+                        <div class="rent-row">
+                            <div><strong>₹38,999</strong><span> / night</span></div><span class="room-type">Canal
+                                View</span>
+                        </div>
+                        <div class="visible-data">
+                            <div class="detail-mini-card mini-green"><i>✓</i>23rd Floor Skyline View</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Canal Cruise + Van Gogh VIP</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Michelin Star Ciel Bleu</div>
+                        </div>
+                        <div class="extra-data" id="i24">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Japanese Spa + Indoor Pool</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>4 Restaurants + Sushi</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Private Bicycle Tour</div>
+                            <div class="detail-mini-card mini-green"><i>✓</i>Butler + Limo + WiFi</div>
+                        </div>
+                        <div class="btn-row"><button class="view-btn" onclick="toggleData('i24',this)">View Itinerary
+                                ⬇️</button><a href="/hotel-booking/" class="book-btn" onclick="return bookNowLink(this)"
+                                target="_blank">Book Now ✈️</a></div>
+                    </div>
+                </div>
+
+                <!-- 25 -->
+                <div class="hotel-card">
+                    <div class="card-img"><img src="{% static 'home/Image/International_Hotel/Image25.png' %}"><span
+                            class="card-badge">Zurich • 4.9★</span></div>
+                    <div class="card-body">
+                        <div class="hotel-name">Baur au Lac</div>
+                        <div class="hotel-loc">📍 Switzerland</div>
+                        <div class="rent-row">
+                            <div><strong>₹85,999</strong><span> / night</span></div><span class="room-type">Lake
+                                View</span>
+                        </div>
+                        <div class="visible-data">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Lake Zurich + Alps View</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Private Park + 1844 Heritage</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Pavillon Michelin 2 Stars</div>
+                        </div>
+                        <div class="extra-data" id="i25">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Private Boat + Swiss Chocolate Tour</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Spa + Fitness + Indoor Pool</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Rolls Royce + Butler 24/7</div>
+                            <div class="detail-mini-card mini-green"><i>✓</i>Art Collection + Wine Cellar</div>
+                        </div>
+                        <div class="btn-row"><button class="view-btn" onclick="toggleData('i25',this)">View Itinerary
+                                ⬇️</button><a href="/hotel-booking/" class="book-btn" onclick="return bookNowLink(this)"
+                                target="_blank">Book Now ✈️</a></div>
+                    </div>
+                </div>
+
+                <!-- 26 -->
+                <div class="hotel-card">
+                    <div class="card-img"><img src="{% static 'home/Image/International_Hotel/Image26.png' %}"><span
+                            class="card-badge">Vienna • 4.8★</span></div>
+                    <div class="card-body">
+                        <div class="hotel-name">Hotel Sacher Wien</div>
+                        <div class="hotel-loc">📍 Vienna, Austria</div>
+                        <div class="rent-row">
+                            <div><strong>₹48,999</strong><span> / night</span></div><span class="room-type">Opera
+                                View</span>
+                        </div>
+                        <div class="visible-data">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Opera House Opposite + Sacher Torte</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Vienna Philharmonic VIP</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Sacher Spa + Rooftop</div>
+                        </div>
+                        <div class="extra-data" id="i26">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Butler + Limo + Horse Carriage</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Schoenbrunn Palace Private Tour</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Fine Dining + Red Bar</div>
+                            <div class="detail-mini-card mini-green"><i>✓</i>Art Gallery + Wine Cellar</div>
+                        </div>
+                        <div class="btn-row"><button class="view-btn" onclick="toggleData('i26',this)">View Itinerary
+                                ⬇️</button><a href="/hotel-booking/" class="book-btn" onclick="return bookNowLink(this)"
+                                target="_blank">Book Now ✈️</a></div>
+                    </div>
+                </div>
+
+                <!-- 27 -->
+                <div class="hotel-card">
+                    <div class="card-img"><img src="{% static 'home/Image/International_Hotel/Image27.png' %}"><span
+                            class="card-badge">Sydney • 4.9★</span></div>
+                    <div class="card-body">
+                        <div class="hotel-name">Park Hyatt Sydney</div>
+                        <div class="hotel-loc">📍 Sydney, Australia</div>
+                        <div class="rent-row">
+                            <div><strong>₹55,999</strong><span> / night</span></div><span class="room-type">Harbour
+                                View</span>
+                        </div>
+                        <div class="visible-data">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Sydney Opera House Direct View</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Harbour Bridge Climb VIP</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Rooftop Pool + Spa</div>
+                        </div>
+                        <div class="extra-data" id="i27">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Private Yacht Harbour Cruise</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Fine Dining + Bar</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Butler + Airport Transfer</div>
+                            <div class="detail-mini-card mini-green"><i>✓</i>Bondi Beach Surf Lesson</div>
+                        </div>
+                        <div class="btn-row"><button class="view-btn" onclick="toggleData('i27',this)">View Itinerary
+                                ⬇️</button><a href="/hotel-booking/" class="book-btn" onclick="return bookNowLink(this)"
+                                target="_blank">Book Now ✈️</a></div>
+                    </div>
+                </div>
+
+                <!-- 28 -->
+                <div class="hotel-card">
+                    <div class="card-img"><img src="{% static 'home/Image/International_Hotel/Image28.png' %}"><span
+                            class="card-badge">Melbourne • 4.8★</span></div>
+                    <div class="card-body">
+                        <div class="hotel-name">The Langham Melbourne</div>
+                        <div class="hotel-loc">📍 Melbourne, Australia</div>
+                        <div class="rent-row">
+                            <div><strong>₹38,999</strong><span> / night</span></div><span class="room-type">City
+                                View</span>
+                        </div>
+                        <div class="visible-data">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Yarra River + City Skyline View</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Chuan Spa + Indoor Pool</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>High Tea + Chocolate Factory</div>
+                        </div>
+                        <div class="extra-data" id="i28">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Great Ocean Road Private Tour</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Wine Tasting Yarra Valley</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Butler + Limo Service</div>
+                            <div class="detail-mini-card mini-green"><i>✓</i>2 Restaurants + Bar</div>
+                        </div>
+                        <div class="btn-row"><button class="view-btn" onclick="toggleData('i28',this)">View Itinerary
+                                ⬇️</button><a href="/hotel-booking/" class="book-btn" onclick="return bookNowLink(this)"
+                                target="_blank">Book Now ✈️</a></div>
+                    </div>
+                </div>
+
+                <!-- 29 -->
+                <div class="hotel-card">
+                    <div class="card-img"><img src="{% static 'home/Image/International_Hotel/Image29.png' %}"><span
+                            class="card-badge">New York • 4.9★</span></div>
+                    <div class="card-body">
+                        <div class="hotel-name">The Plaza New York</div>
+                        <div class="hotel-loc">📍 New York, USA</div>
+                        <div class="rent-row">
+                            <div><strong>₹92,999</strong><span> / night</span></div><span
+                                class="room-type">Luxury</span>
+                        </div>
+                        <div class="visible-data">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Central Park View + Home Alone Suite</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Palm Court Afternoon Tea</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Champagne Bar + Butler</div>
+                        </div>
+                        <div class="extra-data" id="i29">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Caudalie Spa + Guerlain</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Broadway VIP Tickets + Limo</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>5th Avenue Personal Shopper</div>
+                            <div class="detail-mini-card mini-green"><i>✓</i>Helicopter Manhattan Tour</div>
+                        </div>
+                        <div class="btn-row"><button class="view-btn" onclick="toggleData('i29',this)">View Itinerary
+                                ⬇️</button><a href="/hotel-booking/" class="book-btn" onclick="return bookNowLink(this)"
+                                target="_blank">Book Now ✈️</a></div>
+                    </div>
+                </div>
+
+                <!-- 30 -->
+                <div class="hotel-card">
+                    <div class="card-img"><img src="{% static 'home/Image/International_Hotel/Image30.png' %}"><span
+                            class="card-badge">Prague • 4.8★</span></div>
+                    <div class="card-body">
+                        <div class="hotel-name">Four Seasons Hotel Prague</div>
+                        <div class="hotel-loc">📍 Prague, Czech Republic</div>
+                        <div class="rent-row">
+                            <div><strong>₹35,999</strong><span> / night</span></div><span class="room-type">Castle
+                                View</span>
+                        </div>
+                        <div class="visible-data">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Prague Castle + Charles Bridge View</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Rooftop Beer Spa + Pilsner Bath</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Old Town Private Walking Tour</div>
+                        </div>
+                        <div class="extra-data" id="i30">
+                            <div class="detail-mini-card mini-green"><i>✓</i>Michelin CottoCrudo Restaurant</div>
+                            <div class="detail-mini-card mini-blue"><i>✓</i>Spa + Indoor Pool + Gym</div>
+                            <div class="detail-mini-card mini-orange"><i>✓</i>Vltava River Private Cruise</div>
+                            <div class="detail-mini-card mini-green"><i>✓</i>Butler + Limo + Wine Cellar</div>
+                        </div>
+                        <div class="btn-row"><button class="view-btn" onclick="toggleData('i30',this)">View Itinerary
+                                ⬇️</button><a href="/hotel-booking/" class="book-btn" onclick="return bookNowLink(this)"
+                                target="_blank">Book Now ✈️</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+       <div class="pagination-wrap" id="internationalPagination"></div>
+</div>
+    </div>
+<script>
+// ===== FINAL COMPLETE JS - 30 CARDS / 6 PER PAGE =====
+const PAGE_SIZE = 6;
+let currentPages = { domesticGrid: 1, internationalGrid: 1 };
+
+// 1. Page render - 6 cards show, baaki hidden
+function renderPage(gridId) {
+  const grid = document.getElementById(gridId);
+  if (!grid) return;
+  const cards = grid.querySelectorAll(".hotel-card");
+  const page = currentPages[gridId];
+  const totalPages = Math.ceil(cards.length / PAGE_SIZE);
+
+  cards.forEach((c, i) => {
+    const start = (page - 1) * PAGE_SIZE;
+    const end = start + PAGE_SIZE;
+    if (i >= start && i < end) {
+      c.classList.remove("hidden");
+    } else {
+      c.classList.add("hidden");
+      // band karo open extra
+      const extra = c.querySelector(".extra-data");
+      if(extra) extra.classList.remove("open");
+      c.classList.remove("active-expand");
+      const vbtn = c.querySelector(".view-btn");
+      if(vbtn) vbtn.innerHTML = "View Itinerary ⬇️";
+    }
+  });
+  renderPagination(gridId, totalPages);
+}
+
+// 2. Pagination number wala - < Previous | 1 2 3 4 5 | Next >
+function renderPagination(gridId, totalPages){
+  const wrapId = gridId === 'domesticGrid'? 'domesticPagination' : 'internationalPagination';
+  const topId = gridId === 'domesticGrid'? 'domesticTop' : 'internationalTop';
+  const wrap = document.getElementById(wrapId);
+  if(!wrap) return;
+  const current = currentPages[gridId];
+
+  let html = `<button class="pg-btn" ${current===1?'disabled':''} onclick="changePage('${gridId}',-1,'${topId}')">‹ Previous</button>`;
+  for(let i=1; i<=totalPages; i++){
+    html += `<button class="pg-btn ${i===current?'active':''}" onclick="goToPage('${gridId}',${i},'${topId}')">${i}</button>`;
+  }
+  html += `<button class="pg-btn" ${current===totalPages?'disabled':''} onclick="changePage('${gridId}',1,'${topId}')">Next ›</button>`;
+  wrap.innerHTML = html;
+}
+
+function goToPage(gridId, pageNo, topId){
+  currentPages[gridId] = pageNo;
+  renderPage(gridId);
+  document.getElementById(topId)?.scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+function changePage(gridId, dir, topId) {
+  const grid = document.getElementById(gridId);
+  if(!grid) return;
+  const totalPages = Math.ceil(grid.querySelectorAll(".hotel-card").length / PAGE_SIZE);
+  let newPage = currentPages[gridId] + dir;
+  if(newPage < 1) newPage = 1;
+  if(newPage > totalPages) newPage = totalPages;
+  goToPage(gridId, newPage, topId);
+}
+
+// 3. View Itinerary toggle - card niche badhega
+function toggleData(id, btn) {
+  const box = document.getElementById(id);
+  if (!box) return;
+  const currentCard = btn.closest(".hotel-card");
+
+  document.querySelectorAll(".extra-data.open").forEach(openBox => {
+    if (openBox!== box) {
+      openBox.classList.remove("open");
+      const otherCard = openBox.closest(".hotel-card");
+      if (otherCard) {
+        otherCard.classList.remove("active-expand");
+        const otherBtn = otherCard.querySelector(".view-btn");
+        if (otherBtn) otherBtn.innerHTML = "View Itinerary ⬇️";
+      }
+    }
+  });
+
+  box.classList.toggle("open");
+  btn.innerHTML = box.classList.contains("open")? "Hide Itinerary ⬆️" : "View Itinerary ⬇️";
+
+  if (currentCard) {
+    if (box.classList.contains("open")) currentCard.classList.add("active-expand");
+    else currentCard.classList.remove("active-expand");
+  }
+}
+
+// 4. Book Now - PURA CARD DETAIL BOOKING PAGE PR JAYEGA
+function bookNowLink(el) {
+  const card = el.closest('.hotel-card');
+  if (!card) return true;
+
+  const name = card.querySelector('.hotel-name')?.innerText.trim() || "";
+  const loc = card.querySelector('.hotel-loc')?.innerText.replace('📍','').trim() || "";
+  const priceText = card.querySelector('.rent-row strong')?.innerText.trim() || "₹0";
+  const priceNum = priceText.replace(/[^0-9]/g,'') || "0";
+  const room = card.querySelector('.room-type')?.innerText.trim() || "";
+  const badge = card.querySelector('.card-badge')?.innerText.trim() || "";
+  const rating = card.querySelector('.card-rating')?.innerText.trim() || "";
+  const imgEl = card.querySelector('.card-img img');
+  const img = imgEl?.getAttribute('src') || "";
+
+  let features = [];
+  card.querySelectorAll('.hotel-features.feat').forEach(f => {
+    if(f.innerText.trim()) features.push(f.innerText.trim());
+  });
+
+  let amenities = [];
+  card.querySelectorAll('.detail-mini-card').forEach(a => {
+    let txt = a.innerText.replace('✓','').trim();
+    if(txt) amenities.push(txt);
+  });
+
+  const data = {
+    hotel: name,
+    location: loc,
+    price: priceNum,
+    priceShow: priceText,
+    room: room,
+    badge: badge,
+    rating: rating,
+    img: img,
+    features: features.join('|'),
+    amenities: amenities.join('|')
+  };
+
+  try {
+    localStorage.setItem('selectedHotel', JSON.stringify(data));
+  } catch(e){}
+
+  // link banao
+  const query = new URLSearchParams(data).toString();
+  el.setAttribute('href', "/hotel-booking/?" + query);
+  return true;
+}
+
+// 5. Init
+function initHotels() {
+  ["domesticGrid", "internationalGrid"].forEach(gid => {
+    if(document.getElementById(gid)){
+      currentPages[gid] = 1;
+      renderPage(gid);
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', initHotels);
+</script>
+{% endblock %}
+</body>
+    

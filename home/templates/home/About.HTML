@@ -1,0 +1,191 @@
+{% extends 'home/Master.html' %}
+{% block content %}
+<style>
+/* RESET */
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+body{background:#f4f6fb}
+/* HERO */
+.hero-heading-block{padding:110px 20px 30px;text-align:center}
+.hero-heading{font-size:52px;font-weight:800;line-height:1.15;margin-bottom:12px;letter-spacing:-1.5px}
+.hero-heading .blue{color:#0d47a1}
+.hero-heading .orange{background:linear-gradient(90deg,#ffb300,#ff7a00,#ff5722);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-subheading{font-size:16px;color:#666;max-width:720px;margin:0 auto;line-height:1.7}
+/* COMMON */
+.section-padding{padding:20px 20px}
+.grid-2{max-width:1200px;margin:auto;display:grid;grid-template-columns:1fr 1fr;gap:30px}
+/* CARDS */
+.card-white{background:white;padding:40px 30px;border-radius:22px;box-shadow:0 10px 35px rgba(13,110,253,.06);border:1px solid #fff;transition:.4s ease}
+.card-white:hover{transform:translateY(-8px);box-shadow:0 20px 50px rgba(0,0,0,.15)}
+.card-icon{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:16px}
+.card-white h3{font-size:21px;font-weight:800;color:#0d47a1;margin-bottom:12px}
+.card-white p{font-size:15px;color:#555;line-height:1.8}
+.card-white p b{color:#0d47a1}
+.card-white p span{color:#ff6f00;font-weight:700}
+.card-intro-left .card-icon{background:#e3f2fd}
+.card-intro-right .card-icon{background:#fff3e0}
+.card-mission-left .card-icon{background:#e8f5e9}
+.card-mission-right .card-icon{background:#f3e5f5}
+/* HEADINGS - MAIN HEADING 52PX KAR DIYA */
+.sec-heading{text-align:center;margin-bottom:30px}
+.sec-heading h2,.section-heading,.team-heading,.why-heading,.services-header h2,.faq-header h2{font-size:52px;font-weight:800;line-height:1.2;letter-spacing:-1px}
+.sec-heading h2 .blue,.section-heading .blue,.team-heading .blue,.why-heading .blue{color:#0d47a1}
+.sec-heading h2 .orange,.section-heading .orange,.team-heading .orange,.why-heading .orange,.services-header h2 span,.faq-header h2 span{background:linear-gradient(90deg,#ffb300,#ff7a00,#ff5722);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sec-heading p{max-width:750px;margin:8px auto 0;color:#666;font-size:16px}
+/* WHY CHOOSE - 4 IN A ROW */
+.why-choose-section{background:#f4f6fb;padding:20px 20px 30px;text-align:center}
+.why-heading{margin-bottom:10px}
+.why-subheading{max-width:750px;margin:0 auto 35px;font-size:16px;color:#666}
+.why-container{max-width:1200px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:25px}
+.why-card{background:white;padding:30px 20px;border-radius:18px;text-align:center;box-shadow:0 10px 35px rgba(13,110,253,.06);border:1px solid white;transition:.4s}
+.why-card:hover{transform:translateY(-8px);box-shadow:0 10px 40px rgba(0,0,0,.2)}
+.why-icon{font-size:38px;margin-bottom:12px;display:inline-block}
+.why-card h3{font-size:17px;font-weight:700;color:#0d47a1;margin-bottom:8px}
+.why-card p{font-size:14px;color:#666;line-height:1.6}
+/* SERVICES - 4 IN A ROW */
+.services-section{width:100%;padding:25px 20px;background:#f4f6fb;text-align:center}
+.services-header{margin-bottom:35px}
+.services-header h2{color:#0d47a1;margin-bottom:10px}
+.services-header .desc{font-size:16px;color:#666;max-width:650px;margin:0 auto}
+.services-container{display:grid;grid-template-columns:repeat(4,1fr);gap:25px;max-width:1200px;margin:0 auto}
+.service-card{background:white;padding:35px 22px;border-radius:18px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.12);transition:.4s;display:flex;flex-direction:column}
+.service-card:hover{transform:translateY(-10px)}
+.icon-box{font-size:40px;margin-bottom:10px}
+.service-card h3{font-size:18px;color:#0d47a1;font-weight:700;margin-bottom:10px}
+.service-card p{font-size:14px;color:#777;line-height:1.6;flex-grow:1}
+/* ACHIEVEMENTS - 4 IN A ROW */
+.achievement-section{background:#f4f6fb;text-align:center;padding:25px 20px}
+.section-heading{margin-bottom:10px}
+.section-subheading{max-width:850px;margin:0 auto 35px;font-size:16px;color:#666}
+.achievement-container{max-width:1200px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:25px}
+.achievement-card{padding:35px 20px;text-align:center;background:white;border-radius:18px;box-shadow:0 10px 35px rgba(13,110,253,.06);border:1px solid white;transition:.4s}
+.achievement-card:hover{transform:translateY(-8px);box-shadow:0 10px 40px rgba(0,0,0,.2)}
+.achievement-card h2{font-size:40px;font-weight:800;background:linear-gradient(90deg,#ffb300,#ff7a00,#ff5722);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
+.achievement-card h3{color:#0d47a1;font-size:18px;font-weight:700}
+/* TEAM */
+.team-section{background:#f4f6fb;padding:30px 20px;text-align:center}
+.team-heading{margin-bottom:10px}
+.team-subheading{max-width:750px;margin:0 auto 35px;font-size:16px;color:#666}
+.team-container{max-width:1300px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+.team-card{background:white;padding:25px 18px;border-radius:18px;box-shadow:0 10px 35px rgba(13,110,253,.06);border:1px solid #f0f4ff;transition:.4s}
+.team-card:hover{transform:translateY(-8px);box-shadow:0 10px 40px rgba(0,0,0,.2)}
+.team-img{width:100px;height:100px;border-radius:50%;object-fit:cover;margin-bottom:14px;border:4px solid #0d47a1}
+.team-card h3{font-size:18px;font-weight:700;color:#0d47a1;margin-bottom:6px}
+.team-role{font-size:14px;font-weight:600;color:#ff7a00;margin-bottom:10px}
+.team-desc{font-size:13px;color:#555;line-height:1.6}
+/* FAQ */
+.faq-section {width: 100%;padding: 50px 8%;background: #f4f6fb;color: #fff;font-family: 'Poppins', sans-serif;}
+.faq-container {max-width: 900px;margin: 0 auto;}
+.faq-header {text-align: center;margin-bottom: 60px;}
+.faq-header h2 {font-size: 52px;font-weight: 800;color: #0d47a1;margin-bottom: 20px;line-height: 1.2;}
+.faq-header h2 span {background: linear-gradient(135deg, #ff9800, #ff5722);-webkit-background-clip: text;-webkit-text-fill-color: transparent;}
+.faq-header .desc {font-size: 17px;color: #444;max-width: 600px;margin: 0 auto;}
+.faq-wrapper {display: flex;flex-direction: column;gap: 18px;}
+.faq-item {background: transparent;border: none;border-radius: 0;overflow: hidden;transition: .4s ease;}
+.faq-question {width: 100%;padding: 22px 25px;background: white;border: 1px solid #e0e6f0;border-radius: 14px;color: #0d47a1;font-size: 16px;font-weight: 600;text-align: left;cursor: pointer;display: flex;justify-content: space-between;align-items: center;transition: .3s ease;}
+.faq-question:hover {transform: translateY(-2px);}
+.faq-icon {width: 32px;height: 32px;background: yellow;color: RED;font-size: 20px;font-weight: 400;border-radius: 50%;display: flex;align-items: center;justify-content: center;transition: .4s ease;min-width: 32px;}
+.faq-item.active .faq-icon {transform: rotate(45deg);background: linear-gradient(135deg, #ff9800, #ff5722);color: white;}
+.faq-answer {max-height: 0;overflow: hidden;transition: max-height .4s ease, padding .4s ease;background: white;border: 1px solid #e0e6f0;border-top: none;border-radius: 14px 14px;margin-top: -1px;}
+.faq-item.active .faq-answer {max-height: 300px;padding: 0 25px 22px 25px;}
+.faq-answer p {font-size: 15px;color: #444;line-height: 1.8;border-top: 1px solid #f0f2f7;padding-top: 18px;margin: 0;}
+@media(max-width:768px) {.faq-section {padding: 70px 5%;}.faq-header h2 {font-size: 34px;}.faq-question {font-size: 16px;padding: 18px 20px;}.faq-item.active .faq-answer {padding: 0 20px 20px 20px;}}
+/* RESPONSIVE */
+@media(max-width:1200px){.why-container,.services-container,.achievement-container{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:992px){.grid-2{grid-template-columns:repeat(2,1fr)}.team-container{grid-template-columns:repeat(2,1fr)}.hero-heading{font-size:42px}.sec-heading h2,.services-header h2,.section-heading,.team-heading,.faq-header h2,.why-heading{font-size:36px}}
+@media(max-width:768px){.hero-heading-block{padding:60px 15px 25px}.hero-heading{font-size:32px}.grid-2,.why-container,.services-container,.achievement-container,.team-container{grid-template-columns:1fr}.sec-heading h2,.services-header h2,.section-heading,.team-heading,.faq-header h2,.why-heading{font-size:28px}.section-padding{padding:15px}.card-white{padding:25px 20px}.services-section,.achievement-section,.team-section,.faq-section{padding:25px 15px}}
+</style>
+<section class="hero-heading-block">
+<h1 class="hero-heading"><span class="blue">Discover</span> <span class="orange">the World with TravelEase</span></h1>
+<p class="hero-subheading">Plan less. Explore more. Your dream vacation starts with one click.</p>
+</section>
+<section class="section-padding">
+<div class="grid-2">
+<div class="card-white card-intro-left"><div class="card-icon">🌍</div><h3>Who We Are</h3><p>At <b>TravelEase</b>, we believe travel should be effortless, not exhausting. We were founded to eliminate confusion, overpricing, and unreliable information.<br><br>With <span>500+ Curated Packages</span> and <b>300+ Verified Hotel Partners</b>, we bring everything onto one secure platform. No hidden charges — just <span>pure travel experience</span>.</p></div>
+<div class="card-white card-intro-right"><div class="card-icon">✨</div><h3>Why Travelers Love Us</h3><p>Imagine booking your entire journey — <b>Flights, Stays, Sightseeing & Transfers</b> — in a single click.<br><br>We offer <span>Best Price Guarantee</span>, secure payments, and real human support. Trusted by <b>10,000+ Happy Travelers</b> with 4.9★, we craft <span>unforgettable memories</span>.</p></div>
+</div>
+</section>
+<section class="section-padding">
+<div class="sec-heading"><h2><span class="blue">Our</span> <span class="orange">Mission</span></h2><p>The reason we exist and what drives us every single day</p></div>
+<div class="grid-2">
+<div class="card-white card-mission-left"><div class="card-icon">🎯</div><h3>Our Promise</h3><p>Our mission is to make travel <span>simple, transparent, and affordable</span> for everyone. No more fake deals.<br><br>Every itinerary is <b>personally verified</b>, every partner trusted, every price genuine. We handle logistics, you focus on <span>exploring and enjoying</span>.</p></div>
+<div class="card-white card-mission-right"><div class="card-icon">🚀</div><h3>Our Vision</h3><p>We envision a world where everyone — <b>₹10,000 or ₹10,00,000 budget</b> — can explore without fear.<br><br>That's why we provide <span>24/7 Real Human Assistance</span>. You are not a booking ID, you are <span>family</span>. Your happiness is our success.</p></div>
+</div>
+</section>
+<section class="why-choose-section">
+<h1 class="why-heading"><span class="blue">Why Choose</span> <span class="orange">TravelEase</span></h1>
+<p class="why-subheading">Trusted by thousands of travelers for a reason. Here’s what makes us different.</p>
+<div class="why-container">
+<div class="why-card"><div class="why-icon">✈️</div><h3>Best Price Guarantee</h3><p>Lowest prices on flights & hotels. Found cheaper? We’ll match it.</p></div>
+<div class="why-card"><div class="why-icon">🛡️</div><h3>Safe & Secure Booking</h3><p>100% secure payments and verified partners. Fully protected.</p></div>
+<div class="why-card"><div class="why-icon">📞</div><h3>24/7 Customer Support</h3><p>Real experts available round the clock before, during & after trip.</p></div>
+<div class="why-card"><div class="why-icon">🎯</div><h3>Customized Packages</h3><p>Solo to Group - personalized trips as per your budget & choice.</p></div>
+<div class="why-card"><div class="why-icon">⭐</div><h3>10K+ Happy Travelers</h3><p>Trusted by 10,000+ customers with 4.9★ real reviews.</p></div>
+<div class="why-card"><div class="why-icon">🌍</div><h3>500+ Destinations</h3><p>Hill stations to beaches, India to abroad - 500+ locations.</p></div>
+<div class="why-card"><div class="why-icon">💸</div><h3>No Hidden Charges</h3><p>What you see is what you pay. 100% transparency, zero surprises.</p></div>
+<div class="why-card"><div class="why-icon">⚡</div><h3>Instant Booking</h3><p>2-minute confirmation + Free cancellation on most packages.</p></div>
+</div>
+</section>
+<section class="services-section">
+<div class="services-header"><h2>Our <span>Premium Services</span></h2><p class="desc">Making every journey comfortable, safe, and unforgettable.</p></div>
+<div class="services-container">
+<div class="service-card"><div class="icon-box">🧭</div><h3>Bespoke Journeys</h3><p>Handcrafted itineraries, private guides, VIP access & hidden gems.</p></div>
+<div class="service-card"><div class="icon-box">✈️</div><h3>Private Jet & Charter</h3><p>On-demand jets, helicopter transfers & first-class worldwide.</p></div>
+<div class="service-card"><div class="icon-box">🏖️</div><h3>Luxury Stays & Resorts</h3><p>5-Star resorts, private villas & overwater bungalows upgrade.</p></div>
+<div class="service-card"><div class="icon-box">🤵</div><h3>24/7 Concierge</h3><p>Personal butler for dining, tickets, yachts - anytime anywhere.</p></div>
+<div class="service-card"><div class="icon-box">📜</div><h3>VIP Visa & Passport</h3><p>Express visa, meet & greet, fast-track immigration - VIP entry.</p></div>
+<div class="service-card"><div class="icon-box">🚗</div><h3>Luxury Transport</h3><p>Mercedes, BMW chauffeur, yacht charters for ultimate comfort.</p></div>
+<div class="service-card"><div class="icon-box">🛥️</div><h3>Private Yacht & Cruise</h3><p>Private yacht in Goa, Maldives, Dubai - sunset & party cruise.</p></div>
+<div class="service-card"><div class="icon-box">🍽️</div><h3>Gourmet Dining</h3><p>Michelin restaurants, private chef dinner & exclusive events access.</p></div>
+</div>
+</section>
+<section class="achievement-section">
+<h1 class="section-heading"><span class="blue">Our</span> <span class="orange">Achievements</span></h1>
+<p class="section-subheading">Numbers that reflect our journey, trust, and commitment.</p>
+<div class="achievement-container">
+<div class="achievement-card"><h2>10K+</h2><h3>Happy Travelers</h3></div>
+<div class="achievement-card"><h2>500+</h2><h3>Tour Packages</h3></div>
+<div class="achievement-card"><h2>300+</h2><h3>Hotel Partners</h3></div>
+<div class="achievement-card"><h2>24/7</h2><h3>Customer Support</h3></div>
+<div class="achievement-card"><h2>98%</h2><h3>Customer Satisfaction</h3></div>
+<div class="achievement-card"><h2>4.9★</h2><h3>Customer Rating</h3></div>
+<div class="achievement-card"><h2>10+</h2><h3>Years Experience</h3></div>
+<div class="achievement-card"><h2>20K+</h2><h3>Trips Completed</h3></div>
+</div>
+</section>
+<section class="team-section">
+<h1 class="team-heading"><span class="blue">Meet the</span> <span class="orange">TravelEase Team</span></h1>
+<p class="team-subheading">The passionate people behind your unforgettable travel experiences.</p>
+<div class="team-container">
+<div class="team-card"><img src="https://i.pravatar.cc/300?img=1" class="team-img" alt="Rahul"><h3>Rahul Sharma</h3><p class="team-role">Founder</p><p class="team-desc">Vision behind TravelEase. 10+ years making travel easy.</p></div>
+<div class="team-card"><img src="https://i.pravatar.cc/300?img=5" class="team-img" alt="Priya"><h3>Priya Verma</h3><p class="team-role">Tour Manager</p><p class="team-desc">Handles all trips, hotels & on-ground operations.</p></div>
+<div class="team-card"><img src="https://i.pravatar.cc/300?img=8" class="team-img" alt="Aman"><h3>Aman Gupta</h3><p class="team-role">Travel Expert</p><p class="team-desc">500+ destinations covered. Best itineraries expert.</p></div>
+<div class="team-card"><img src="https://i.pravatar.cc/300?img=10" class="team-img" alt="Sneha"><h3>Sneha Patel</h3><p class="team-role">Customer Support</p><p class="team-desc">24/7 available. Booking to post-trip support.</p></div>
+</div>
+</section>
+<section class="faq-section">
+<div class="faq-container">
+<div class="faq-header"><h2>Frequently <span>Asked Questions</span></h2><p class="desc">Everything you need to know about booking your luxury journey with us</p></div>
+<div class="faq-wrapper">
+<div class="faq-item"><button class="faq-question"><span>How far in advance should I book my luxury trip?</span><span class="faq-icon">+</span></button><div class="faq-answer"><p>We recommend booking 3-6 months in advance for peak seasons and private jet charters. However, our team can arrange last-minute luxury trips within 72 hours based on availability.</p></div></div>
+<div class="faq-item"><button class="faq-question"><span>Are your prices negotiable? Do you offer payment plans?</span><span class="faq-icon">+</span></button><div class="faq-answer"><p>Yes! We offer flexible payment plans and best price guarantee. Found a lower price? We'll beat it and add exclusive perks worth $1000+. Speak to your travel curator for details.</p></div></div>
+<div class="faq-item"><button class="faq-question"><span>What if I need to cancel or change my booking?</span><span class="faq-icon">+</span></button><div class="faq-answer"><p>Your comfort is priority. We offer free changes up to 14 days before travel. Cancellations are handled case-by-case with our partners to get you maximum refunds and credits.</p></div></div>
+<div class="faq-item"><button class="faq-question"><span>Do you provide 24/7 support during my trip?</span><span class="faq-icon">+</span></button><div class="faq-answer"><p>Absolutely. Every client gets a dedicated travel curator + 24/7 emergency hotline. Lost passport, flight delay, medical emergency - we handle everything instantly, anywhere in the world.</p></div></div>
+<div class="faq-item"><button class="faq-question"><span>How do you ensure privacy and security for VIP clients?</span><span class="faq-icon">+</span></button><div class="faq-answer"><p>We use bank-level encryption for all bookings. NDAs available for high-profile clients. Private jet terminals, discreet hotels, and security coordination can be arranged on request.</p></div></div>
+</div>
+</div>
+</section>
+<script>
+const faqItems = document.querySelectorAll('.faq-item');
+faqItems.forEach(item => {
+const question = item.querySelector('.faq-question');
+question.addEventListener('click', () => {
+faqItems.forEach(otherItem => {
+if (otherItem !== item) {
+otherItem.classList.remove('active');
+}
+});
+item.classList.toggle('active');
+});
+});
+</script>
+{% endblock %}

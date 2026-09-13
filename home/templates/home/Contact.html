@@ -1,0 +1,191 @@
+{% extends 'home/Master.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact TravelEase</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+body{background:#f4f6fb;color:#222}
+:root{--blue:#0d47a1;--orange:#ff7a00}
+.container{max-width:1200px;margin:auto;padding:0 20px}
+.head{text-align:center;padding:40px 0 20px}
+.head.first{padding:110px 0 20px}
+.head h1{font-size:52px;font-weight:800;color:var(--blue);line-height:1.15;margin-bottom:10px}
+.head h1 span{background:linear-gradient(90deg,#ffb300,#ff7a00,#ff5722);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.head p{font-size:18px;color:#666;max-width:700px;margin:0 auto;line-height:1.6}
+.two-card{max-width:1100px;margin:0 auto 30px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.card{background:white;padding:30px 26px;border-radius:18px;box-shadow:0 10px 30px rgba(13,110,253,.06);transition:.35s}
+.card:hover{transform:translateY(-6px)}
+.card .ico{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:12px}
+.c1{background:#e3f2fd}.c2{background:#fff3e0}
+.card h3{font-size:22px;font-weight:700;color:var(--blue);margin-bottom:10px}
+.card p{font-size:14px;color:#555;line-height:1.8;margin-bottom:10px}
+.card p span{color:var(--orange);font-weight:700}
+.card ul{list-style:none}
+.card ul li{font-size:13px;color:#444;margin-bottom:6px;display:flex;gap:8px;align-items:center}
+.card ul li i{color:var(--orange)}
+.form-map{padding:10px 0 35px;background:#f4f6fb}
+.fm-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.f-card,.m-card{background:white;padding:26px;border-radius:18px;box-shadow:0 10px 30px rgba(13,110,253,.06)}
+.f-card h3,.m-card h3{font-size:20px;color:var(--blue);font-weight:700;margin-bottom:6px;text-align:center}
+.f-card .sub,.m-card .sub{font-size:13px;color:#777;text-align:center;margin-bottom:18px}
+.form-group{margin-bottom:12px}
+.form-group label{font-size:11px;font-weight:700;color:#333;margin-bottom:4px;display:block}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:12px 14px;border:1px solid #dde4ee;border-radius:10px;font-size:13px;outline:none;background:#fafafa}
+.form-group textarea{min-height:90px;resize:vertical}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#ff7a00;background:#fff;box-shadow:0 0 0 3px rgba(255,122,0,.08)}
+.submit{width:100%;padding:13px;border:none;border-radius:10px;background:linear-gradient(90deg,#ffb300,#ff7a00);color:white;font-weight:700;font-size:14px;cursor:pointer}
+.map-box{border-radius:12px;overflow:hidden;height:350px;background:#e9edf4}
+.map-box iframe{width:100%;height:100%;border:0}
+.contact-mediums-section{padding:10px 0 35px;background:#f4f6fb}
+.mediums-grid{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.c-medium{background:white;border-radius:16px;padding:22px 16px;text-align:center;box-shadow:0 8px 25px rgba(13,110,253,.06);transition:.35s}
+.c-medium:hover{transform:translateY(-8px)}
+.c-medium .cm-icon{width:52px;height:52px;margin:0 auto 12px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px}
+.c-medium .cm-icon.wa{background:#e8f5e9;color:#25d366}.c-medium .cm-icon.call{background:#e3f2fd;color:#0d47a1}.c-medium .cm-icon.email{background:#fce4ec;color:#ea4335}.c-medium .cm-icon.loc{background:#fff3e0;color:#ff7a00}
+.c-medium h4{font-size:15px;color:#1d2a40;font-weight:700;margin-bottom:6px}
+.c-medium a,.c-medium p{font-size:12px;color:#666;text-decoration:none;line-height:1.5;word-break:break-all}
+.c-medium .cm-btn{display:inline-block;margin-top:10px;padding:7px 16px;border-radius:20px;background:#f4f6fb;color:var(--blue);font-size:11px;font-weight:700;text-decoration:none;transition:.3s}
+.c-medium:hover .cm-btn{background:linear-gradient(90deg,#ffb300,#ff7a00);color:white}
+.why-choose-section{background:#f4f6fb;padding:20px 20px 30px;text-align:center}
+.why-choose-section .why-heading{font-size:52px;font-weight:800;color:var(--blue);margin-bottom:10px}
+.why-choose-section .why-heading .orange{background:linear-gradient(90deg,#ffb300,#ff7a00);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.why-subheading{font-size:18px;color:#666;max-width:750px;margin:0 auto 25px;line-height:1.6}
+.why-container{max-width:1200px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.why-card{background:white;padding:28px 20px;border-radius:18px;text-align:center;box-shadow:0 10px 35px rgba(13,110,253,.06);transition:.4s}
+.why-card:hover{transform:translateY(-8px)}
+.why-icon{font-size:36px;margin-bottom:10px;display:inline-block}
+.why-card h3{font-size:17px;font-weight:700;color:#0d47a1;margin-bottom:8px}
+.why-card p{font-size:14px;color:#666;line-height:1.6}
+.follow{padding:10px 0 30px;text-align:center;}
+.socials{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:15px}
+.slink{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:16px;transition:.3s;text-decoration:none !important}
+.slink:hover{transform:translateY(-4px) scale(1.05)}
+.fb{background:#1877f2}.insta{background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888)}.tw{background:#111}.yt{background:#ff0000}.wa{background:#25d366}.mail{background:#ea4335}.li{background:#0a66c2}
+.faq-section{width:100%;padding:50px 8% 40px;background:#f4f6fb}
+.faq-container{max-width:900px;margin:0 auto}
+.faq-header{text-align:center;margin-bottom:30px}
+.faq-header h2{font-size:52px;font-weight:800;color:#0d47a1;margin-bottom:10px;line-height:1.2}
+.faq-header h2 span{background:linear-gradient(135deg,#ff9800,#ff5722);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.faq-header .desc{font-size:18px;color:#666;max-width:600px;margin:0 auto;line-height:1.6}
+.faq-wrapper{display:flex;flex-direction:column;gap:12px}
+.faq-item{background:white;border:1px solid #e0e6f0;border-radius:14px;overflow:hidden;transition:.4s}
+.faq-question{width:100%;padding:18px 22px;background:white;border:none;border-radius:14px;color:#0d47a1;font-size:15px;font-weight:600;text-align:left;cursor:pointer;display:flex;justify-content:space-between;align-items:center}
+.faq-icon{width:30px;height:30px;background:#fff0df;color:#ff7a00;font-size:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:.4s;min-width:30px}
+.faq-item.active .faq-icon{transform:rotate(45deg);background:linear-gradient(135deg,#ff9800,#ff5722);color:white}
+.faq-answer{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.faq-answer p{font-size:14px;color:#555;line-height:1.7;padding:0 22px 18px;margin:0;border-top:1px solid #f0f2f7;margin-top:10px;padding-top:14px}
+.faq-item.active .faq-answer{max-height:300px}
+.overlay{display:none;position:fixed;inset:0;background:rgba(8,20,40,.6);backdrop-filter:blur(4px);z-index:9998}
+.popup{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:min(400px,90%);background:white;padding:28px 22px;border-radius:18px;text-align:center;z-index:9999}
+.pop-ico{width:60px;height:60px;margin:0 auto 12px;border-radius:50%;background:#e9fbf1;color:#12a15a;display:flex;align-items:center;justify-content:center;font-size:26px}
+.popup h3{color:#0d47a1;font-size:20px;margin-bottom:6px}
+.popup p{color:#666;font-size:12px;line-height:1.6;margin-bottom:12px}
+.pop-btn{padding:10px 22px;border:none;border-radius:8px;background:linear-gradient(90deg,#ffb300,#ff7a00);color:white;font-weight:700;cursor:pointer;margin:4px}
+.pop-btn.wa-btn{background:#25d366}
+@media(max-width:900px){.two-card,.fm-grid,.why-container,.mediums-grid{grid-template-columns:1fr}.head h1,.why-choose-section .why-heading,.faq-header h2{font-size:34px}.head p,.why-subheading,.faq-header .desc{font-size:16px}}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="head first"><h1>Contact <span>TravelEase</span></h1><p>Your trusted partner for safe, affordable & unforgettable travel with 24/7 expert support.</p></div>
+<div class="two-card">
+<div class="card"><div class="ico c1">🌍</div><h3>We Are TravelEase – Your Trusted Travel Partner</h3><p>At <b>TravelEase</b>, we don't just book trips – we <span>craft unforgettable memories</span>. With <b>500+ packages</b>, <b>300+ hotels</b> & <b>4.9★ rating</b>, we make every journey transparent & hassle-free.</p><ul><li><i class="fa-solid fa-check"></i> Best Price Guaranteed</li><li><i class="fa-solid fa-check"></i> 100% Secure Payments</li><li><i class="fa-solid fa-check"></i> 500+ Destinations</li></ul></div>
+<div class="card"><div class="ico c2">🤝</div><h3>How We Help You Plan Better?</h3><p>Share your dream – <span>honeymoon in Bali, family trip to Manali or Dubai tour</span> – our curators design a <b>personalized itinerary as per your budget</b>.</p><ul><li><i class="fa-solid fa-check"></i> Customized Itinerary in 30 Minutes</li><li><i class="fa-solid fa-check"></i> Free Changes Up To 14 Days</li><li><i class="fa-solid fa-check"></i> Dedicated Manager on WhatsApp</li></ul></div>
+</div>
+</div>
+<div class="form-map"><div class="container"><div class="head"><h1>Tell Us About <span>Your Travel Plan</span></h1><p>Fill the form – your enquiry goes directly to our WhatsApp & we reply within 30 minutes.</p></div>
+<div class="fm-grid">
+<div class="f-card"><h3>Send Enquiry</h3><p class="sub">2-min form → Instant WhatsApp Connect</p>
+<form onsubmit="sendWA(event)">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div class="form-group"><label>Full Name</label><input type="text" id="name" placeholder="Your name" required></div><div class="form-group"><label>Phone</label><input type="tel" id="phone" placeholder="+91 XXXXX XXXXX" required></div></div>
+<div class="form-group"><label>Email</label><input type="email" id="email" placeholder="Enter E-mail" required></div>
+<div class="form-group"><label>Enquiry Type</label><select id="type"><option>Select</option><option>Domestic Package</option><option>International Package</option><option>Hotel Booking</option><option>Flight Booking</option></select></div>
+<div class="form-group"><label>Message</label><textarea id="msg" placeholder="Destination, dates, persons, budget..." required></textarea></div>
+<button type="submit" class="submit">Submit</button>
+</form></div>
+<div class="m-card"><h3>Visit Our Office</h3><p class="sub">Gomti Nagar, Lucknow</p><div class="map-box"><iframe src="https://www.google.com/maps?q=Gomti+Nagar,+Lucknow&output=embed" loading="lazy"></iframe></div></div>
+</div></div></div>
+<div class="contact-mediums-section"><div class="container"><div class="head"><h1>Connect With Us <span>Via Any Medium</span></h1><p>Choose your favourite way – call, WhatsApp, email or visit us</p></div>
+<div class="mediums-grid">
+<div class="c-medium"><div class="cm-icon call"><i class="fa-solid fa-phone"></i></div><h4>Call Us</h4><a href="tel:+917618007640">+91 76180 07640</a><br><a href="tel:+919889576557">+91 98895 76557</a><div><a href="tel:+917618007640" class="cm-btn">Call Now</a></div></div>
+<div class="c-medium"><div class="cm-icon wa"><i class="fa-brands fa-whatsapp"></i></div><h4>WhatsApp</h4><a href="https://wa.me/917618007640" target="_blank">+91 76180 07640</a><p>Instant reply in 5 mins</p><div><a href="https://wa.me/917618007640" target="_blank" class="cm-btn">Chat Now</a></div></div>
+<div class="c-medium"><div class="cm-icon email"><i class="fa-solid fa-envelope"></i></div><h4>Email Us</h4><a href="mailto:abhikumar761800@gmail.com">abhikumar761800@gmail.com</a><p>Reply within 24 hours</p><div><a href="mailto:abhikumar761800@gmail.com" class="cm-btn">Send Email</a></div></div>
+<div class="c-medium"><div class="cm-icon loc"><i class="fa-solid fa-location-dot"></i></div><h4>Office Location</h4><p>TravelEase HQ, Gomti Nagar,<br>Lucknow, UP - 226010</p><div><a href="https://www.google.com/maps?q=Gomti+Nagar,+Lucknow" target="_blank" class="cm-btn">Get Direction</a></div></div>
+</div></div></div>
+<section class="why-choose-section">
+<h1 class="why-heading"><span class="blue">Why Choose</span> <span class="orange">TravelEase</span></h1>
+<p class="why-subheading">Trusted by thousands of travelers for a reason. Here’s what makes us different.</p>
+<div class="why-container">
+<div class="why-card"><div class="why-icon">✈️</div><h3>Best Price Guarantee</h3><p>Lowest prices on flights & hotels. Found cheaper? We’ll match it.</p></div>
+<div class="why-card"><div class="why-icon">🛡️</div><h3>Safe & Secure Booking</h3><p>100% secure payments and verified partners.</p></div>
+<div class="why-card"><div class="why-icon">📞</div><h3>24/7 Customer Support</h3><p>Real experts available round the clock.</p></div>
+<div class="why-card"><div class="why-icon">🎯</div><h3>Customized Packages</h3><p>Solo to Group - personalized trips as per budget.</p></div>
+<div class="why-card"><div class="why-icon">⭐</div><h3>10K+ Happy Travelers</h3><p>Trusted by 10,000+ customers with 4.9★ reviews.</p></div>
+<div class="why-card"><div class="why-icon">🌍</div><h3>500+ Destinations</h3><p>Hill stations to beaches, India to abroad.</p></div>
+<div class="why-card"><div class="why-icon">💸</div><h3>No Hidden Charges</h3><p>What you see is what you pay. Zero surprises.</p></div>
+<div class="why-card"><div class="why-icon">⚡</div><h3>Instant Booking</h3><p>2-minute confirmation + Free cancellation.</p></div>
+</div>
+</section>
+<div class="follow"><div class="container"><div class="head"><h1>Follow <span>TravelEase</span></h1><p>Get latest offers & travel tips</p></div>
+<div class="socials">
+<a href="#" class="slink fb"><i class="fab fa-facebook-f"></i></a>
+<a href="#" class="slink insta"><i class="fab fa-instagram"></i></a>
+<a href="#" class="slink tw"><i class="fab fa-x-twitter"></i></a>
+<a href="#" class="slink yt"><i class="fab fa-youtube"></i></a>
+<a href="https://wa.me/917618007640" target="_blank" class="slink wa"><i class="fab fa-whatsapp"></i></a>
+<a href="mailto:abhikumar761800@gmail.com" class="slink mail"><i class="fas fa-envelope"></i></a>
+<a href="#" class="slink li"><i class="fab fa-linkedin-in"></i></a>
+</div></div></div>
+
+<!-- LUXURY FAQ - AS YOU WANTED -->
+<section class="faq-section">
+<div class="faq-container">
+<div class="faq-header"><h2>Frequently <span>Asked Questions</span></h2><p class="desc">Everything you need to know about booking your luxury journey with us</p></div>
+<div class="faq-wrapper">
+<div class="faq-item"><button class="faq-question"><span>How far in advance should I book my luxury trip?</span><span class="faq-icon">+</span></button><div class="faq-answer"><p>We recommend booking 3-6 months in advance for peak seasons and private jet charters. However, our team can arrange last-minute luxury trips within 72 hours based on availability.</p></div></div>
+<div class="faq-item"><button class="faq-question"><span>Are your prices negotiable? Do you offer payment plans?</span><span class="faq-icon">+</span></button><div class="faq-answer"><p>Yes! We offer flexible payment plans and best price guarantee. Found a lower price? We'll beat it and add exclusive perks worth $1000+. Speak to your travel curator for details.</p></div></div>
+<div class="faq-item"><button class="faq-question"><span>What if I need to cancel or change my booking?</span><span class="faq-icon">+</span></button><div class="faq-answer"><p>Your comfort is priority. We offer free changes up to 14 days before travel. Cancellations are handled case-by-case with our partners to get you maximum refunds and credits.</p></div></div>
+<div class="faq-item"><button class="faq-question"><span>Do you provide 24/7 support during my trip?</span><span class="faq-icon">+</span></button><div class="faq-answer"><p>Absolutely. Every client gets a dedicated travel curator + 24/7 emergency hotline. Lost passport, flight delay, medical emergency - we handle everything instantly, anywhere in the world.</p></div></div>
+<div class="faq-item"><button class="faq-question"><span>How do you ensure privacy and security for VIP clients?</span><span class="faq-icon">+</span></button><div class="faq-answer"><p>We use bank-level encryption for all bookings. NDAs available for high-profile clients. Private jet terminals, discreet hotels, and security coordination can be arranged on request.</p></div></div>
+</div>
+</div>
+</section>
+
+<div class="overlay" id="overlay" onclick="hidePop()"></div>
+<div class="popup" id="popup"><div class="pop-ico"><i class="fa-solid fa-check"></i></div><h3>Enquiry Ready! ✅</h3><p>Your enquiry prepared. Click to send directly to <b style="color:#ff7a00">TravelEase</b> on WhatsApp & get reply in 30 mins.</p><button class="pop-btn wa-btn" onclick="openWA()"><i class="fa-brands fa-whatsapp"></i> Open WhatsApp & Send</button><button class="pop-btn" onclick="hidePop()" style="background:#eef2f7;color:#333">Close</button></div>
+<script>
+let waLink="";
+function sendWA(e){
+e.preventDefault();
+let n=document.getElementById("name").value.trim();
+let p=document.getElementById("phone").value.trim();
+let em=document.getElementById("email").value.trim();
+let t=document.getElementById("type").value;
+let m=document.getElementById("msg").value.trim();
+let txt=`*TravelEase New Enquiry*%0A%0A*Name:* ${n}%0A*Phone:* ${p}%0A*Email:* ${em}%0A*Type:* ${t}%0A*Message:* ${m}`;
+waLink=`https://wa.me/917618007640?text=${encodeURIComponent(txt)}`;
+document.getElementById("popup").style.display="block";
+document.getElementById("overlay").style.display="block";
+e.target.reset();
+}
+function hidePop(){document.getElementById("popup").style.display="none";document.getElementById("overlay").style.display="none"}
+function openWA(){window.open(waLink,"_blank");hidePop()}
+document.querySelectorAll(".faq-item").forEach(item=>{
+const q=item.querySelector(".faq-question");
+q.addEventListener("click",()=>{
+document.querySelectorAll(".faq-item").forEach(o=>{if(o!==item){o.classList.remove("active");o.querySelector(".faq-answer").style.maxHeight=null}});
+item.classList.toggle("active");
+let a=item.querySelector(".faq-answer");
+a.style.maxHeight=item.classList.contains("active")?a.scrollHeight+"px":null;
+});
+});
+</script>
+</body>
+</html>
+{% endblock %}

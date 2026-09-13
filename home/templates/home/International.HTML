@@ -1,0 +1,3606 @@
+{% extends 'home/Master.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TravelEase - International Packages</title>
+
+  {% load static %}
+
+  <!-- GOOGLE FONT - POPPINS -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: #f4f6fb;
+    }
+
+    .hero {
+      padding: 120px 0px 20px;
+      text-align: center;
+      background: #f4f6fb;
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      font-weight: 800;
+      color: #0d47a1;
+      margin-bottom: 15px
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, #ff9800, #ff5722);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: #666;
+      line-height: 1.6;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .hero p.line1 {
+      display: block;
+      font-weight: 600;
+      font-size: 20px;
+    }
+
+    .hero p.line2 {
+      display: block;
+      font-weight: 500;
+      font-size: 16px;
+      color: #888;
+      margin-top: 5px;
+    }
+
+    .container {
+      width: 95%;
+      max-width: 1400px;
+      margin: 40px auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      align-items: start;
+      grid-auto-rows: max-content;
+    }
+
+    .card {
+      background: white;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 2px solid #eee;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
+      display: flex;
+      flex-direction: column;
+      height: 700px;
+      min-height: 700px;
+      position: relative;
+      transition: height 0.35s ease, transform .45s ease, box-shadow .45s ease;
+    }
+
+    .card.expanded {
+      height: auto !important;
+    }
+
+    .card:hover {
+      transform: translateY(-12px);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, .3);
+    }
+
+    .card-img {
+      width: 100%;
+      height: 240px;
+      flex-shrink: 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: .5s;
+    }
+
+    .card:hover .card-img img {
+      transform: scale(1.10)
+    }
+
+    .future-tag {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      z-index: 3;
+      background: linear-gradient(135deg, #ff9800, #ff5722);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 30px;
+      font-size: 12px;
+      font-weight: 700
+    }
+
+    .rating-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      z-index: 3;
+      background: rgba(255, 255, 255, .96);
+      color: #ff9800;
+      padding: 8px 14px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 700
+    }
+
+     .card-content {
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .card-content h3 {
+      font-size: 25px;
+      font-weight: 700;
+      line-height: 1.3;
+      min-height: 65px;
+      height: auto;
+      overflow: hidden;
+      color: #0d47a1;
+    }
+
+    .days {
+      margin-top: 5px;
+      display: inline-flex;
+      gap: 6px;
+      width: max-content;
+      padding: 7px 14px;
+      border-radius: 25px;
+      background: linear-gradient(135deg, #ff9800, #ff5722);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 20px
+    }
+
+    .price {
+      font-size: 32px;
+      font-weight: 800;
+      color: #ff5722;
+      margin-bottom: 18px
+    }
+
+    .price span {
+      font-size: 14px;
+      color: #666;
+      font-weight: 500
+    }
+
+    .itinerary {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .itinerary li {
+      position: relative;
+      padding: 12px 15px 12px 42px;
+      margin-bottom: 10px;
+      background: #F8FAFD;
+      border-radius: 12px;
+      border-left: 4px solid #0d6efd;
+      color: #444;
+      font-size: 14px;
+      font-weight: 500;
+      transition: .35s
+    }
+
+    .itinerary li:hover {
+      background: #EEF5FF;
+      transform: translateX(6px);
+      border-left: 4px solid #ff9800
+    }
+
+    .itinerary li::before {
+      content: "📍";
+      position: absolute;
+      left: 15px;
+      top: 11px;
+      font-size: 18px
+    }
+
+    .extra-day {
+      display: none
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: auto;
+      padding-top: 20px;
+      flex-shrink: 0;
+    }
+
+    .btn,
+    .btn-book {
+      flex: 1;
+      padding: 15px;
+      border: none;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .4s;
+      color: #fff;
+      box-shadow: 0 6px 15px rgba(255, 87, 34, .25);
+      background: linear-gradient(135deg, #ff9800, #ff5722);
+      text-decoration: none;
+      text-align: center;
+      display: inline-block;
+    }
+
+    .btn:hover,
+    .btn-book:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(255, 87, 34, .35);
+      background: linear-gradient(135deg, #ff5722, #ff9800);
+    }
+
+    @media(max-width: 992px) {
+      .container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media(max-width: 600px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        font-size: 32px;
+      }
+
+      .hero p.line1 {
+        font-size: 18px;
+      }
+
+      .hero p.line2 {
+        font-size: 14px;
+      }
+    }
+
+    .card.expanded .extra-day {
+      display: block;
+    }
+
+      /* =========================================PACKAGE PAGINATION BUTTONS======================================== */
+
+    .package-navigation {
+  width: 95%;
+  max-width: 1400px;
+  margin: 40px auto 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.package-navigation button {
+  border: none; outline: none;
+  padding: 12px 22px;
+  border-radius: 50px;
+  background: #fff;
+  color: #0d47a1;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px; font-weight: 700;
+  cursor: pointer; min-width: 48px;
+  box-shadow: 0 8px 20px rgba(0,0,0,.08);
+  transition: .3s;
+}
+.package-navigation button:hover,
+.package-navigation button.active {
+  background: linear-gradient(135deg,#ff9800,#ff5722);
+  color: #fff;
+  transform: translateY(-3px);
+}
+.package-navigation button:disabled{ opacity:.35; cursor:not-allowed; }
+
+@media(max-width:600px){
+  .package-navigation{ gap:8px; }
+  .package-navigation button{ padding:9px 14px; font-size:12px; min-width:38px; }
+}
+
+    /*================ WHY CHOOSE US SECTION ================*/
+/* WHY CHOOSE - 4 IN A ROW */
+.why-choose-section{background:#f4f6fb;padding:20px 20px 30px;text-align:center}
+.why-heading{margin-bottom:10px}
+.why-subheading{max-width:750px;margin:0 auto 35px;font-size:16px;color:#666}
+.why-container{max-width:1200px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:25px}
+.why-card{background:white;padding:30px 20px;border-radius:18px;text-align:center;box-shadow:0 10px 35px rgba(13,110,253,.06);border:1px solid white;transition:.4s}
+.why-card:hover{transform:translateY(-8px);box-shadow:0 10px 40px rgba(0,0,0,.2)}
+.why-icon{font-size:38px;margin-bottom:12px;display:inline-block}
+.why-card h3{font-size:17px;font-weight:700;color:#0d47a1;margin-bottom:8px}
+.why-card p{font-size:14px;color:#666;line-height:1.6}
+@media(max-width:1200px){.why-container,.services-container,.achievement-container{grid-template-columns:repeat(2,1fr)}}
+
+
+    /* ================= CUSTOMER REVIEWS ================= */
+    .reviews-section {
+      padding: 90px 7%;
+      background: #f8fafc;
+    }
+
+    .reviews-container {
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    /* HEADING STYLE - IMAGE JAISE */
+    .reviews-heading {
+      text-align: center;
+      max-width: 750px;
+      margin: 40px auto 70px;
+    }
+
+    .reviews-heading .tag {
+      display: inline-block;
+      background: linear-gradient(90deg, #ff7a00, #ff5722);
+      color: white;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      margin-bottom: 20px;
+      padding: 8px 20px;
+      border-radius: 50px;
+      box-shadow: 0 6px 15px rgba(255, 87, 34, .25);
+    }
+
+    /* YE WALI HEADING IMAGE JAISI */
+    .why-heading {
+      font-family: 'Poppins', sans-serif;
+      font-size: 46px;
+      font-weight: 800;
+      margin-bottom: 15px;
+      line-height: 1.2;
+    }
+
+    .why-heading .blue {
+      color: #0d47a1;
+      /* What Our = Blue */
+    }
+
+    .why-heading .orange {
+      color: #ff7a00;
+      /* Customers Say = Orange */
+    }
+
+    .why-subheading {
+      font-family: 'Poppins', sans-serif;
+      font-size: 16px;
+      color: #6b7280;
+      line-height: 1.7;
+    }
+
+    /* Review Grid */
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+
+    /* Review Card */
+    .review-card {
+      background: #ffffff;
+      padding: 28px;
+      border-radius: 20px;
+      border: 1px solid #e8edf3;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      transition: 0.4s ease;
+    }
+
+    .review-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.10);
+    }
+
+    /* Customer */
+    .review-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .customer-info {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+    }
+
+    .customer-info img {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #ff9800;
+    }
+
+    .customer-info h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 17px;
+      color: #172033;
+      margin: 0 0 3px;
+      font-weight: 700;
+    }
+
+    .customer-info span {
+      font-family: 'Poppins', sans-serif;
+      font-size: 12px;
+      color: #8992a3;
+    }
+
+    /* Rating */
+    .review-rating {
+      color: #ff9800;
+      font-size: 16px;
+      letter-spacing: 1px;
+    }
+
+    /* Review Text */
+    .review-text {
+      font-family: 'Poppins', sans-serif;
+      color: #606978;
+      font-size: 15px;
+      line-height: 1.8;
+      margin: 25px 0;
+    }
+
+    /* Footer */
+    .review-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #edf0f4;
+      padding-top: 17px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 12px;
+    }
+
+    .review-footer span:first-child {
+      color: #ff5722;
+      font-weight: 600;
+    }
+
+    .review-footer span:last-child {
+      color: #20a464;
+      font-weight: 600;
+    }
+
+    /* Overall Rating */
+    .overall-rating {
+      margin: 50px auto 0;
+      width: fit-content;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      background: #ffffff;
+      padding: 20px 35px;
+      border-radius: 18px;
+      border: 1px solid #e8edf3;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+    }
+
+    .rating-number {
+      font-family: 'Poppins', sans-serif;
+      font-size: 42px;
+      font-weight: 800;
+      color: black;
+    }
+
+    .big-stars {
+      color: #ff9800;
+      font-size: 20px;
+      letter-spacing: 2px;
+    }
+
+    .overall-rating p {
+      font-family: 'Poppins', sans-serif;
+      margin: 3px 0 0;
+      color: #7a8392;
+      font-size: 13px;
+    }
+
+    /* ================= RESPONSIVE ================= */
+    @media (max-width: 900px) {
+      .reviews-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .reviews-section {
+        padding: 65px 5%;
+      }
+
+      .why-heading {
+        font-size: 34px;
+      }
+
+      .reviews-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+.faq-section {width: 100%;padding: 50px 8%;background: #f4f6fb;color: #fff;font-family: 'Poppins', sans-serif;}
+.faq-container {max-width: 900px;margin: 0 auto;}
+.faq-header {text-align: center;margin-bottom: 60px;}
+.faq-header h2 {font-size: 52px;font-weight: 800;color: #0d47a1;margin-bottom: 20px;line-height: 1.2;}
+.faq-header h2 span {background: linear-gradient(135deg, #ff9800, #ff5722);-webkit-background-clip: text;-webkit-text-fill-color: transparent;}
+.faq-header .desc {font-size: 17px;color: #444;max-width: 600px;margin: 0 auto;}
+.faq-wrapper {display: flex;flex-direction: column;gap: 18px;}
+.faq-item {background: transparent;border: none;border-radius: 0;overflow: hidden;transition: .4s ease;}
+.faq-question {width: 100%;padding: 22px 25px;background: white;border: 1px solid #e0e6f0;border-radius: 14px;color: #0d47a1;font-size: 16px;font-weight: 600;text-align: left;cursor: pointer;display: flex;justify-content: space-between;align-items: center;transition: .3s ease;}
+.faq-question:hover {transform: translateY(-2px);}
+.faq-icon {width: 32px;height: 32px;background: yellow;color: RED;font-size: 20px;font-weight: 400;border-radius: 50%;display: flex;align-items: center;justify-content: center;transition: .4s ease;min-width: 32px;}
+.faq-item.active .faq-icon {transform: rotate(45deg);background: linear-gradient(135deg, #ff9800, #ff5722);color: white;}
+.faq-answer {max-height: 0;overflow: hidden;transition: max-height .4s ease, padding .4s ease;background: white;border: 1px solid #e0e6f0;border-top: none;border-radius: 14px 14px;margin-top: -1px;}
+.faq-item.active .faq-answer {max-height: 300px;padding: 0 25px 22px 25px;}
+.faq-answer p {font-size: 15px;color: #444;line-height: 1.8;border-top: 1px solid #f0f2f7;padding-top: 18px;margin: 0;}
+@media(max-width:768px) {.faq-section {padding: 70px 5%;}.faq-header h2 {font-size: 34px;}.faq-question {font-size: 16px;padding: 18px 20px;}.faq-item.active .faq-answer {padding: 0 20px 20px 20px;}}
+
+</style>
+</head>
+<body>
+
+  <section class="hero">
+    <h1>International <span>Packages</span> ✈️</h1>
+    <p>
+      <span class="line1">Explore 50+ World's most beautiful destinations with exclusive travel packages</span>
+      <span class="line2">Visa, Flights & Hotels Included</span>
+    </p>
+  </section>
+
+  <section class="container" id="packageContainer">
+    <!-- 1. DUBAI PACKAGE -->
+    <div class="card">
+      <div class="card-img">
+        <img src="{% static 'home/Image/International_Image/Inter1.png' %}"
+          alt="Dubai">
+        <div class="future-tag">✈️ International Tour</div>
+        <div class="rating-badge">⭐ 4.9</div>
+      </div>
+      <div class="card-content">
+        <h3>Dubai Luxury Package</h3>
+        <div class="days">⏰ 5 Days • 4 Nights</div>
+        <div class="price">₹69,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Burj Khalifa + Dubai Mall</li>
+          <li><b>Day 2:</b> Desert Safari + BBQ Dinner</li>
+          <li><b>Day 3:</b> Abu Dhabi City Tour</li>
+          <li class="extra-day"><b>Day 4:</b> Dubai Marina + Cruise</li>
+          <li class="extra-day"><b>Day 5:</b> Shopping + Departure</li>
+        </ul>
+        <div class="btn-group">
+          <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. BALI PACKAGE -->
+    <div class="card">
+      <div class="card-img">
+        <img src="{% static 'home/Image/International_Image/Inter2.png' %}"
+          alt="Bali">
+        <div class="future-tag">✈️ International Tour</div>
+        <div class="rating-badge">⭐ 4.8</div>
+      </div>
+      <div class="card-content">
+        <h3>Bali Paradise Package</h3>
+        <div class="days">⏰ 6 Days • 5 Nights</div>
+        <div class="price">₹89,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Ubud + Monkey Forest</li>
+          <li><b>Day 2:</b> Nusa Penida Island</li>
+          <li><b>Day 3:</b> Water Sports + Beach</li>
+          <li class="extra-day"><b>Day 4:</b> Tanah Lot Temple</li>
+          <li class="extra-day"><b>Day 5:</b> Spa + Shopping</li>
+          <li class="extra-day"><b>Day 6:</b> Departure</li>
+        </ul>
+        <div class="btn-group">
+          <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+          <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. THAILAND PACKAGE -->
+    <div class="card">
+      <div class="card-img">
+        <img src="{% static 'home/Image/International_Image/Inter3.png' %}"
+          alt="Thailand">
+        <div class="future-tag">✈️ International Tour</div>
+        <div class="rating-badge">⭐ 4.9</div>
+      </div>
+      <div class="card-content">
+        <h3>Thailand Explorer Package</h3>
+        <div class="days">⏰ 7 Days • 6 Nights</div>
+        <div class="price">₹74,999 <span>/ Per Person</span></div>
+        <ul class="itinerary">
+          <li><b>Day 1:</b> Bangkok City Tour</li>
+          <li><b>Day 2:</b> Pattaya Coral Island</li>
+          <li><b>Day 3:</b> Phuket Beaches</li>
+          <li class="extra-day"><b>Day 4:</b> Phi Island</li>
+          <li class="extra-day"><b>Day 5:</b> Safari + Shopping</li>
+          <li class="extra-day"><b>Day 6:</b> Temple Visit</li>
+          <li class="extra-day"><b>Day 7:</b> Departure</li>
+        </ul>
+        <div class="btn-group">
+          <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+            <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a> 
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Singapore -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter4.png' %}" alt="Singapore">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.8</div>
+  </div>
+  <div class="card-content">
+    <h3>Singapore Explorer Package</h3>
+    <div class="days">⏰ 4 Days • 3 Nights</div>
+    <div class="price">₹64,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Sentosa Island + Cable Car</li>
+      <li><b>Day 2:</b> Gardens by the Bay + Marina Bay</li>
+      <li><b>Day 3:</b> Universal Studios</li>
+      <li class="extra-day"><b>Day 4:</b> City Tour + Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 5. Malaysia -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter5.png' %}" alt="Malaysia">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.7</div>
+  </div>
+  <div class="card-content">
+    <h3>Malaysia & Genting Package</h3>
+    <div class="days">⏰ 5 Days • 4 Nights</div>
+    <div class="price">₹59,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Kuala Lumpur City Tour</li>
+      <li><b>Day 2:</b> Genting Highlands</li>
+      <li><b>Day 3:</b> Sunway Lagoon</li>
+      <li class="extra-day"><b>Day 4:</b> Batu Caves + Shopping</li>
+      <li class="extra-day"><b>Day 5:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 6. Maldives -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter6.png' %}" alt="Maldives">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.9</div>
+  </div>
+  <div class="card-content">
+    <h3>Maldives Water Villa Package</h3>
+    <div class="days">⏰ 5 Days • 4 Nights</div>
+    <div class="price">₹1,29,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Airport Transfer + Water Villa</li>
+      <li><b>Day 2:</b> Water Sports + Snorkeling</li>
+      <li><b>Day 3:</b> Sunset Cruise + Spa</li>
+      <li class="extra-day"><b>Day 4:</b> Island Hopping</li>
+      <li class="extra-day"><b>Day 5:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 7. Mauritius -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter7.png' %}" alt="Mauritius">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.8</div>
+  </div>
+  <div class="card-content">
+    <h3>Mauritius Luxury Package</h3>
+    <div class="days">⏰ 6 Days • 5 Nights</div>
+    <div class="price">₹1,19,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> North Island Tour</li>
+      <li><b>Day 2:</b> South Island + Waterfall</li>
+      <li><b>Day 3:</b> Ile Aux Cerfs Island</li>
+      <li class="extra-day"><b>Day 4:</b> Casela Park</li>
+      <li class="extra-day"><b>Day 5:</b> Shopping + Leisure</li>
+      <li class="extra-day"><b>Day 6:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 8. Seychelles -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter8.png' %}" alt="Seychelles">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.9</div>
+  </div>
+  <div class="card-content">
+    <h3>Seychelles Island Package</h3>
+    <div class="days">⏰ 6 Days • 5 Nights</div>
+    <div class="price">₹1,49,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Mahe Island Tour</li>
+      <li><b>Day 2:</b> Praslin Island</li>
+      <li><b>Day 3:</b> La Digue Island</li>
+      <li class="extra-day"><b>Day 4:</b> Beach Hopping</li>
+      <li class="extra-day"><b>Day 5:</b> Water Sports</li>
+      <li class="extra-day"><b>Day 6:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 9. Sri Lanka -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter9.png' %}" alt="Sri Lanka">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.6</div>
+  </div>
+  <div class="card-content">
+    <h3>Sri Lanka Heritage Package</h3>
+    <div class="days">⏰ 5 Days • 4 Nights</div>
+    <div class="price">₹54,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Colombo City</li>
+      <li><b>Day 2:</b> Kandy + Temple of Tooth</li>
+      <li><b>Day 3:</b> Nuwara Eliya</li>
+      <li class="extra-day"><b>Day 4:</b> Bentota Beach</li>
+      <li class="extra-day"><b>Day 5:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 10. Nepal -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter10.png' %}" alt="Nepal">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.7</div>
+  </div>
+  <div class="card-content">
+    <h3>Nepal Tour Package</h3>
+    <div class="days">⏰ 5 Days • 4 Nights</div>
+    <div class="price">₹34,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Kathmandu + Temple</li>
+      <li><b>Day 2:</b> Pokhara + Phewa Lake</li>
+      <li><b>Day 3:</b> Sarangkot Sunrise</li>
+      <li class="extra-day"><b>Day 4:</b> Chitwan Safari</li>
+      <li class="extra-day"><b>Day 5:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 11. Bhutan -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter11.png' %}" alt="Bhutan">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.8</div>
+  </div>
+  <div class="card-content">
+    <h3>Bhutan Monastery Package</h3>
+    <div class="days">⏰ 6 Days • 5 Nights</div>
+    <div class="price">₹49,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Paro + Tiger Nest</li>
+      <li><b>Day 2:</b> Thimphu City</li>
+      <li><b>Day 3:</b> Punakha Dzong</li>
+      <li class="extra-day"><b>Day 4:</b> Dochula Pass</li>
+      <li class="extra-day"><b>Day 5:</b> Local Market</li>
+      <li class="extra-day"><b>Day 6:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 12. Vietnam -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter12.png' %}" alt="Vietnam">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.6</div>
+  </div>
+  <div class="card-content">
+    <h3>Vietnam Explorer Package</h3>
+    <div class="days">⏰ 6 Days • 5 Nights</div>
+    <div class="price">₹69,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Hanoi City Tour</li>
+      <li><b>Day 2:</b> Halong Bay Cruise</li>
+      <li><b>Day 3:</b> Da Nang + Bana Hills</li>
+      <li class="extra-day"><b>Day 4:</b> Ho Chi Minh City</li>
+      <li class="extra-day"><b>Day 5:</b> Cu Chi Tunnels</li>
+      <li class="extra-day"><b>Day 6:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 13. Cambodia -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter13.png' %}" alt="Cambodia">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.5</div>
+  </div>
+  <div class="card-content">
+    <h3>Cambodia Angkor Package</h3>
+    <div class="days">⏰ 5 Days • 4 Nights</div>
+    <div class="price">₹74,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Siem Reap + Angkor Wat</li>
+      <li><b>Day 2:</b> Bayon Temple</li>
+      <li><b>Day 3:</b> Ta Prohm Temple</li>
+      <li class="extra-day"><b>Day 4:</b> Phnom Penh City</li>
+      <li class="extra-day"><b>Day 5:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 14. Philippines -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter14.png' %}" alt="Philippines">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.7</div>
+  </div>
+  <div class="card-content">
+    <h3>Philippines Beach Package</h3>
+    <div class="days">⏰ 6 Days • 5 Nights</div>
+    <div class="price">₹89,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Manila City Tour</li>
+      <li><b>Day 2:</b> Boracay Island</li>
+      <li><b>Day 3:</b> Water Sports + Beach</li>
+      <li class="extra-day"><b>Day 4:</b> Cebu + Kawasan Falls</li>
+      <li class="extra-day"><b>Day 5:</b> Oslob Whale Shark</li>
+      <li class="extra-day"><b>Day 6:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 15. Indonesia -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter15.png' %}" alt="Indonesia">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.8</div>
+  </div>
+  <div class="card-content">
+    <h3>Indonesia Bali Package</h3>
+    <div class="days">⏰ 6 Days • 5 Nights</div>
+    <div class="price">₹84,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Ubud + Monkey Forest</li>
+      <li><b>Day 2:</b> Nusa Penida Island</li>
+      <li><b>Day 3:</b> Water Sports</li>
+      <li class="extra-day"><b>Day 4:</b> Tanah Lot Temple</li>
+      <li class="extra-day"><b>Day 5:</b> Spa + Shopping</li>
+      <li class="extra-day"><b>Day 6:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 16. Japan -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter16.png' %}" alt="Japan">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.9</div>
+  </div>
+  <div class="card-content">
+    <h3>Japan Cultural Package</h3>
+    <div class="days">⏰ 7 Days • 6 Nights</div>
+    <div class="price">₹1,59,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Tokyo City Tour</li>
+      <li><b>Day 2:</b> Disneyland + Shopping</li>
+      <li><b>Day 3:</b> Mt Fuji + Lake Kawaguchi</li>
+      <li class="extra-day"><b>Day 4:</b> Kyoto Temples</li>
+      <li class="extra-day"><b>Day 5:</b> Osaka Castle</li>
+      <li class="extra-day"><b>Day 6:</b> Nara Day Trip</li>
+      <li class="extra-day"><b>Day 7:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 17. South Korea -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter17.png' %}" alt="South Korea">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.8</div>
+  </div>
+  <div class="card-content">
+    <h3>South Korea Package</h3>
+    <div class="days">⏰ 6 Days • 5 Nights</div>
+    <div class="price">₹1,39,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Seoul City + Palace</li>
+      <li><b>Day 2:</b> Nami Island</li>
+      <li><b>Day 3:</b> Everland Theme Park</li>
+      <li class="extra-day"><b>Day 4:</b> DMZ Tour</li>
+      <li class="extra-day"><b>Day 5:</b> Busan City</li>
+      <li class="extra-day"><b>Day 6:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 18. China -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter18.png' %}" alt="China">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.7</div>
+  </div>
+  <div class="card-content">
+    <h3>China Explorer Package</h3>
+    <div class="days">⏰ 7 Days • 6 Nights</div>
+    <div class="price">₹1,19,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Beijing + Tiananmen Square</li>
+      <li><b>Day 2:</b> Great Wall of China</li>
+      <li><b>Day 3:</b> Forbidden City</li>
+      <li class="extra-day"><b>Day 4:</b> Shanghai City</li>
+      <li class="extra-day"><b>Day 5:</b> Disneyland Shanghai</li>
+      <li class="extra-day"><b>Day 6:</b> Huangpu River Cruise</li>
+      <li class="extra-day"><b>Day 7:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 19. Hong Kong -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter19.png' %}" alt="Hong Kong">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.7</div>
+  </div>
+  <div class="card-content">
+    <h3>Hong Kong + Disneyland</h3>
+    <div class="days">⏰ 4 Days • 3 Nights</div>
+    <div class="price">₹74,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Victoria Peak + City Tour</li>
+      <li><b>Day 2:</b> Disneyland Hong Kong</li>
+      <li><b>Day 3:</b> Ocean Park</li>
+      <li class="extra-day"><b>Day 4:</b> Shopping + Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 20. Macau -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter20.png' %}" alt="Macau">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.6</div>
+  </div>
+  <div class="card-content">
+    <h3>Macau Luxury Package</h3>
+    <div class="days">⏰ 3 Days • 2 Nights</div>
+    <div class="price">₹69,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Macau Tower + Ruins</li>
+      <li><b>Day 2:</b> Venetian Casino + Show</li>
+      <li class="extra-day"><b>Day 3:</b> Shopping + Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 21. Taiwan -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter21.png' %}" alt="Taiwan">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.7</div>
+  </div>
+  <div class="card-content">
+    <h3>Taiwan Explorer Package</h3>
+    <div class="days">⏰ 5 Days • 4 Nights</div>
+    <div class="price">₹94,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Taipei 101 + Night Market</li>
+      <li><b>Day 2:</b> Sun Moon Lake</li>
+      <li><b>Day 3:</b> Taroko Gorge</li>
+      <li class="extra-day"><b>Day 4:</b> Jiufen Old Street</li>
+      <li class="extra-day"><b>Day 5:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 22. Australia -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter22.png' %}" alt="Australia">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.9</div>
+  </div>
+  <div class="card-content">
+    <h3>Australia Adventure Package</h3>
+    <div class="days">⏰ 8 Days • 7 Nights</div>
+    <div class="price">₹2,49,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Sydney Opera House</li>
+      <li><b>Day 2:</b> Blue Mountains</li>
+      <li><b>Day 3:</b> Great Barrier Reef</li>
+      <li class="extra-day"><b>Day 4:</b> Cairns + Kuranda</li>
+      <li class="extra-day"><b>Day 5:</b> Melbourne City</li>
+      <li class="extra-day"><b>Day 6:</b> Gold Coast</li>
+      <li class="extra-day"><b>Day 7:</b> Theme Parks</li>
+      <li class="extra-day"><b>Day 8:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 23. New Zealand -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter23.png' %}" alt="New Zealand">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.9</div>
+  </div>
+  <div class="card-content">
+    <h3>New Zealand Scenic Package</h3>
+    <div class="days">⏰ 9 Days • 8 Nights</div>
+    <div class="price">₹2,89,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Auckland City</li>
+      <li><b>Day 2:</b> Rotorua + Geothermal</li>
+      <li><b>Day 3:</b> Queenstown Adventure</li>
+      <li class="extra-day"><b>Day 4:</b> Milford Sound Cruise</li>
+      <li class="extra-day"><b>Day 5:</b> Glacier Tour</li>
+      <li class="extra-day"><b>Day 6:</b> Christchurch</li>
+      <li class="extra-day"><b>Day 7:</b> Wellington</li>
+      <li class="extra-day"><b>Day 8:</b> Hobbiton Tour</li>
+      <li class="extra-day"><b>Day 9:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 24. Turkey -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter24.png' %}" alt="Turkey">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.8</div>
+  </div>
+  <div class="card-content">
+    <h3>Turkey Magical Package</h3>
+    <div class="days">⏰ 7 Days • 6 Nights</div>
+    <div class="price">₹1,49,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Istanbul City Tour</li>
+      <li><b>Day 2:</b> Bosphorus Cruise</li>
+      <li><b>Day 3:</b> Cappadocia + Hot Air Balloon</li>
+      <li class="extra-day"><b>Day 4:</b> Pamukkale</li>
+      <li class="extra-day"><b>Day 5:</b> Ephesus</li>
+      <li class="extra-day"><b>Day 6:</b> Antalya</li>
+      <li class="extra-day"><b>Day 7:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 25. Azerbaijan -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter25.png' %}" alt="Azerbaijan">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.6</div>
+  </div>
+  <div class="card-content">
+    <h3>Azerbaijan Baku Package</h3>
+    <div class="days">⏰ 5 Days • 4 Nights</div>
+    <div class="price">₹99,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Baku Old City</li>
+      <li><b>Day 2:</b> Flame Towers + Boulevard</li>
+      <li><b>Day 3:</b> Gobustan + Mud Volcanoes</li>
+      <li class="extra-day"><b>Day 4:</b> Gabala Day Trip</li>
+      <li class="extra-day"><b>Day 5:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 26. Georgia -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter26.png' %}" alt="Georgia">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.7</div>
+  </div>
+  <div class="card-content">
+    <h3>Georgia Caucasus Package</h3>
+    <div class="days">⏰ 6 Days • 5 Nights</div>
+    <div class="price">₹89,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Tbilisi City</li>
+      <li><b>Day 2:</b> Kazbegi + Gudauri</li>
+      <li><b>Day 3:</b> Gori + Uplistsikhe</li>
+      <li class="extra-day"><b>Day 4:</b> Wine Region Kakheti</li>
+      <li class="extra-day"><b>Day 5:</b> Borjomi</li>
+      <li class="extra-day"><b>Day 6:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 27. Armenia -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter27.png' %}" alt="Armenia">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.5</div>
+  </div>
+  <div class="card-content">
+    <h3>Armenia Cultural Package</h3>
+    <div class="days">⏰ 5 Days • 4 Nights</div>
+    <div class="price">₹94,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Yerevan City Tour</li>
+      <li><b>Day 2:</b> Garni + Geghard</li>
+      <li><b>Day 3:</b> Lake Sevan</li>
+      <li class="extra-day"><b>Day 4:</b> Tatev Monastery</li>
+      <li class="extra-day"><b>Day 5:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 28. Kazakhstan -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter28.png' %}" alt="Kazakhstan">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.6</div>
+  </div>
+  <div class="card-content">
+    <h3>Kazakhstan Explorer</h3>
+    <div class="days">⏰ 6 Days • 5 Nights</div>
+    <div class="price">₹1,09,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Almaty City</li>
+      <li><b>Day 2:</b> Medeu + Shymbulak</li>
+      <li><b>Day 3:</b> Charyn Canyon</li>
+      <li class="extra-day"><b>Day 4:</b> Nur-Sultan Capital</li>
+      <li class="extra-day"><b>Day 5:</b> Bayterek Tower</li>
+      <li class="extra-day"><b>Day 6:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 29. Uzbekistan -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter29.png' %}" alt="Uzbekistan">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.7</div>
+  </div>
+  <div class="card-content">
+    <h3>Uzbekistan Heritage Tour</h3>
+    <div class="days">⏰ 7 Days • 6 Nights</div>
+    <div class="price">₹1,19,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Tashkent City</li>
+      <li><b>Day 2:</b> Samarkand</li>
+      <li><b>Day 3:</b> Registan Square</li>
+      <li class="extra-day"><b>Day 4:</b> Bukhara</li>
+      <li class="extra-day"><b>Day 5:</b> Khiva</li>
+      <li class="extra-day"><b>Day 6:</b> Fergana Valley</li>
+      <li class="extra-day"><b>Day 7:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 30. Egypt -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter30.png' %}" alt="Egypt">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.8</div>
+  </div>
+  <div class="card-content">
+    <h3>Egypt Wonders Package</h3>
+    <div class="days">⏰ 7 Days • 6 Nights</div>
+    <div class="price">₹1,39,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Cairo + Pyramids</li>
+      <li><b>Day 2:</b> Egyptian Museum</li>
+      <li><b>Day 3:</b> Nile Cruise</li>
+      <li class="extra-day"><b>Day 4:</b> Luxor Temples</li>
+      <li class="extra-day"><b>Day 5:</b> Aswan</li>
+      <li class="extra-day"><b>Day 6:</b> Alexandria</li>
+      <li class="extra-day"><b>Day 7:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 31. South Africa -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter31.png' %}" alt="South Africa">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.9</div>
+  </div>
+  <div class="card-content">
+    <h3>South Africa Safari Package</h3>
+    <div class="days">⏰ 8 Days • 7 Nights</div>
+    <div class="price">₹2,19,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Cape Town</li>
+      <li><b>Day 2:</b> Table Mountain</li>
+      <li><b>Day 3:</b> Kruger Safari</li>
+      <li class="extra-day"><b>Day 4:</b> Game Drive</li>
+      <li class="extra-day"><b>Day 5:</b> Johannesburg</li>
+      <li class="extra-day"><b>Day 6:</b> Garden Route</li>
+      <li class="extra-day"><b>Day 7:</b> Wine Tasting</li>
+      <li class="extra-day"><b>Day 8:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 32. Morocco -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter32.png' %}" alt="Morocco">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.7</div>
+  </div>
+  <div class="card-content">
+    <h3>Morocco Desert Package</h3>
+    <div class="days">⏰ 7 Days • 6 Nights</div>
+    <div class="price">₹1,59,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Casablanca</li>
+      <li><b>Day 2:</b> Rabat + Chefchaouen</li>
+      <li><b>Day 3:</b> Fes Medina</li>
+      <li class="extra-day"><b>Day 4:</b> Sahara Desert + Camel Ride</li>
+      <li class="extra-day"><b>Day 5:</b> Merzouga</li>
+      <li class="extra-day"><b>Day 6:</b> Marrakech</li>
+      <li class="extra-day"><b>Day 7:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 33. Kenya -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter33.png' %}" alt="Kenya">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.8</div>
+  </div>
+  <div class="card-content">
+    <h3>Kenya Safari Package</h3>
+    <div class="days">⏰ 6 Days • 5 Nights</div>
+    <div class="price">₹1,89,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Nairobi City</li>
+      <li><b>Day 2:</b> Masai Mara Safari</li>
+      <li><b>Day 3:</b> Game Drive</li>
+      <li class="extra-day"><b>Day 4:</b> Lake Nakuru</li>
+      <li class="extra-day"><b>Day 5:</b> Amboseli Park</li>
+      <li class="extra-day"><b>Day 6:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 34. Tanzania -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter34.png' %}" alt="Tanzania">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.9</div>
+  </div>
+  <div class="card-content">
+    <h3>Tanzania Wildlife Package</h3>
+    <div class="days">⏰ 7 Days • 6 Nights</div>
+    <div class="price">₹2,09,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Arusha</li>
+      <li><b>Day 2:</b> Tarangire National Park</li>
+      <li><b>Day 3:</b> Serengeti Safari</li>
+      <li class="extra-day"><b>Day 4:</b> Ngorongoro Crater</li>
+      <li class="extra-day"><b>Day 5:</b> Lake Manyara</li>
+      <li class="extra-day"><b>Day 6:</b> Zanzibar Beach</li>
+      <li class="extra-day"><b>Day 7:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 35. Zanzibar -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter35.png' %}" alt="Zanzibar">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.8</div>
+  </div>
+  <div class="card-content">
+    <h3>Zanzibar Island Package</h3>
+    <div class="days">⏰ 5 Days • 4 Nights</div>
+    <div class="price">₹1,29,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Stone Town Tour</li>
+      <li><b>Day 2:</b> Spice Farm + Prison Island</li>
+      <li><b>Day 3:</b> Nungwi Beach</li>
+      <li class="extra-day"><b>Day 4:</b> Safari Blue Tour</li>
+      <li class="extra-day"><b>Day 5:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 36. Seychelles -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter36.png' %}" alt="Seychelles">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.9</div>
+  </div>
+  <div class="card-content">
+    <h3>Seychelles Island Package</h3>
+    <div class="days">⏰ 6 Days • 5 Nights</div>
+    <div class="price">₹1,49,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Mahe Island Tour</li>
+      <li><b>Day 2:</b> Praslin Island</li>
+      <li><b>Day 3:</b> La Digue Island</li>
+      <li class="extra-day"><b>Day 4:</b> Beach Hopping</li>
+      <li class="extra-day"><b>Day 5:</b> Water Sports</li>
+      <li class="extra-day"><b>Day 6:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 37. Mauritius -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter37.png' %}" alt="Mauritius">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.8</div>
+  </div>
+  <div class="card-content">
+    <h3>Mauritius Luxury Package</h3>
+    <div class="days">⏰ 6 Days • 5 Nights</div>
+    <div class="price">₹1,19,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> North Island Tour</li>
+      <li><b>Day 2:</b> South Island + Waterfall</li>
+      <li><b>Day 3:</b> Ile Aux Cerfs Island</li>
+      <li class="extra-day"><b>Day 4:</b> Casela Park</li>
+      <li class="extra-day"><b>Day 5:</b> Shopping + Leisure</li>
+      <li class="extra-day"><b>Day 6:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 38. Réunion -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter38.png' %}" alt="Reunion">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.6</div>
+  </div>
+  <div class="card-content">
+    <h3>Réunion Island Package</h3>
+    <div class="days">⏰ 6 Days • 5 Nights</div>
+    <div class="price">₹1,39,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Saint Denis City</li>
+      <li><b>Day 2:</b> Piton de la Fournaise</li>
+      <li><b>Day 3:</b> Cirque de Salazie</li>
+      <li class="extra-day"><b>Day 4:</b> Beach + Waterfall</li>
+      <li class="extra-day"><b>Day 5:</b> Hiking + Nature</li>
+      <li class="extra-day"><b>Day 6:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 39. Madagascar -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter39.png' %}" alt="Madagascar">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.7</div>
+  </div>
+  <div class="card-content">
+    <h3>Madagascar Explorer Package</h3>
+    <div class="days">⏰ 8 Days • 7 Nights</div>
+    <div class="price">₹1,79,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Antananarivo City</li>
+      <li><b>Day 2:</b> Andasibe National Park</li>
+      <li><b>Day 3:</b> Lemur Watching</li>
+      <li class="extra-day"><b>Day 4:</b> Morondava + Baobab</li>
+      <li class="extra-day"><b>Day 5:</b> Beach Day</li>
+      <li class="extra-day"><b>Day 6:</b> Nosy Be Island</li>
+      <li class="extra-day"><b>Day 7:</b> Snorkeling</li>
+      <li class="extra-day"><b>Day 8:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 40. Rwanda -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter40.png' %}" alt="Rwanda">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.8</div>
+  </div>
+  <div class="card-content">
+    <h3>Rwanda Gorilla Safari</h3>
+    <div class="days">⏰ 5 Days • 4 Nights</div>
+    <div class="price">₹1,99,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Kigali City Tour</li>
+      <li><b>Day 2:</b> Volcanoes National Park</li>
+      <li><b>Day 3:</b> Gorilla Trekking</li>
+      <li class="extra-day"><b>Day 4:</b> Lake Kivu</li>
+      <li class="extra-day"><b>Day 5:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 41. Uganda -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter41.png' %}" alt="Uganda">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.7</div>
+  </div>
+  <div class="card-content">
+    <h3>Uganda Gorilla Safari</h3>
+    <div class="days">⏰ 6 Days • 5 Nights</div>
+    <div class="price">₹1,89,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Kampala City</li>
+      <li><b>Day 2:</b> Bwindi Forest</li>
+      <li><b>Day 3:</b> Gorilla Trekking</li>
+      <li class="extra-day"><b>Day 4:</b> Queen Elizabeth Park</li>
+      <li class="extra-day"><b>Day 5:</b> Lake Bunyonyi</li>
+      <li class="extra-day"><b>Day 6:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 42. Namibia -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter42.png' %}" alt="Namibia">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.8</div>
+  </div>
+  <div class="card-content">
+    <h3>Namibia Desert Adventure</h3>
+    <div class="days">⏰ 7 Days • 6 Nights</div>
+    <div class="price">₹2,19,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Windhoek</li>
+      <li><b>Day 2:</b> Sossusvlei Dunes</li>
+      <li><b>Day 3:</b> Swakopmund</li>
+      <li class="extra-day"><b>Day 4:</b> Etosha Safari</li>
+      <li class="extra-day"><b>Day 5:</b> Game Drive</li>
+      <li class="extra-day"><b>Day 6:</b> Skeleton Coast</li>
+      <li class="extra-day"><b>Day 7:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 43. Botswana -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter43.png' %}" alt="Botswana">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.9</div>
+  </div>
+  <div class="card-content">
+    <h3>Botswana Safari Package</h3>
+    <div class="days">⏰ 7 Days • 6 Nights</div>
+    <div class="price">₹2,49,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Gaborone</li>
+      <li><b>Day 2:</b> Okavango Delta</li>
+      <li><b>Day 3:</b> Mokoro Safari</li>
+      <li class="extra-day"><b>Day 4:</b> Chobe National Park</li>
+      <li class="extra-day"><b>Day 5:</b> Game Drive</li>
+      <li class="extra-day"><b>Day 6:</b> Maun</li>
+      <li class="extra-day"><b>Day 7:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 44. Greece -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter44.png' %}" alt="Greece">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.9</div>
+  </div>
+  <div class="card-content">
+    <h3>Greece Island Hopping</h3>
+    <div class="days">⏰ 7 Days • 6 Nights</div>
+    <div class="price">₹1,59,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Athens City Tour</li>
+      <li><b>Day 2:</b> Acropolis + Museum</li>
+      <li><b>Day 3:</b> Santorini</li>
+      <li class="extra-day"><b>Day 4:</b> Mykonos</li>
+      <li class="extra-day"><b>Day 5:</b> Beach + Shopping</li>
+      <li class="extra-day"><b>Day 6:</b> Delphi Day Trip</li>
+      <li class="extra-day"><b>Day 7:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 45. Italy -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter45.png' %}" alt="Italy">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.9</div>
+  </div>
+  <div class="card-content">
+    <h3>Italy Classic Package</h3>
+    <div class="days">⏰ 9 Days • 8 Nights</div>
+    <div class="price">₹1,89,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Rome + Colosseum</li>
+      <li><b>Day 2:</b> Vatican City</li>
+      <li><b>Day 3:</b> Florence</li>
+      <li class="extra-day"><b>Day 4:</b> Venice + Gondola</li>
+      <li class="extra-day"><b>Day 5:</b> Milan</li>
+      <li class="extra-day"><b>Day 6:</b> Pisa</li>
+      <li class="extra-day"><b>Day 7:</b> Naples + Pompeii</li>
+      <li class="extra-day"><b>Day 8:</b> Amalfi Coast</li>
+      <li class="extra-day"><b>Day 9:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 46. France -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter46.png' %}" alt="France">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.9</div>
+  </div>
+  <div class="card-content">
+    <h3>France Romance Package</h3>
+    <div class="days">⏰ 7 Days • 6 Nights</div>
+    <div class="price">₹1,99,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Paris City Tour</li>
+      <li><b>Day 2:</b> Eiffel Tower + Seine Cruise</li>
+      <li><b>Day 3:</b> Disneyland Paris</li>
+      <li class="extra-day"><b>Day 4:</b> Louvre Museum</li>
+      <li class="extra-day"><b>Day 5:</b> Versailles Palace</li>
+      <li class="extra-day"><b>Day 6:</b> Nice + French Riviera</li>
+      <li class="extra-day"><b>Day 7:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 47. Switzerland -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter47.png' %}" alt="Switzerland">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.9</div>
+  </div>
+  <div class="card-content">
+    <h3>Switzerland Alps Package</h3>
+    <div class="days">⏰ 7 Days • 6 Nights</div>
+    <div class="price">₹2,29,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Zurich + Lake</li>
+      <li><b>Day 2:</b> Lucerne + Mt Titlis</li>
+      <li><b>Day 3:</b> Interlaken</li>
+      <li class="extra-day"><b>Day 4:</b> Jungfraujoch</li>
+      <li class="extra-day"><b>Day 5:</b> Geneva</li>
+      <li class="extra-day"><b>Day 6:</b> Lausanne</li>
+      <li class="extra-day"><b>Day 7:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 48. Germany -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter48.png' %}" alt="Germany">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.7</div>
+  </div>
+  <div class="card-content">
+    <h3>Germany Heritage Tour</h3>
+    <div class="days">⏰ 8 Days • 7 Nights</div>
+    <div class="price">₹1,79,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Berlin</li>
+      <li><b>Day 2:</b> Munich + BMW Museum</li>
+      <li><b>Day 3:</b> Neuschwanstein Castle</li>
+      <li class="extra-day"><b>Day 4:</b> Frankfurt</li>
+      <li class="extra-day"><b>Day 5:</b> Black Forest</li>
+      <li class="extra-day"><b>Day 6:</b> Hamburg</li>
+      <li class="extra-day"><b>Day 7:</b> Cologne</li>
+      <li class="extra-day"><b>Day 8:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 49. Austria -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter49.png' %}" alt="Austria">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.8</div>
+  </div>
+  <div class="card-content">
+    <h3>Austria Music + Alps</h3>
+    <div class="days">⏰ 6 Days • 5 Nights</div>
+    <div class="price">₹1,69,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Vienna</li>
+      <li><b>Day 2:</b> Schonbrunn Palace</li>
+      <li><b>Day 3:</b> Salzburg</li>
+      <li class="extra-day"><b>Day 4:</b> Innsbruck</li>
+      <li class="extra-day"><b>Day 5:</b> Hallstatt</li>
+      <li class="extra-day"><b>Day 6:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 50. Netherlands -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter50.png' %}" alt="Netherlands">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.7</div>
+  </div>
+  <div class="card-content">
+    <h3>Netherlands Tulip Tour</h3>
+    <div class="days">⏰ 5 Days • 4 Nights</div>
+    <div class="price">₹1,49,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Amsterdam City</li>
+      <li><b>Day 2:</b> Keukenhof Gardens</li>
+      <li><b>Day 3:</b> Zaanse Schans</li>
+      <li class="extra-day"><b>Day 4:</b> Rotterdam</li>
+      <li class="extra-day"><b>Day 5:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 51. Belgium -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter51.png' %}" alt="Belgium">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.6</div>
+  </div>
+  <div class="card-content">
+    <h3>Belgium Chocolate Tour</h3>
+    <div class="days">⏰ 4 Days • 3 Nights</div>
+    <div class="price">₹1,39,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Brussels</li>
+      <li><b>Day 2:</b> Bruges</li>
+      <li><b>Day 3:</b> Ghent</li>
+      <li class="extra-day"><b>Day 4:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+        <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 52. Spain -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter52.png' %}" alt="Spain">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.8</div>
+  </div>
+  <div class="card-content">
+    <h3>Spain Culture Package</h3>
+    <div class="days">⏰ 8 Days • 7 Nights</div>
+    <div class="price">₹1,69,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Madrid</li>
+      <li><b>Day 2:</b> Barcelona</li>
+      <li><b>Day 3:</b> Sagrada Familia</li>
+      <li class="extra-day"><b>Day 4:</b> Seville</li>
+      <li class="extra-day"><b>Day 5:</b> Granada</li>
+      <li class="extra-day"><b>Day 6:</b> Valencia</li>
+      <li class="extra-day"><b>Day 7:</b> Toledo</li>
+      <li class="extra-day"><b>Day 8:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 53. Portugal -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter53.png' %}" alt="Portugal">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.7</div>
+  </div>
+  <div class="card-content">
+    <h3>Portugal Coastal Tour</h3>
+    <div class="days">⏰ 6 Days • 5 Nights</div>
+    <div class="price">₹1,59,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Lisbon</li>
+      <li><b>Day 2:</b> Sintra + Pena Palace</li>
+      <li><b>Day 3:</b> Porto</li>
+      <li class="extra-day"><b>Day 4:</b> Algarve</li>
+      <li class="extra-day"><b>Day 5:</b> Coimbra</li>
+      <li class="extra-day"><b>Day 6:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 54. United Kingdom -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter54.png' %}" alt="UK">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.8</div>
+  </div>
+  <div class="card-content">
+    <h3>United Kingdom Royal Tour</h3>
+    <div class="days">⏰ 8 Days • 7 Nights</div>
+    <div class="price">₹2,19,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> London</li>
+      <li><b>Day 2:</b> Big Ben + London Eye</li>
+      <li><b>Day 3:</b> Oxford + Cambridge</li>
+      <li class="extra-day"><b>Day 4:</b> Edinburgh</li>
+      <li class="extra-day"><b>Day 5:</b> Lake District</li>
+      <li class="extra-day"><b>Day 6:</b> Manchester</li>
+      <li class="extra-day"><b>Day 7:</b> Stonehenge</li>
+      <li class="extra-day"><b>Day 8:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 55. Ireland -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter55.png' %}" alt="Ireland">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.7</div>
+  </div>
+  <div class="card-content">
+    <h3>Ireland Green Escape</h3>
+    <div class="days">⏰ 5 Days • 4 Nights</div>
+    <div class="price">₹1,79,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Dublin</li>
+      <li><b>Day 2:</b> Cliffs of Moher</li>
+      <li><b>Day 3:</b> Galway</li>
+      <li class="extra-day"><b>Day 4:</b> Kilkenny</li>
+      <li class="extra-day"><b>Day 5:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 56. Norway -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter56.png' %}" alt="Norway">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.9</div>
+  </div>
+  <div class="card-content">
+    <h3>Norway Fjords Package</h3>
+    <div class="days">⏰ 7 Days • 6 Nights</div>
+    <div class="price">₹2,59,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Oslo</li>
+      <li><b>Day 2:</b> Bergen</li>
+      <li><b>Day 3:</b> Geiranger Fjord</li>
+      <li class="extra-day"><b>Day 4:</b> Tromso</li>
+      <li class="extra-day"><b>Day 5:</b> Northern Lights</li>
+      <li class="extra-day"><b>Day 6:</b> Stavanger</li>
+      <li class="extra-day"><b>Day 7:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 57. Sweden -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter57.png' %}" alt="Sweden">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.8</div>
+  </div>
+  <div class="card-content">
+    <h3>Sweden Scenic Tour</h3>
+    <div class="days">⏰ 6 Days • 5 Nights</div>
+    <div class="price">₹2,29,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Stockholm</li>
+      <li><b>Day 2:</b> Vasa Museum</li>
+      <li><b>Day 3:</b> Gothenburg</li>
+      <li class="extra-day"><b>Day 4:</b> Lapland</li>
+      <li class="extra-day"><b>Day 5:</b> Malmo</li>
+      <li class="extra-day"><b>Day 6:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 58. Denmark -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter58.png' %}" alt="Denmark">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.7</div>
+  </div>
+  <div class="card-content">
+    <h3>Denmark Fairy Tale Tour</h3>
+    <div class="days">⏰ 4 Days • 3 Nights</div>
+    <div class="price">₹1,99,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Copenhagen</li>
+      <li><b>Day 2:</b> Tivoli Gardens</li>
+      <li><b>Day 3:</b> Odense</li>
+      <li class="extra-day"><b>Day 4:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 59. Finland -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter59.png' %}" alt="Finland">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.8</div>
+  </div>
+  <div class="card-content">
+    <h3>Finland Lapland Tour</h3>
+    <div class="days">⏰ 5 Days • 4 Nights</div>
+    <div class="price">₹2,49,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Helsinki</li>
+      <li><b>Day 2:</b> Rovaniemi</li>
+      <li><b>Day 3:</b> Santa Claus Village</li>
+      <li class="extra-day"><b>Day 4:</b> Husky Safari</li>
+      <li class="extra-day"><b>Day 5:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+       <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 60. Iceland -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter60.png' %}" alt="Iceland">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.9</div>
+  </div>
+  <div class="card-content">
+    <h3>Iceland Golden Circle</h3>
+    <div class="days">⏰ 6 Days • 5 Nights</div>
+    <div class="price">₹2,79,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Reykjavik</li>
+      <li><b>Day 2:</b> Golden Circle</li>
+      <li><b>Day 3:</b> Blue Lagoon</li>
+      <li class="extra-day"><b>Day 4:</b> South Coast</li>
+      <li class="extra-day"><b>Day 5:</b> Glacier Tour</li>
+      <li class="extra-day"><b>Day 6:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 61. Czech Republic -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter61.png' %}" alt="Czech Republic">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.7</div>
+  </div>
+  <div class="card-content">
+    <h3>Czech Republic Heritage</h3>
+    <div class="days">⏰ 5 Days • 4 Nights</div>
+    <div class="price">₹1,29,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Prague</li>
+      <li><b>Day 2:</b> Prague Castle</li>
+      <li><b>Day 3:</b> Cesky Krumlov</li>
+      <li class="extra-day"><b>Day 4:</b> Karlovy Vary</li>
+      <li class="extra-day"><b>Day 5:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 62. Hungary -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter62.png' %}" alt="Hungary">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.6</div>
+  </div>
+  <div class="card-content">
+    <h3>Hungary Danube Tour</h3>
+    <div class="days">⏰ 4 Days • 3 Nights</div>
+    <div class="price">₹1,19,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Budapest</li>
+      <li><b>Day 2:</b> Parliament + Cruise</li>
+      <li><b>Day 3:</b> Eger</li>
+      <li class="extra-day"><b>Day 4:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 63. Poland -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter63.png' %}" alt="Poland">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.7</div>
+  </div>
+  <div class="card-content">
+    <h3>Poland Heritage Tour</h3>
+    <div class="days">⏰ 6 Days • 5 Nights</div>
+    <div class="price">₹1,24,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Warsaw City Tour</li>
+      <li><b>Day 2:</b> Krakow Old Town</li>
+      <li><b>Day 3:</b> Wieliczka Salt Mine</li>
+      <li class="extra-day"><b>Day 4:</b> Auschwitz Tour</li>
+      <li class="extra-day"><b>Day 5:</b> Gdansk</li>
+      <li class="extra-day"><b>Day 6:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 64. Croatia Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter64.png' %}" alt="Croatia">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.8</div>
+  </div>
+  <div class="card-content">
+    <h3>Croatia Package</h3>
+    <div class="days">⏰ 7 Days • 6 Nights</div>
+    <div class="price">₹1,49,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Zagreb</li>
+      <li><b>Day 2:</b> Plitvice Lakes</li>
+      <li><b>Day 3:</b> Split</li>
+      <li class="extra-day"><b>Day 4:</b> Dubrovnik</li>
+      <li class="extra-day"><b>Day 5:</b> Hvar Island</li>
+      <li class="extra-day"><b>Day 6:</b> Zadar</li>
+      <li class="extra-day"><b>Day 7:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 65. Slovenia Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter65.png' %}" alt="Slovenia">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.7</div>
+  </div>
+  <div class="card-content">
+    <h3>Slovenia Package</h3>
+    <div class="days">⏰ 5 Days • 4 Nights</div>
+    <div class="price">₹1,39,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Ljubljana</li>
+      <li><b>Day 2:</b> Lake Bled</li>
+      <li><b>Day 3:</b> Lake Bohinj</li>
+      <li class="extra-day"><b>Day 4:</b> Piran</li>
+      <li class="extra-day"><b>Day 5:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 66. Slovakia Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter66.png' %}" alt="Slovakia">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.6</div>
+  </div>
+  <div class="card-content">
+    <h3>Slovakia Package</h3>
+    <div class="days">⏰ 4 Days • 3 Nights</div>
+    <div class="price">₹1,19,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Bratislava</li>
+      <li><b>Day 2:</b> High Tatras</li>
+      <li><b>Day 3:</b> Kosice</li>
+      <li class="extra-day"><b>Day 4:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 67. Romania Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter67.png' %}" alt="Romania">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.7</div>
+  </div>
+  <div class="card-content">
+    <h3>Romania Package</h3>
+    <div class="days">⏰ 6 Days • 5 Nights</div>
+    <div class="price">₹1,24,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Bucharest</li>
+      <li><b>Day 2:</b> Transylvania</li>
+      <li><b>Day 3:</b> Bran Castle</li>
+      <li class="extra-day"><b>Day 4:</b> Brasov</li>
+      <li class="extra-day"><b>Day 5:</b> Sibiu</li>
+      <li class="extra-day"><b>Day 6:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 68. Bulgaria Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter68.png' %}" alt="Bulgaria">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.6</div>
+  </div>
+  <div class="card-content">
+    <h3>Bulgaria Package</h3>
+    <div class="days">⏰ 5 Days • 4 Nights</div>
+    <div class="price">₹1,14,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Sofia</li>
+      <li><b>Day 2:</b> Plovdiv</li>
+      <li><b>Day 3:</b> Black Sea Coast</li>
+      <li class="extra-day"><b>Day 4:</b> Rila Monastery</li>
+      <li class="extra-day"><b>Day 5:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 69. Serbia Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter69.png' %}" alt="Serbia">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.5</div>
+  </div>
+  <div class="card-content">
+    <h3>Serbia Package</h3>
+    <div class="days">⏰ 4 Days • 3 Nights</div>
+    <div class="price">₹1,09,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Belgrade</li>
+      <li><b>Day 2:</b> Novi Sad</li>
+      <li><b>Day 3:</b> Nis</li>
+      <li class="extra-day"><b>Day 4:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 70. Montenegro Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter70.png' %}" alt="Montenegro">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.7</div>
+  </div>
+  <div class="card-content">
+    <h3>Montenegro Package</h3>
+    <div class="days">⏰ 5 Days • 4 Nights</div>
+    <div class="price">₹1,29,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Podgorica</li>
+      <li><b>Day 2:</b> Kotor</li>
+      <li><b>Day 3:</b> Budva</li>
+      <li class="extra-day"><b>Day 4:</b> Bay of Kotor</li>
+      <li class="extra-day"><b>Day 5:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 71. Albania Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter71.png' %}" alt="Albania">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.5</div>
+  </div>
+  <div class="card-content">
+    <h3>Albania Package</h3>
+    <div class="days">⏰ 5 Days • 4 Nights</div>
+    <div class="price">₹1,14,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Tirana</li>
+      <li><b>Day 2:</b> Durres</li>
+      <li><b>Day 3:</b> Saranda</li>
+      <li class="extra-day"><b>Day 4:</b> Gjirokaster</li>
+      <li class="extra-day"><b>Day 5:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 72. Bosnia & Herzegovina Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter72.png' %}" alt="Bosnia">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.6</div>
+  </div>
+  <div class="card-content">
+    <h3>Bosnia & Herzegovina Package</h3>
+    <div class="days">⏰ 5 Days • 4 Nights</div>
+    <div class="price">₹1,19,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Sarajevo</li>
+      <li><b>Day 2:</b> Mostar</li>
+      <li><b>Day 3:</b> Banja Luka</li>
+      <li class="extra-day"><b>Day 4:</b> Travnik</li>
+      <li class="extra-day"><b>Day 5:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+     <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 73. Malta Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter73.png' %}" alt="Malta">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.7</div>
+  </div>
+  <div class="card-content">
+    <h3>Malta Package</h3>
+    <div class="days">⏰ 4 Days • 3 Nights</div>
+    <div class="price">₹1,34,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Valletta</li>
+      <li><b>Day 2:</b> Mdina</li>
+      <li><b>Day 3:</b> Blue Lagoon</li>
+      <li class="extra-day"><b>Day 4:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 74. Cyprus Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter74.png' %}" alt="Cyprus">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.7</div>
+  </div>
+  <div class="card-content">
+    <h3>Cyprus Package</h3>
+    <div class="days">⏰ 5 Days • 4 Nights</div>
+    <div class="price">₹1,39,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Nicosia</li>
+      <li><b>Day 2:</b> Limassol</li>
+      <li><b>Day 3:</b> Paphos</li>
+      <li class="extra-day"><b>Day 4:</b> Larnaca</li>
+      <li class="extra-day"><b>Day 5:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 75. Canada Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter75.png' %}" alt="Canada">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.9</div>
+  </div>
+  <div class="card-content">
+    <h3>Canada Package</h3>
+    <div class="days">⏰ 9 Days • 8 Nights</div>
+    <div class="price">₹2,69,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Toronto</li>
+      <li><b>Day 2:</b> Niagara Falls</li>
+      <li><b>Day 3:</b> Ottawa</li>
+      <li class="extra-day"><b>Day 4:</b> Montreal</li>
+      <li class="extra-day"><b>Day 5:</b> Quebec City</li>
+      <li class="extra-day"><b>Day 6:</b> Vancouver</li>
+      <li class="extra-day"><b>Day 7:</b> Banff</li>
+      <li class="extra-day"><b>Day 8:</b> Lake Louise</li>
+      <li class="extra-day"><b>Day 9:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 76. United States Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter76.png' %}" alt="USA">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.9</div>
+  </div>
+  <div class="card-content">
+    <h3>United States Package</h3>
+    <div class="days">⏰ 10 Days • 9 Nights</div>
+    <div class="price">₹2,99,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> New York</li>
+      <li><b>Day 2:</b> Statue of Liberty</li>
+      <li><b>Day 3:</b> Washington DC</li>
+      <li class="extra-day"><b>Day 4:</b> Las Vegas</li>
+      <li class="extra-day"><b>Day 5:</b> Grand Canyon</li>
+      <li class="extra-day"><b>Day 6:</b> Los Angeles</li>
+      <li class="extra-day"><b>Day 7:</b> Hollywood</li>
+      <li class="extra-day"><b>Day 8:</b> San Francisco</li>
+      <li class="extra-day"><b>Day 9:</b> Orlando</li>
+      <li class="extra-day"><b>Day 10:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 77. Mexico Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter77.png' %}" alt="Mexico">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.7</div>
+  </div>
+  <div class="card-content">
+    <h3>Mexico Package</h3>
+    <div class="days">⏰ 7 Days • 6 Nights</div>
+    <div class="price">₹1,79,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Mexico City</li>
+      <li><b>Day 2:</b> Teotihuacan</li>
+      <li><b>Day 3:</b> Cancun</li>
+      <li class="extra-day"><b>Day 4:</b> Tulum</li>
+      <li class="extra-day"><b>Day 5:</b> Chichen Itza</li>
+      <li class="extra-day"><b>Day 6:</b> Playa del Carmen</li>
+      <li class="extra-day"><b>Day 7:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+     <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 78. Brazil Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter78.png' %}" alt="Brazil">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.8</div>
+  </div>
+  <div class="card-content">
+    <h3>Brazil Package</h3>
+    <div class="days">⏰ 8 Days • 7 Nights</div>
+    <div class="price">₹2,19,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Rio de Janeiro</li>
+      <li><b>Day 2:</b> Christ the Redeemer</li>
+      <li><b>Day 3:</b> Sugarloaf Mountain</li>
+      <li class="extra-day"><b>Day 4:</b> Sao Paulo</li>
+      <li class="extra-day"><b>Day 5:</b> Iguazu Falls</li>
+      <li class="extra-day"><b>Day 6:</b> Salvador</li>
+      <li class="extra-day"><b>Day 7:</b> Amazon Tour</li>
+      <li class="extra-day"><b>Day 8:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 79. Argentina Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter79.png' %}" alt="Argentina">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.8</div>
+  </div>
+  <div class="card-content">
+    <h3>Argentina Package</h3>
+    <div class="days">⏰ 7 Days • 6 Nights</div>
+    <div class="price">₹2,09,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Buenos Aires</li>
+      <li><b>Day 2:</b> Tango Show</li>
+      <li><b>Day 3:</b> Iguazu Falls</li>
+      <li class="extra-day"><b>Day 4:</b> Mendoza</li>
+      <li class="extra-day"><b>Day 5:</b> Patagonia</li>
+      <li class="extra-day"><b>Day 6:</b> Ushuaia</li>
+      <li class="extra-day"><b>Day 7:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 80. Peru Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter80.png' %}" alt="Peru">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.9</div>
+  </div>
+  <div class="card-content">
+    <h3>Peru Package</h3>
+    <div class="days">⏰ 8 Days • 7 Nights</div>
+    <div class="price">₹2,29,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Lima</li>
+      <li><b>Day 2:</b> Cusco</li>
+      <li><b>Day 3:</b> Sacred Valley</li>
+      <li class="extra-day"><b>Day 4:</b> Machu Picchu</li>
+      <li class="extra-day"><b>Day 5:</b> Rainbow Mountain</li>
+      <li class="extra-day"><b>Day 6:</b> Lake Titicaca</li>
+      <li class="extra-day"><b>Day 7:</b> Amazon Jungle</li>
+      <li class="extra-day"><b>Day 8:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 81. Chile Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter81.png' %}" alt="Chile">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.8</div>
+  </div>
+  <div class="card-content">
+    <h3>Chile Package</h3>
+    <div class="days">⏰ 7 Days • 6 Nights</div>
+    <div class="price">₹2,14,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Santiago</li>
+      <li><b>Day 2:</b> Valparaiso</li>
+      <li><b>Day 3:</b> Atacama Desert</li>
+      <li class="extra-day"><b>Day 4:</b> Easter Island</li>
+      <li class="extra-day"><b>Day 5:</b> Patagonia</li>
+      <li class="extra-day"><b>Day 6:</b> Torres del Paine</li>
+      <li class="extra-day"><b>Day 7:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 82. Colombia Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter82.png' %}" alt="Colombia">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.7</div>
+  </div>
+  <div class="card-content">
+    <h3>Colombia Package</h3>
+    <div class="days">⏰ 6 Days • 5 Nights</div>
+    <div class="price">₹1,89,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Bogota</li>
+      <li><b>Day 2:</b> Medellin</li>
+      <li><b>Day 3:</b> Cartagena</li>
+      <li class="extra-day"><b>Day 4:</b> Coffee Region</li>
+      <li class="extra-day"><b>Day 5:</b> Tayrona Park</li>
+      <li class="extra-day"><b>Day 6:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 83. Costa Rica Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter83.png' %}" alt="Costa Rica">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.8</div>
+  </div>
+  <div class="card-content">
+    <h3>Costa Rica Package</h3>
+    <div class="days">⏰ 6 Days • 5 Nights</div>
+    <div class="price">₹1,94,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> San Jose</li>
+      <li><b>Day 2:</b> Arenal Volcano</li>
+      <li><b>Day 3:</b> Monteverde</li>
+      <li class="extra-day"><b>Day 4:</b> Manuel Antonio</li>
+      <li class="extra-day"><b>Day 5:</b> Beach Day</li>
+      <li class="extra-day"><b>Day 6:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 84. Panama Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter84.png' %}" alt="Panama">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.7</div>
+  </div>
+  <div class="card-content">
+    <h3>Panama Package</h3>
+    <div class="days">⏰ 5 Days • 4 Nights</div>
+    <div class="price">₹1,69,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Panama City</li>
+      <li><b>Day 2:</b> Panama Canal</li>
+      <li><b>Day 3:</b> San Blas Islands</li>
+      <li class="extra-day"><b>Day 4:</b> Bocas del Toro</li>
+      <li class="extra-day"><b>Day 5:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 85. Bahamas Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter85.png' %}" alt="Bahamas">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.8</div>
+  </div>
+  <div class="card-content">
+    <h3>Bahamas Package</h3>
+    <div class="days">⏰ 5 Days • 4 Nights</div>
+    <div class="price">₹1,89,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Nassau</li>
+      <li><b>Day 2:</b> Paradise Island</li>
+      <li><b>Day 3:</b> Exuma + Pig Beach</li>
+      <li class="extra-day"><b>Day 4:</b> Water Sports</li>
+      <li class="extra-day"><b>Day 5:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+     <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 86. Jamaica Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter86.png' %}" alt="Jamaica">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.7</div>
+  </div>
+  <div class="card-content">
+    <h3>Jamaica Package</h3>
+    <div class="days">⏰ 6 Days • 5 Nights</div>
+    <div class="price">₹1,79,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Kingston</li>
+      <li><b>Day 2:</b> Montego Bay</li>
+      <li><b>Day 3:</b> Dunn's River Falls</li>
+      <li class="extra-day"><b>Day 4:</b> Negril Beach</li>
+      <li class="extra-day"><b>Day 5:</b> Blue Mountains</li>
+      <li class="extra-day"><b>Day 6:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 87. Dominican Republic Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter87.png' %}" alt="Dominican Republic">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.8</div>
+  </div>
+  <div class="card-content">
+    <h3>Dominican Republic Package</h3>
+    <div class="days">⏰ 6 Days • 5 Nights</div>
+    <div class="price">₹1,74,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Santo Domingo</li>
+      <li><b>Day 2:</b> Punta Cana</li>
+      <li><b>Day 3:</b> Saona Island</li>
+      <li class="extra-day"><b>Day 4:</b> Water Sports</li>
+      <li class="extra-day"><b>Day 5:</b> Puerto Plata</li>
+      <li class="extra-day"><b>Day 6:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 88. Cuba Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter88.png' %}" alt="Cuba">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.7</div>
+  </div>
+  <div class="card-content">
+    <h3>Cuba Package</h3>
+    <div class="days">⏰ 7 Days • 6 Nights</div>
+    <div class="price">₹1,84,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Havana</li>
+      <li><b>Day 2:</b> Old Havana Tour</li>
+      <li><b>Day 3:</b> Varadero Beach</li>
+      <li class="extra-day"><b>Day 4:</b> Trinidad</li>
+      <li class="extra-day"><b>Day 5:</b> Cienfuegos</li>
+      <li class="extra-day"><b>Day 6:</b> Vinales</li>
+      <li class="extra-day"><b>Day 7:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 89. Fiji Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter89.png' %}" alt="Fiji">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.9</div>
+  </div>
+  <div class="card-content">
+    <h3>Fiji Package</h3>
+    <div class="days">⏰ 6 Days • 5 Nights</div>
+    <div class="price">₹1,99,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Nadi</li>
+      <li><b>Day 2:</b> Denarau Island</li>
+      <li><b>Day 3:</b> Mamanuca Islands</li>
+      <li class="extra-day"><b>Day 4:</b> Water Sports</li>
+      <li class="extra-day"><b>Day 5:</b> Cultural Tour</li>
+      <li class="extra-day"><b>Day 6:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 90. Samoa Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter90.png' %}" alt="Samoa">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.7</div>
+  </div>
+  <div class="card-content">
+    <h3>Samoa Package</h3>
+    <div class="days">⏰ 5 Days • 4 Nights</div>
+    <div class="price">₹1,89,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Apia</li>
+      <li><b>Day 2:</b> Upolu Island</li>
+      <li><b>Day 3:</b> Savaii Island</li>
+      <li class="extra-day"><b>Day 4:</b> Beach + Waterfall</li>
+      <li class="extra-day"><b>Day 5:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 91. Vanuatu Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter91.png' %}" alt="Vanuatu">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.6</div>
+  </div>
+  <div class="card-content">
+    <h3>Vanuatu Package</h3>
+    <div class="days">⏰ 5 Days • 4 Nights</div>
+    <div class="price">₹1,94,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Port Vila</li>
+      <li><b>Day 2:</b> Tanna Island</li>
+      <li><b>Day 3:</b> Volcano Tour</li>
+      <li class="extra-day"><b>Day 4:</b> Beach + Snorkeling</li>
+      <li class="extra-day"><b>Day 5:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 92. French Polynesia Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter92.png' %}" alt="French Polynesia">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.9</div>
+  </div>
+  <div class="card-content">
+    <h3>French Polynesia Package</h3>
+    <div class="days">⏰ 7 Days • 6 Nights</div>
+    <div class="price">₹2,89,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Papeete</li>
+      <li><b>Day 2:</b> Moorea Island</li>
+      <li><b>Day 3:</b> Bora Bora</li>
+      <li class="extra-day"><b>Day 4:</b> Overwater Bungalow</li>
+      <li class="extra-day"><b>Day 5:</b> Lagoon Tour</li>
+      <li class="extra-day"><b>Day 6:</b> Huahine</li>
+      <li class="extra-day"><b>Day 7:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 93. Tahiti Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter93.png' %}" alt="Tahiti">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.9</div>
+  </div>
+  <div class="card-content">
+    <h3>Tahiti Package</h3>
+    <div class="days">⏰ 6 Days • 5 Nights</div>
+    <div class="price">₹2,69,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Papeete</li>
+      <li><b>Day 2:</b> Beach + Market</li>
+      <li><b>Day 3:</b> Island Tour</li>
+      <li class="extra-day"><b>Day 4:</b> Waterfall Hike</li>
+      <li class="extra-day"><b>Day 5:</b> Spa + Leisure</li>
+      <li class="extra-day"><b>Day 6:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 94. Qatar Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter94.png' %}" alt="Qatar">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.8</div>
+  </div>
+  <div class="card-content">
+    <h3>Qatar Package</h3>
+    <div class="days">⏰ 4 Days • 3 Nights</div>
+    <div class="price">₹1,19,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Doha City Tour</li>
+      <li><b>Day 2:</b> Desert Safari</li>
+      <li><b>Day 3:</b> Souq Waqif</li>
+      <li class="extra-day"><b>Day 4:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 95. Oman Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter95.png' %}" alt="Oman">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.7</div>
+  </div>
+  <div class="card-content">
+    <h3>Oman Package</h3>
+    <div class="days">⏰ 5 Days • 4 Nights</div>
+    <div class="price">₹1,29,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Muscat</li>
+      <li><b>Day 2:</b> Nizwa + Bahla</li>
+      <li><b>Day 3:</b> Wahiba Sands</li>
+      <li class="extra-day"><b>Day 4:</b> Salalah</li>
+      <li class="extra-day"><b>Day 5:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 96. Saudi Arabia Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter96.png' %}" alt="Saudi Arabia">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.7</div>
+  </div>
+  <div class="card-content">
+    <h3>Saudi Arabia Package</h3>
+    <div class="days">⏰ 6 Days • 5 Nights</div>
+    <div class="price">₹1,49,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Riyadh</li>
+      <li><b>Day 2:</b> Jeddah</li>
+      <li><b>Day 3:</b> AlUla</li>
+      <li class="extra-day"><b>Day 4:</b> Mecca</li>
+      <li class="extra-day"><b>Day 5:</b> Medina</li>
+      <li class="extra-day"><b>Day 6:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 97. Jordan Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter97.png' %}" alt="Jordan">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.8</div>
+  </div>
+  <div class="card-content">
+    <h3>Jordan Package</h3>
+    <div class="days">⏰ 6 Days • 5 Nights</div>
+    <div class="price">₹1,39,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Amman</li>
+      <li><b>Day 2:</b> Petra</li>
+      <li><b>Day 3:</b> Wadi Rum</li>
+      <li class="extra-day"><b>Day 4:</b> Dead Sea</li>
+      <li class="extra-day"><b>Day 5:</b> Aqaba</li>
+      <li class="extra-day"><b>Day 6:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 98. Israel Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter98.png' %}" alt="Israel">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.8</div>
+  </div>
+  <div class="card-content">
+    <h3>Israel Package</h3>
+    <div class="days">⏰ 7 Days • 6 Nights</div>
+    <div class="price">₹1,59,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Tel Aviv</li>
+      <li><b>Day 2:</b> Jerusalem</li>
+      <li><b>Day 3:</b> Bethlehem</li>
+      <li class="extra-day"><b>Day 4:</b> Dead Sea</li>
+      <li class="extra-day"><b>Day 5:</b> Haifa</li>
+      <li class="extra-day"><b>Day 6:</b> Nazareth</li>
+      <li class="extra-day"><b>Day 7:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 99. Bahrain Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter99.png' %}" alt="Bahrain">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.6</div>
+  </div>
+  <div class="card-content">
+    <h3>Bahrain Package</h3>
+    <div class="days">⏰ 3 Days • 2 Nights</div>
+    <div class="price">₹99,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Manama City</li>
+      <li><b>Day 2:</b> Desert Safari</li>
+      <li class="extra-day"><b>Day 3:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 100. Kuwait Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter100.png' %}" alt="Kuwait">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.6</div>
+  </div>
+  <div class="card-content">
+    <h3>Kuwait Package</h3>
+    <div class="days">⏰ 3 Days • 2 Nights</div>
+    <div class="price">₹1,04,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Kuwait City</li>
+      <li><b>Day 2:</b> Failaka Island</li>
+      <li class="extra-day"><b>Day 3:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 101. Lebanon Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter101.png' %}" alt="Lebanon">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.7</div>
+  </div>
+  <div class="card-content">
+    <h3>Lebanon Package</h3>
+    <div class="days">⏰ 5 Days • 4 Nights</div>
+    <div class="price">₹1,34,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Beirut</li>
+      <li><b>Day 2:</b> Byblos</li>
+      <li><b>Day 3:</b> Baalbek</li>
+      <li class="extra-day"><b>Day 4:</b> Cedars of God</li>
+      <li class="extra-day"><b>Day 5:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 102. Seychelles Island Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter102.png' %}" alt="Seychelles">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.9</div>
+  </div>
+  <div class="card-content">
+    <h3>Seychelles Island Package</h3>
+    <div class="days">⏰ 6 Days • 5 Nights</div>
+    <div class="price">₹1,49,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Mahe Island</li>
+      <li><b>Day 2:</b> Praslin Island</li>
+      <li><b>Day 3:</b> La Digue</li>
+      <li class="extra-day"><b>Day 4:</b> Beach Hopping</li>
+      <li class="extra-day"><b>Day 5:</b> Water Sports</li>
+      <li class="extra-day"><b>Day 6:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 103. Galápagos Islands Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter103.png' %}" alt="Galapagos">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.9</div>
+  </div>
+  <div class="card-content">
+    <h3>Galápagos Islands Package</h3>
+    <div class="days">⏰ 8 Days • 7 Nights</div>
+    <div class="price">₹3,19,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Quito</li>
+      <li><b>Day 2:</b> Santa Cruz Island</li>
+      <li><b>Day 3:</b> Isabela Island</li>
+      <li class="extra-day"><b>Day 4:</b> Wildlife Tour</li>
+      <li class="extra-day"><b>Day 5:</b> Snorkeling</li>
+      <li class="extra-day"><b>Day 6:</b> Tortuga Bay</li>
+      <li class="extra-day"><b>Day 7:</b> Floreana Island</li>
+      <li class="extra-day"><b>Day 8:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 104. Maldives Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter90.png' %}" alt="Maldives">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.9</div>
+  </div>
+  <div class="card-content">
+    <h3>Maldives Package</h3>
+    <div class="days">⏰ 5 Days • 4 Nights</div>
+    <div class="price">₹1,59,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Male City Tour</li>
+      <li><b>Day 2:</b> Water Villa + Spa</li>
+      <li><b>Day 3:</b> Island Hopping</li>
+      <li class="extra-day"><b>Day 4:</b> Snorkeling + Dolphin Cruise</li>
+      <li class="extra-day"><b>Day 5:</b> Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+
+<!-- 105. Singapore Package -->
+<div class="card">
+  <div class="card-img">
+    <img src="{% static 'home/Image/International_Image/Inter98.png' %}" alt="Singapore">
+    <div class="future-tag">✈️ International Tour</div>
+    <div class="rating-badge">⭐ 4.8</div>
+  </div>
+  <div class="card-content">
+    <h3>Singapore Package</h3>
+    <div class="days">⏰ 4 Days • 3 Nights</div>
+    <div class="price">₹89,999 <span>/ Per Person</span></div>
+    <ul class="itinerary">
+      <li><b>Day 1:</b> Marina Bay + Gardens by the Bay</li>
+      <li><b>Day 2:</b> Sentosa Island + Universal Studios</li>
+      <li><b>Day 3:</b> Singapore Zoo + Night Safari</li>
+      <li class="extra-day"><b>Day 4:</b> Shopping + Departure</li>
+    </ul>
+    <div class="btn-group">
+      <button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button>
+      <a href="/booknow/" target="_blank" class="btn-book" onclick="return bookNowLink(this)">Book Now ✈️</a>
+    </div>
+  </div>
+</div>
+</section>
+
+ <div class="package-navigation" id="packagePagination"></div>
+
+  <!-- WHY CHOOSE US SECTION -->
+<section class="why-choose-section">
+<h1 class="why-heading"><span class="blue">Why Choose</span> <span class="orange">TravelEase</span></h1>
+<p class="why-subheading">Trusted by thousands of travelers for a reason. Here’s what makes us different.</p>
+<div class="why-container">
+<div class="why-card"><div class="why-icon">✈️</div><h3>Best Price Guarantee</h3><p>Lowest prices on flights & hotels. Found cheaper? We’ll match it.</p></div>
+<div class="why-card"><div class="why-icon">🛡️</div><h3>Safe & Secure Booking</h3><p>100% secure payments and verified partners. Fully protected.</p></div>
+<div class="why-card"><div class="why-icon">📞</div><h3>24/7 Customer Support</h3><p>Real experts available round the clock before, during & after trip.</p></div>
+<div class="why-card"><div class="why-icon">🎯</div><h3>Customized Packages</h3><p>Solo to Group - personalized trips as per your budget & choice.</p></div>
+<div class="why-card"><div class="why-icon">⭐</div><h3>10K+ Happy Travelers</h3><p>Trusted by 10,000+ customers with 4.9★ real reviews.</p></div>
+<div class="why-card"><div class="why-icon">🌍</div><h3>500+ Destinations</h3><p>Hill stations to beaches, India to abroad - 500+ locations.</p></div>
+<div class="why-card"><div class="why-icon">💸</div><h3>No Hidden Charges</h3><p>What you see is what you pay. 100% transparency, zero surprises.</p></div>
+<div class="why-card"><div class="why-icon">⚡</div><h3>Instant Booking</h3><p>2-minute confirmation + Free cancellation on most packages.</p></div>
+</div>
+</section>
+
+<!-- ================= INTERNATIONAL CUSTOMER REVIEWS SECTION ================= -->
+
+<div class="reviews-container">
+
+  <!-- Section Heading - NEW STYLE -->
+  <div class="reviews-heading">
+    <h2 class="why-heading">
+      <span class="blue">What Our</span>
+      <span class="orange">Global Travellers Say</span>
+    </h2>
+    <p class="why-subheading">
+      From Europe to Bali, our international travellers share their 
+      unforgettable experiences with TravelEase.
+    </p>
+  </div>
+
+  <!-- Reviews -->
+  <div class="reviews-grid">
+
+    <!-- Review 1 -->
+    <div class="review-card">
+      <div class="review-top">
+        <div class="customer-info">
+          <img src="https://i.pravatar.cc/100?img=12" alt="Rahul Sharma">
+          <div>
+            <h3>Rahul Sharma</h3>
+            <span>New York, USA 🇺🇸</span>
+          </div>
+        </div>
+        <div class="review-rating">★★★★★</div>
+      </div>
+      <p class="review-text">
+        "TravelEase made our Switzerland trip absolutely magical. 
+        The Alps, lakes and hotels were perfectly arranged. 
+        Visa and forex support was also smooth. Highly recommended!"
+      </p>
+      <div class="review-footer">
+        <span>📍 Switzerland</span>
+        <span>✓ Verified International Traveller</span>
+      </div>
+    </div>
+
+    <!-- Review 2 -->
+    <div class="review-card">
+      <div class="review-top">
+        <div class="customer-info">
+          <img src="https://i.pravatar.cc/100?img=47" alt="Priya Singh">
+          <div>
+            <h3>Priya Singh</h3>
+            <span>London, UK 🇬🇧</span>
+          </div>
+        </div>
+        <div class="review-rating">★★★</div>
+      </div>
+      <p class="review-text">
+        "Our Paris + Italy honeymoon was a dream come true! 
+        TravelEase handled everything - flights, hotels, sightseeing. 
+        The team was available 24/7 for support."
+      </p>
+      <div class="review-footer">
+        <span>📍 France & Italy</span>
+        <span>✓ Verified International Traveller</span>
+      </div>
+    </div>
+
+    <!-- Review 3 -->
+    <div class="review-card">
+      <div class="review-top">
+        <div class="customer-info">
+          <img src="https://i.pravatar.cc/100?img=33" alt="Amit Verma">
+          <div>
+            <h3>Amit Verma</h3>
+            <span>Dubai, UAE 🇦🇪</span>
+          </div>
+        </div>
+        <div class="review-rating">★★☆</div>
+      </div>
+      <p class="review-text">
+        "Bali trip was incredible! From airport pickup to resort 
+        and water sports - everything was managed perfectly. 
+        Best part was the hassle-free visa process."
+      </p>
+      <div class="review-footer">
+        <span>📍 Bali, Indonesia</span>
+        <span>✓ Verified International Traveller</span>
+      </div>
+    </div>
+
+    <!-- Review 4 - NEW -->
+    <div class="review-card">
+      <div class="review-top">
+        <div class="customer-info">
+          <img src="https://i.pravatar.cc/100?img=56" alt="Sneha Patel">
+          <div>
+            <h3>Sneha Patel</h3>
+            <span>Toronto, Canada 🇨🇦</span>
+          </div>
+        </div>
+        <div class="review-rating">★★★★★</div>
+      </div>
+      <p class="review-text">
+        "Australia tour was beyond expectations! Great itinerary, 
+        5-star hotels and kangaroo island visit was the highlight. 
+        TravelEase team is super professional."
+      </p>
+      <div class="review-footer">
+        <span>📍 Australia</span>
+        <span>✓ Verified International Traveller</span>
+      </div>
+    </div>
+    <!-- Review 5 -->
+<div class="review-card">
+  <div class="review-top">
+    <div class="customer-info">
+      <img src="https://i.pravatar.cc/100?img=65" alt="Karan Mehta">
+      <div>
+        <h3>Karan Mehta</h3>
+        <span>Singapore 🇸🇬</span>
+      </div>
+    </div>
+    <div class="review-rating">★★★</div>
+  </div>
+  <p class="review-text">
+    "Our Thailand + Singapore package was super smooth! 
+    No visa tension, perfect hotel location and amazing city tours. 
+    TravelEase really knows how to handle international trips."
+  </p>
+  <div class="review-footer">
+    <span>📍 Thailand & Singapore</span>
+    <span>✓ Verified International Traveller</span>
+  </div>
+</div>
+
+<!-- Review 6 -->
+<div class="review-card">
+  <div class="review-top">
+    <div class="customer-info">
+      <img src="https://i.pravatar.cc/100?img=8" alt="Ananya Reddy">
+      <div>
+        <h3>Ananya Reddy</h3>
+        <span>Manchester, UK 🇬🇧</span>
+      </div>
+    </div>
+    <div class="review-rating">★★★★★</div>
+  </div>
+  <p class="review-text">
+    "Egypt trip was a lifetime experience! Pyramids, Nile Cruise 
+    and desert safari everything was on point. The local guide 
+    arranged by TravelEase was excellent. 10/10 service."
+  </p>
+  <div class="review-footer">
+    <span>📍 Egypt</span>
+    <span>✓ Verified International Traveller</span>
+  </div>
+</div>
+</div>
+  
+
+  <!-- Bottom Rating -->
+  <div class="overall-rating">
+    <div class="rating-number">4.9</div>
+    <div>
+      <div class="big-stars">★★★★★</div>
+      <p>Based on 2,500+ International Traveller Reviews</p>
+    </div>
+  </div>
+</div>
+</section>
+
+  <!-- =========== FAQ SECTION =========== -->
+<section class="faq-section">
+<div class="faq-container">
+<div class="faq-header"><h2>Frequently <span>Asked Questions</span></h2><p class="desc">Everything you need to know about booking your luxury journey with us</p></div>
+<div class="faq-wrapper">
+<div class="faq-item"><button class="faq-question"><span>How far in advance should I book my luxury trip?</span><span class="faq-icon">+</span></button><div class="faq-answer"><p>We recommend booking 3-6 months in advance for peak seasons and private jet charters. However, our team can arrange last-minute luxury trips within 72 hours based on availability.</p></div></div>
+<div class="faq-item"><button class="faq-question"><span>Are your prices negotiable? Do you offer payment plans?</span><span class="faq-icon">+</span></button><div class="faq-answer"><p>Yes! We offer flexible payment plans and best price guarantee. Found a lower price? We'll beat it and add exclusive perks worth $1000+. Speak to your travel curator for details.</p></div></div>
+<div class="faq-item"><button class="faq-question"><span>What if I need to cancel or change my booking?</span><span class="faq-icon">+</span></button><div class="faq-answer"><p>Your comfort is priority. We offer free changes up to 14 days before travel. Cancellations are handled case-by-case with our partners to get you maximum refunds and credits.</p></div></div>
+<div class="faq-item"><button class="faq-question"><span>Do you provide 24/7 support during my trip?</span><span class="faq-icon">+</span></button><div class="faq-answer"><p>Absolutely. Every client gets a dedicated travel curator + 24/7 emergency hotline. Lost passport, flight delay, medical emergency - we handle everything instantly, anywhere in the world.</p></div></div>
+<div class="faq-item"><button class="faq-question"><span>How do you ensure privacy and security for VIP clients?</span><span class="faq-icon">+</span></button><div class="faq-answer"><p>We use bank-level encryption for all bookings. NDAs available for high-profile clients. Private jet terminals, discreet hotels, and security coordination can be arranged on request.</p></div></div>
+</div>
+</div>
+</section>
+
+<script>
+function toggleDays(btn){
+  const card = btn.closest('.card');
+  const extras = card.querySelectorAll('.extra-day');
+  const isOpen = card.classList.contains('open');
+  if(!isOpen){
+    extras.forEach(e=>e.style.display='block');
+    card.classList.add('open','expanded');
+    btn.innerHTML='Hide Itinerary ⬆️';
+  } else {
+    extras.forEach(e=>e.style.display='none');
+    card.classList.remove('open','expanded');
+    btn.innerHTML='View Itinerary ⬇️';
+  }
+}
+
+function bookNowLink(el){
+  const card = el.closest('.card');
+  const place = card.querySelector('h3').innerText.trim();
+  const price = card.querySelector('.price').innerText.replace(/[^0-9]/g, '');
+  const days = card.querySelector('.days').innerText.replace(/[^0-9A-Za-z\s•\-]/g,'').trim();
+  const imgTag = card.querySelector('.card-img img');
+  const imgSrc = imgTag ? imgTag.getAttribute('src') : "";
+  localStorage.setItem('lastPackageImg', imgSrc);
+  localStorage.setItem('lastPackagePlace', place);
+  let iti = [];
+  card.querySelectorAll('.itinerary li').forEach(li=> iti.push(li.innerText.replace(/📍|⏰/g,'').trim()));
+  const params = new URLSearchParams({place, price, days, img: imgSrc, iti: iti.join(' | ')});
+  el.href = `../booknow/?${params.toString()}`;
+  return true;
+}
+
+/* 15 - 15 - 15 Number Pagination */
+document.addEventListener('DOMContentLoaded', function(){
+  const allCards = document.querySelectorAll('.container .card');
+  const paginationBox = document.getElementById('packagePagination');
+  if(!allCards.length || !paginationBox) return;
+
+  const perPage = 15;
+  let currentPageNum = 1;
+
+  function showPageNum(page){
+    currentPageNum = page;
+    let start = (page-1)*perPage;
+    let end = start + perPage;
+    allCards.forEach((card, idx)=>{
+      card.style.display = (idx>=start && idx<end) ? "flex" : "none";
+    });
+    renderPageNumbers();
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  function renderPageNumbers(){
+    let totalPages = Math.ceil(allCards.length / perPage);
+    paginationBox.innerHTML="";
+
+    let prev = document.createElement("button");
+    prev.innerHTML="‹ Previous";
+    prev.disabled = currentPageNum===1;
+    prev.onclick=()=>{ if(currentPageNum>1) showPageNum(currentPageNum-1); };
+    paginationBox.appendChild(prev);
+
+    for(let i=1;i<=totalPages;i++){
+      let btn = document.createElement("button");
+      btn.innerText=i;
+      if(i===currentPageNum) btn.classList.add("active");
+      btn.onclick=()=>showPageNum(i);
+      paginationBox.appendChild(btn);
+    }
+
+    let next = document.createElement("button");
+    next.innerHTML="Next ›";
+    next.disabled = currentPageNum===totalPages;
+    next.onclick=()=>{ if(currentPageNum<totalPages) showPageNum(currentPageNum+1); };
+    paginationBox.appendChild(next);
+  }
+
+  showPageNum(1);
+});
+
+/*==============FQ=============*/
+const faqItems = document.querySelectorAll('.faq-item');
+faqItems.forEach(item => {
+const question = item.querySelector('.faq-question');
+question.addEventListener('click', () => {
+faqItems.forEach(otherItem => {
+if (otherItem !== item) {
+otherItem.classList.remove('active');
+}
+});
+item.classList.toggle('active');
+});
+});
+</script>
+</body>
+</html>
+{% endblock %}
