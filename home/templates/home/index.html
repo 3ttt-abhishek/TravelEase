@@ -1,16 +1,26 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#141E30">
     <title>TravelEase - Tour & Travels</title>
 
     {% load static %}
 
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
     <style>
+        /* =========================================================
+           GLOBAL
+        ========================================================= */
+
         * {
             margin: 0;
             padding: 0;
@@ -18,13 +28,33 @@
             font-family: 'Montserrat', sans-serif;
         }
 
-        html,
+        html {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
         body {
+            width: 100%;
+            min-width: 0;
             background: #f4f6fb;
             color: #222;
             overflow-x: hidden;
-            width: 100%;
         }
+
+        img {
+            max-width: 100%;
+        }
+
+        button,
+        a {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+
+        /* =========================================================
+           NAVBAR
+        ========================================================= */
 
         .Box1 {
             height: 70px;
@@ -36,6 +66,7 @@
             padding: 0 45px;
             position: fixed;
             top: 0;
+            left: 0;
             z-index: 9999;
             box-shadow: 0 12px 30px rgba(0, 0, 0, .25);
             border-bottom: 1px solid rgba(255, 255, 255, .08);
@@ -48,6 +79,7 @@
             letter-spacing: 1px;
             cursor: pointer;
             transition: .3s;
+            white-space: nowrap;
         }
 
         .Logo:hover {
@@ -56,6 +88,41 @@
 
         .Logo span {
             color: #FFD700;
+        }
+
+        .menu-toggle {
+            display: none;
+            width: 45px;
+            height: 45px;
+            border: none;
+            background: rgba(255, 255, 255, .08);
+            border-radius: 10px;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 23px;
+            height: 3px;
+            border-radius: 5px;
+            background: #fff;
+            transition: .3s;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
         }
 
         .Navbaar ul {
@@ -91,7 +158,7 @@
             position: absolute;
             left: 15%;
             bottom: 5px;
-            width: 0%;
+            width: 0;
             height: 3px;
             background: #FFD700;
             border-radius: 10px;
@@ -168,68 +235,154 @@
             border-radius: 10px;
         }
 
-        @media(max-width:900px) {
+
+        /* =========================================================
+           TABLET + MOBILE NAVBAR
+        ========================================================= */
+
+        @media (max-width: 991px) {
+
             .Box1 {
-                height: auto;
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 15px;
+                height: 70px;
+                padding: 0 22px;
             }
 
             .Logo {
                 font-size: 28px;
-                margin-bottom: 15px;
+            }
+
+            .menu-toggle {
+                display: flex;
             }
 
             .Navbaar {
-                width: 100%;
+                position: absolute;
+                top: 80px;
+                right: 20px;
+                width: min(320px, calc(100vw - 40px));
+                max-height: calc(100vh - 100px);
+                overflow-y: auto;
+                overflow-x: hidden;
+
+                background: linear-gradient(135deg, #141E30, #243B55, #1B2735);
+
+                border-radius: 15px;
+                padding: 10px;
+
+                box-shadow: 0 20px 45px rgba(0, 0, 0, .30);
+
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(-10px);
+
+                transition: .30s ease;
+            }
+
+            .Navbaar.active {
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(0);
             }
 
             .Navbaar ul {
                 width: 100%;
+                display: flex;
                 flex-direction: column;
-                gap: 5px;
-                flex-wrap: wrap;
+                align-items: stretch;
+                gap: 4px;
             }
 
-            .Navbaar ul li {
+            .Navbaar>ul>li {
                 width: 100%;
             }
 
             .Navbaar>ul>li>a {
                 width: 100%;
+                min-height: 46px;
                 justify-content: space-between;
-                padding: 14px 15px;
-                border-radius: 8px;
+                padding: 12px 14px;
                 font-size: 14px;
                 white-space: normal;
+            }
+
+            .Navbaar>ul>li>a:hover {
+                transform: none;
             }
 
             .dropdown-menu {
                 position: static;
                 width: 100%;
+                margin-top: 4px;
+
                 opacity: 1;
                 visibility: visible;
                 transform: none;
+
                 display: none;
-                margin-top: 5px;
-                border-radius: 8px;
+
                 box-shadow: none;
+                border-radius: 10px;
+                background: rgba(0, 0, 0, .18);
             }
 
-            .Navbaar>ul>li:hover>.dropdown-menu {
+            .Navbaar>ul>li.dropdown-open>.dropdown-menu {
                 display: flex;
             }
 
+            .Navbaar>ul>li.dropdown-open>.dropdown-menu {
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+            }
+
+            .Navbaar>ul>li.dropdown-open>.arrow-icon {
+                transform: rotate(180deg);
+            }
+
             .dropdown-menu li a {
-                padding: 12px 20px;
+                padding: 11px 18px;
+                font-size: 13px;
+            }
+
+            body {
+                padding-top: 70px;
             }
         }
 
-        /*=============Slider============== */
+
+        /* =========================================================
+           SMALL MOBILE NAVBAR
+        ========================================================= */
+
+        @media (max-width: 600px) {
+
+            .Box1 {
+                padding: 0 14px;
+            }
+
+            .Logo {
+                font-size: 24px;
+            }
+
+            .menu-toggle {
+                width: 42px;
+                height: 42px;
+            }
+
+            .Navbaar {
+                right: 14px;
+                width: min(300px, calc(100vw - 28px));
+                top: 78px;
+            }
+        }
+
+
+        /* =========================================================
+           SLIDER
+        ========================================================= */
+
         .slider-container {
             width: 100%;
-            max-width: 100vw;
             height: 600px;
             position: relative;
             overflow: hidden;
@@ -247,18 +400,21 @@
             width: 20%;
             height: 100%;
             position: relative;
+            flex-shrink: 0;
         }
 
         .slide img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: block;
         }
 
         .slide-content {
             position: absolute;
             top: 50%;
             left: 50%;
+            width: 90%;
             transform: translate(-50%, -50%);
             text-align: center;
             color: #fff;
@@ -282,11 +438,13 @@
         .slide::after {
             content: "";
             position: absolute;
-            top: 0;
-            left: 0;
+            inset: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(rgba(0, 0, 0, .3), rgba(0, 0, 0, .5));
+            background: linear-gradient(
+                rgba(0, 0, 0, .3),
+                rgba(0, 0, 0, .5)
+            );
             z-index: 1;
         }
 
@@ -306,10 +464,10 @@
             border-radius: 50%;
             background: rgba(255, 255, 255, .6);
             border: 2px solid #fff;
-            transition: .3s;
         }
 
         @keyframes slide {
+
             0% {
                 margin-left: 0;
             }
@@ -355,13 +513,14 @@
             }
         }
 
-        @media(max-width:900px) {
+        @media (max-width: 768px) {
+
             .slider-container {
-                height: 300px;
+                height: 360px;
             }
 
             .slide-content h2 {
-                font-size: 28px;
+                font-size: 34px;
             }
 
             .slide-content p {
@@ -369,9 +528,45 @@
             }
         }
 
-        /*============= Future Package===========*/
+        @media (max-width: 600px) {
+
+            .slider-container {
+                height: 270px;
+            }
+
+            .slide-content {
+                width: 94%;
+            }
+
+            .slide-content h2 {
+                font-size: 25px;
+                line-height: 1.25;
+            }
+
+            .slide-content p {
+                font-size: 12px;
+                line-height: 1.5;
+            }
+
+            .dots {
+                bottom: 12px;
+                gap: 7px;
+            }
+
+            .dot {
+                width: 9px;
+                height: 9px;
+                border-width: 1px;
+            }
+        }
+
+
+        /* =========================================================
+           FUTURE PACKAGES
+        ========================================================= */
+
         .hero {
-            padding: 50px;
+            padding: 50px 20px;
             text-align: center;
             background: #f4f6fb;
         }
@@ -380,13 +575,18 @@
             font-size: 52px;
             font-weight: 800;
             color: #0d47a1;
-            margin-bottom: 15px
+            margin-bottom: 15px;
+            line-height: 1.2;
         }
 
         .hero h1 span {
             background: linear-gradient(135deg, #ff9800, #ff5722);
             -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            line-height: 1.6;
         }
 
         .container {
@@ -401,11 +601,14 @@
 
         .card {
             width: 100%;
+            min-width: 0;
             background: white;
             border-radius: 24px;
             overflow: hidden;
             border: 1px solid rgba(13, 110, 253, .12);
-            box-shadow: 0 15px 35px rgba(13, 110, 253, .08), 0 5px 15px rgba(0, 0, 0, .05);
+            box-shadow:
+                0 15px 35px rgba(13, 110, 253, .08),
+                0 5px 15px rgba(0, 0, 0, .05);
             transition: .45s ease;
             position: relative;
             display: flex;
@@ -423,7 +626,9 @@
 
         .card:hover {
             transform: translateY(-12px);
-            box-shadow: 0 25px 60px rgba(13, 110, 253, .18), 0 10px 25px rgba(255, 152, 0, .18)
+            box-shadow:
+                0 25px 60px rgba(13, 110, 253, .18),
+                0 10px 25px rgba(255, 152, 0, .18);
         }
 
         .card-img {
@@ -431,17 +636,19 @@
             height: 240px;
             flex-shrink: 0;
             overflow: hidden;
+            position: relative;
         }
 
         .card-img img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            display: block;
             transition: .5s;
         }
 
         .card:hover .card-img img {
-            transform: scale(1.10)
+            transform: scale(1.10);
         }
 
         .future-tag {
@@ -454,7 +661,7 @@
             padding: 8px 16px;
             border-radius: 30px;
             font-size: 12px;
-            font-weight: 700
+            font-weight: 700;
         }
 
         .rating-badge {
@@ -467,7 +674,7 @@
             padding: 8px 14px;
             border-radius: 30px;
             font-size: 13px;
-            font-weight: 700
+            font-weight: 700;
         }
 
         .card-content {
@@ -475,46 +682,47 @@
             display: flex;
             flex-direction: column;
             flex-grow: 1;
+            min-width: 0;
         }
 
         .card-content h3 {
             font-size: 25px;
             line-height: 1.3;
-            height: 65px;
-            overflow: hidden;
+            min-height: 65px;
             color: blue;
+            overflow-wrap: anywhere;
         }
 
         .days {
             display: inline-flex;
             gap: 6px;
             width: max-content;
+            max-width: 100%;
             padding: 7px 14px;
             border-radius: 25px;
             background: linear-gradient(135deg, #ff9800, #ff5722);
             color: #fff;
             font-size: 12px;
             font-weight: 600;
-            margin-bottom: 15px
+            margin-bottom: 15px;
         }
 
         .price {
             font-size: 32px;
             font-weight: 800;
             color: #ff5722;
-            margin-bottom: 18px
+            margin-bottom: 18px;
         }
 
         .price span {
             font-size: 14px;
             color: #666;
-            font-weight: 500
+            font-weight: 500;
         }
 
         .itinerary {
             list-style: none;
             margin: 8px 0 10px;
-            /* min-height: 220px; */
         }
 
         .itinerary li {
@@ -526,13 +734,14 @@
             border-left: 4px solid #0d6efd;
             color: #444;
             font-size: 14px;
-            transition: .35s
+            transition: .35s;
+            overflow-wrap: anywhere;
         }
 
         .itinerary li:hover {
             background: #EEF5FF;
             transform: translateX(6px);
-            border-left: 4px solid #ff9800
+            border-left: 4px solid #ff9800;
         }
 
         .itinerary li::before {
@@ -540,22 +749,23 @@
             position: absolute;
             left: 15px;
             top: 11px;
-            font-size: 18px
+            font-size: 18px;
         }
 
         .extra-day {
-            display: none
+            display: none;
         }
 
         .btn-group {
             margin-top: 8px;
             padding-top: 8px;
             display: flex;
-            justify-content: center
+            justify-content: center;
         }
 
         .btn {
             width: auto;
+            max-width: 100%;
             padding: 12px 30px;
             border: none;
             border-radius: 50px;
@@ -565,21 +775,22 @@
             transition: .4s;
             background: linear-gradient(135deg, #ff9800, #ff5722);
             color: #fff;
-            box-shadow: 0 8px 20px rgba(255, 87, 34, .25)
+            box-shadow: 0 8px 20px rgba(255, 87, 34, .25);
         }
 
         .btn:hover {
             background: linear-gradient(135deg, #ff5722, #ff9800);
             transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(255, 87, 34, .35)
+            box-shadow: 0 12px 25px rgba(255, 87, 34, .35);
         }
 
         .explore-btn {
             text-align: center;
-            margin: 50px 0
+            margin: 50px 20px;
         }
 
         .explore-btn button {
+            max-width: 100%;
             padding: 16px 42px;
             border: none;
             border-radius: 50px;
@@ -590,7 +801,7 @@
             cursor: pointer;
             transition: .4s;
             letter-spacing: .5px;
-            box-shadow: 0 12px 30px rgba(255, 87, 34, .30)
+            box-shadow: 0 12px 30px rgba(255, 87, 34, .30);
         }
 
         .explore-btn button:hover {
@@ -600,79 +811,352 @@
         }
 
         .hide-card {
-            display: none
+            display: none;
         }
 
-        @media(max-width:1200px) {
+        @media (max-width: 1200px) {
+
             .container {
-                grid-template-columns: repeat(2, 1fr)
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
-        @media(max-width:768px) {
-            .container {
-                grid-template-columns: 1fr
+        @media (max-width: 768px) {
+
+            .hero {
+                padding: 35px 15px;
             }
 
             .hero h1 {
-                font-size: 34px
+                font-size: 34px;
+            }
+
+            .container {
+                width: 92%;
+                grid-template-columns: 1fr;
+                gap: 22px;
+            }
+
+            .card-content h3 {
+                min-height: auto;
+                height: auto;
+                font-size: 22px;
+                margin-bottom: 12px;
+            }
+
+            .price {
+                font-size: 28px;
+            }
+
+            .itinerary li {
+                font-size: 13px;
             }
         }
 
-        .services-section{width:100%;padding:25px 20px;background:#f4f6fb;text-align:center}
-.services-header{margin-bottom:35px}
-.services-header h2{font-size:52px;font-weight:800;color:#0d47a1;line-height:1.2}
-.services-header h2 span{background:linear-gradient(90deg,#ffb300,#ff7a00,#ff5722);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.services-header .desc{font-size:16px;color:#666;max-width:650px;margin:10px auto 0}
-.services-container{display:grid;grid-template-columns:repeat(4,1fr);gap:25px;max-width:1200px;margin:0 auto}
-.service-card{background:white;padding:35px 22px;border-radius:18px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.12);transition:.4s;display:flex;flex-direction:column}
-.service-card:hover{transform:translateY(-10px);box-shadow:0 20px 45px rgba(0,0,0,.18)}
-.icon-box{font-size:40px;margin-bottom:10px}
-.service-card h3{font-size:18px;color:#0d47a1;font-weight:700;margin-bottom:10px}
-.service-card p{font-size:14px;color:#777;line-height:1.6;flex-grow:1}
+        @media (max-width: 600px) {
 
-.achievement-section{background:#f4f6fb;text-align:center;padding:25px 20px}
-.section-heading{font-size:52px;font-weight:800;line-height:1.2;margin-bottom:10px}
-.section-heading .blue{color:#0d47a1}
-.section-heading .orange{background:linear-gradient(90deg,#ffb300,#ff7a00,#ff5722);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.section-subheading{max-width:850px;margin:0 auto 35px;font-size:16px;color:#666}
-.achievement-container{max-width:1200px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:25px}
-.achievement-card{padding:35px 20px;text-align:center;background:white;border-radius:18px;box-shadow:0 10px 35px rgba(13,110,253,.06);border:1px solid white;transition:.4s}
-.achievement-card:hover{transform:translateY(-8px);box-shadow:0 10px 40px rgba(0,0,0,.2)}
-.achievement-card h2{font-size:40px;font-weight:800;background:linear-gradient(90deg,#ffb300,#ff7a00,#ff5722);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
-.achievement-card h3{color:#0d47a1;font-size:15px;font-weight:700}
-
-@media(max-width:1200px){.services-container,.achievement-container{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:768px){.services-container,.achievement-container{grid-template-columns:1fr}.services-header h2,.section-heading{font-size:28px}}
-
-        @media(max-width:768px) {
-            .achievement-section {
-                padding: 50px 22px;
+            .hero h1 {
+                font-size: 29px;
+                line-height: 1.3;
             }
+
+            .hero p {
+                font-size: 14px !important;
+            }
+
+            .container {
+                width: 92%;
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .card {
+                border-radius: 18px;
+            }
+
+            .card-img {
+                height: 210px;
+            }
+
+            .card-content {
+                padding: 18px;
+            }
+
+            .days {
+                font-size: 11px;
+                padding: 7px 11px;
+            }
+
+            .price {
+                font-size: 27px;
+            }
+
+            .price span {
+                font-size: 12px;
+            }
+
+            .itinerary li {
+                font-size: 13px;
+                padding: 11px 12px 11px 38px;
+            }
+
+            .itinerary li::before {
+                left: 12px;
+            }
+
+            .btn {
+                width: 100%;
+                padding: 12px 18px;
+            }
+
+            .explore-btn {
+                margin: 35px 15px 45px;
+            }
+
+            .explore-btn button {
+                width: 100%;
+                padding: 14px 18px;
+                font-size: 14px;
+            }
+        }
+
+
+        /* =========================================================
+           PREMIUM SERVICES
+        ========================================================= */
+
+        .services-section {
+            width: 100%;
+            padding: 45px 20px;
+            background: #f4f6fb;
+            text-align: center;
+        }
+
+        .services-header {
+            margin-bottom: 35px;
+        }
+
+        .services-header h2 {
+            font-size: 52px;
+            font-weight: 800;
+            color: #0d47a1;
+            line-height: 1.2;
+        }
+
+        .services-header h2 span {
+            background: linear-gradient(90deg, #ffb300, #ff7a00, #ff5722);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .services-header .desc {
+            font-size: 16px;
+            color: #666;
+            max-width: 650px;
+            margin: 10px auto 0;
+            line-height: 1.6;
+        }
+
+        .services-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .service-card {
+            background: white;
+            padding: 35px 22px;
+            border-radius: 18px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, .12);
+            transition: .4s;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, .18);
+        }
+
+        .icon-box {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        .service-card h3 {
+            font-size: 18px;
+            color: #0d47a1;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .service-card p {
+            font-size: 14px;
+            color: #777;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        @media (max-width: 1200px) {
+
+            .services-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            .services-section {
+                padding: 40px 15px;
+            }
+
+            .services-container {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+
+            .services-header h2 {
+                font-size: 30px;
+            }
+
+            .services-header .desc {
+                font-size: 14px;
+            }
+
+            .service-card {
+                padding: 30px 20px;
+            }
+        }
+
+
+        /* =========================================================
+           ACHIEVEMENTS
+        ========================================================= */
+
+        .achievement-section {
+            background: #f4f6fb;
+            text-align: center;
+            padding: 45px 20px;
+        }
+
+        .section-heading {
+            font-size: 52px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 10px;
+        }
+
+        .section-heading .blue {
+            color: #0d47a1;
+        }
+
+        .section-heading .orange {
+            background: linear-gradient(90deg, #ffb300, #ff7a00, #ff5722);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subheading {
+            max-width: 850px;
+            margin: 0 auto 35px;
+            font-size: 16px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .achievement-container {
+            max-width: 1200px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+        }
+
+        .achievement-card {
+            padding: 35px 20px;
+            text-align: center;
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 10px 35px rgba(13, 110, 253, .06);
+            border: 1px solid white;
+            transition: .4s;
+            min-width: 0;
+        }
+
+        .achievement-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, .2);
+        }
+
+        .achievement-card h2 {
+            font-size: 40px;
+            font-weight: 800;
+            background: linear-gradient(90deg, #ffb300, #ff7a00, #ff5722);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 6px;
+        }
+
+        .achievement-card h3 {
+            color: #0d47a1;
+            font-size: 15px;
+            font-weight: 700;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 1200px) {
 
             .achievement-container {
                 grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            .achievement-section {
+                padding: 40px 15px;
+            }
+
+            .achievement-container {
+                grid-template-columns: 1fr;
                 gap: 16px;
             }
 
             .section-heading {
-                font-size: 52px;
+                font-size: 30px;
+            }
+
+            .section-subheading {
+                font-size: 14px;
+                margin-bottom: 25px;
+            }
+
+            .achievement-card {
+                padding: 28px 15px;
+            }
+
+            .achievement-card h2 {
+                font-size: 36px;
             }
         }
 
-        @media(max-width:480px) {
-            .achievement-container {
-                grid-template-columns: 1fr;
-            }
-        }
 
-        /* =========== FAQ SECTION =========== */
+        /* =========================================================
+           FAQ
+        ========================================================= */
+
         .faq-section {
             width: 100%;
-            padding: 50px;
+            padding: 50px 20px;
             background: #f4f6fb;
             color: #fff;
-            font-family: 'Poppins', sans-serif;
         }
 
         .faq-container {
@@ -682,7 +1166,7 @@
 
         .faq-header {
             text-align: center;
-            margin-bottom: 60px;
+            margin-bottom: 45px;
         }
 
         .faq-header h2 {
@@ -704,6 +1188,7 @@
             color: #444;
             max-width: 600px;
             margin: 0 auto;
+            line-height: 1.6;
         }
 
         .faq-wrapper {
@@ -717,7 +1202,6 @@
             border: none;
             border-radius: 0;
             overflow: hidden;
-            transition: .4s ease;
         }
 
         .faq-question {
@@ -734,6 +1218,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 15px;
             transition: .3s ease;
         }
 
@@ -741,11 +1226,16 @@
             transform: translateY(-2px);
         }
 
+        .faq-question span:first-child {
+            min-width: 0;
+            line-height: 1.5;
+        }
+
         .faq-icon {
             width: 32px;
             height: 32px;
             background: yellow;
-            color: RED;
+            color: red;
             font-size: 20px;
             font-weight: 400;
             border-radius: 50%;
@@ -754,6 +1244,7 @@
             justify-content: center;
             transition: .4s ease;
             min-width: 32px;
+            flex-shrink: 0;
         }
 
         .faq-item.active .faq-icon {
@@ -769,12 +1260,12 @@
             background: white;
             border: 1px solid #e0e6f0;
             border-top: none;
-            border-radius: 14px 14px;
+            border-radius: 0 0 14px 14px;
             margin-top: -1px;
         }
 
         .faq-item.active .faq-answer {
-            max-height: 300px;
+            max-height: 400px;
             padding: 0 25px 22px 25px;
         }
 
@@ -787,40 +1278,67 @@
             margin: 0;
         }
 
-        @media(max-width:768px) {
+        @media (max-width: 768px) {
+
             .faq-section {
-                padding: 70px 5%;
+                padding: 45px 15px;
+            }
+
+            .faq-header {
+                margin-bottom: 30px;
             }
 
             .faq-header h2 {
-                font-size: 34px;
+                font-size: 30px;
+            }
+
+            .faq-header .desc {
+                font-size: 14px;
             }
 
             .faq-question {
-                font-size: 16px;
-                padding: 18px 20px;
+                font-size: 14px;
+                padding: 16px 14px;
+            }
+
+            .faq-icon {
+                width: 29px;
+                height: 29px;
+                min-width: 29px;
+                font-size: 18px;
             }
 
             .faq-item.active .faq-answer {
-                padding: 0 20px 20px 20px;
+                padding: 0 15px 18px 15px;
+            }
+
+            .faq-answer p {
+                font-size: 13px;
+                line-height: 1.7;
             }
         }
 
-        /* =========== FOOTER SECTION =========== */
+
+        /* =========================================================
+           FOOTER
+        ========================================================= */
+
         .footer {
             background: linear-gradient(135deg, #141E30, #243B55, #1B2735);
             color: #fff;
             padding: 45px 8% 15px;
-            font-family: 'Poppins', sans-serif;
         }
 
         .footer-container {
             display: grid;
-            grid-template-columns: 1.4fr 0.8fr 1.3fr 0.8fr;
-            /* Contact ko thoda aur jagah di */
+            grid-template-columns: 1.4fr .8fr 1.3fr .8fr;
             gap: 30px;
             max-width: 1200px;
             margin: 0 auto;
+        }
+
+        .footer-box {
+            min-width: 0;
         }
 
         .footer-box h2 {
@@ -839,17 +1357,15 @@
             line-height: 1.7;
         }
 
-        /* --- EMAIL FIX --- */
         .contact-box .c-item {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 8px;
             color: #ddd;
             font-size: 15px;
             margin-bottom: 12px;
-            white-space: nowrap;
-            /* 1 LINE ME RAKHEGA */
             line-height: 1.5;
+            overflow-wrap: anywhere;
         }
 
         .contact-box .c-item span:first-child {
@@ -880,6 +1396,7 @@
         .social {
             display: flex;
             gap: 12px;
+            flex-wrap: wrap;
         }
 
         .social a {
@@ -891,7 +1408,7 @@
             align-items: center;
             justify-content: center;
             transition: .3s;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, .1);
         }
 
         .social a svg {
@@ -918,18 +1435,21 @@
             border-top: 1px solid rgba(255, 255, 255, .15);
             color: #bbb;
             font-size: 14px;
-            max-width: 1200px;
-            margin-left: auto;
-            margin-right: auto;
         }
 
-        @media(max-width:900px) {
+        @media (max-width: 900px) {
+
             .footer-container {
                 grid-template-columns: repeat(2, 1fr);
             }
+
+            .footer-box h2 {
+                font-size: 40px;
+            }
         }
 
-        @media(max-width:600px) {
+        @media (max-width: 600px) {
+
             .footer {
                 padding: 35px 5% 15px;
             }
@@ -941,9 +1461,17 @@
                 justify-items: center;
             }
 
+            .footer-box {
+                width: 100%;
+            }
+
+            .footer-box h2 {
+                font-size: 38px;
+            }
+
             .contact-box .c-item {
                 justify-content: center;
-                white-space: normal;
+                text-align: left;
             }
 
             .social {
@@ -955,35 +1483,11 @@
             }
         }
 
-        /*========================= Sticky WhatsApp Button==========================*/
-        .sticky-whatsapp {
-            position: fixed;
-            right: 15px;
-            bottom: 85px;
-            transform: translateY(-50%);
-            z-index: 9999;
-        }
 
-        .sticky-whatsapp a {
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            background: #25D366;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 28px;
-            color: #fff;
-            text-decoration: none;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-            transition: all 0.3s ease;
-        }
+        /* =========================================================
+           STICKY WHATSAPP
+        ========================================================= */
 
-        .sticky-whatsapp a:hover {
-            transform: scale(1.12);
-        }
-
-        /*========================= Sticky WhatsApp Button==========================*/
         .sticky-whatsapp {
             position: fixed;
             right: 15px;
@@ -1002,15 +1506,19 @@
             font-size: 28px;
             color: #fff;
             text-decoration: none;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+            transition: all .3s ease;
         }
 
         .sticky-whatsapp a:hover {
             transform: scale(1.12);
         }
 
-        /*========================= Sticky Call Button==========================*/
+
+        /* =========================================================
+           STICKY CALL
+        ========================================================= */
+
         .sticky-call {
             position: fixed;
             right: 15px;
@@ -1029,16 +1537,16 @@
             font-size: 24px;
             color: #fff;
             text-decoration: none;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
+            transition: all .3s ease;
         }
 
         .sticky-call a:hover {
             transform: scale(1.12);
         }
 
-        /*========================= DESKTOP KE LIYE ==========================*/
-        @media(min-width: 992px) {
+        @media (min-width: 992px) {
+
             .sticky-whatsapp {
                 bottom: auto;
                 top: 45%;
@@ -1054,8 +1562,8 @@
             }
         }
 
-        /*========================= MOBILE KE LIYE ==========================*/
-        @media(max-width:991px) {
+        @media (max-width: 991px) {
+
             .sticky-whatsapp {
                 right: 12px;
                 bottom: 80px;
@@ -1076,651 +1584,2273 @@
     </style>
 </head>
 
+
 <body>
+
+    <!-- =========================================================
+         NAVBAR
+    ========================================================= -->
+
     <div class="Box1">
+
         <div class="Logo">
             ✈️ Travel<span>Ease</span>
         </div>
 
-        <div class="Navbaar">
+        <button class="menu-toggle" id="menuToggle"
+            aria-label="Open Menu"
+            aria-expanded="false">
+
+            <span></span>
+            <span></span>
+            <span></span>
+
+        </button>
+
+        <div class="Navbaar" id="mainNav">
+
             <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/about/">About</a></li>
+
                 <li>
-                    <a href="#">Packages
+                    <a href="/">Home</a>
+                </li>
+
+                <li>
+                    <a href="/about/">About</a>
+                </li>
+
+                <li class="dropdown-item">
+
+                    <a href="#" class="dropdown-trigger">
+                        Packages
+
                         <svg class="arrow-icon" viewBox="0 0 24 24">
                             <path d="M7 10l5 5 5-5z" />
                         </svg>
                     </a>
+
                     <ul class="dropdown-menu">
-                        <li><a href="/domestic/">Domestic Packages</a></li>
-                        <li><a href="/international/">International Packages</a></li>
+
+                        <li>
+                            <a href="/domestic/">
+                                Domestic Packages
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/international/">
+                                International Packages
+                            </a>
+                        </li>
+
                     </ul>
+
                 </li>
-                <li>
-                    <a href="#">Service
+
+
+                <li class="dropdown-item">
+
+                    <a href="#" class="dropdown-trigger">
+                        Service
+
                         <svg class="arrow-icon" viewBox="0 0 24 24">
                             <path d="M7 10l5 5 5-5z" />
                         </svg>
                     </a>
+
                     <ul class="dropdown-menu">
-                        <li><a href="/flight-booking/">Flight Booking</a></li>
-                        <li><a href="/hotel/">Hotel Booking</a></li>
+
+                        <li>
+                            <a href="/flight-booking/">
+                                Flight Booking
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/hotel/">
+                                Hotel Booking
+                            </a>
+                        </li>
+
                     </ul>
+
                 </li>
-                <li><a href="/gallery/">Gallery</a></li>
-                <li><a href="/contact/">Contact</a></li>
+
+
                 <li>
-                    <a href="#">Account
+                    <a href="/gallery/">Gallery</a>
+                </li>
+
+                <li>
+                    <a href="/contact/">Contact</a>
+                </li>
+
+
+                <li class="dropdown-item">
+
+                    <a href="#" class="dropdown-trigger">
+                        Account
+
                         <svg class="arrow-icon" viewBox="0 0 24 24">
                             <path d="M7 10l5 5 5-5z" />
                         </svg>
                     </a>
+
                     <ul class="dropdown-menu">
-                        <li><a href="/login/">Login</a></li>
+
+                        <li>
+                            <a href="/login/">Login</a>
+                        </li>
+
                     </ul>
+
                 </li>
+
             </ul>
+
         </div>
+
     </div>
 
-    <!-- SLIDER START -->
+
+    <!-- =========================================================
+         SLIDER
+    ========================================================= -->
+
     <div class="slider-container">
+
         <div class="slider">
+
             <div class="slide">
-                <img src="{% static 'home/Image/slider1.png' %}" alt="Slide 1">
+                <img src="{% static 'home/Image/slider1.png' %}"
+                    alt="Explore Kashmir">
+
                 <div class="slide-content">
                     <h2>Explore Kashmir</h2>
                     <p>Nature's Paradise Awaits You</p>
                 </div>
             </div>
+
+
             <div class="slide">
-                <img src="{% static 'home/Image/slider2.png' %}" alt="Slide 2">
+                <img src="{% static 'home/Image/slider2.png' %}"
+                    alt="Discover Dubai">
+
                 <div class="slide-content">
                     <h2>Discover Dubai</h2>
                     <p>Luxury Beyond Imagination</p>
                 </div>
             </div>
+
+
             <div class="slide">
-                <img src="{% static 'home/Image/slider3.png' %}" alt="Slide 3">
+                <img src="{% static 'home/Image/slider3.png' %}"
+                    alt="Maldives">
+
                 <div class="slide-content">
                     <h2>Escape to Maldives</h2>
                     <p>Relax in Tropical Paradise.</p>
                 </div>
             </div>
+
+
             <div class="slide">
-                <img src="{% static 'home/Image/slider4.png' %}" alt="Slide 4">
+                <img src="{% static 'home/Image/slider4.png' %}"
+                    alt="Switzerland">
+
                 <div class="slide-content">
                     <h2>Visit Switzerland</h2>
                     <p>Experience Alpine Beauty.</p>
                 </div>
             </div>
+
+
             <div class="slide">
-                <img src="{% static 'home/Image/slider5.png' %}" alt="Slide 5">
+                <img src="{% static 'home/Image/slider5.png' %}"
+                    alt="Goa">
+
                 <div class="slide-content">
                     <h2>Feel Goa Vibes</h2>
                     <p>Sun, Sand & Sea Awaits.</p>
                 </div>
             </div>
+
         </div>
+
+
         <div class="dots">
+
             <div class="dot"></div>
             <div class="dot"></div>
             <div class="dot"></div>
             <div class="dot"></div>
             <div class="dot"></div>
+
         </div>
+
     </div>
 
-    <!-------Your Future Packages-------->
+
+    <!-- =========================================================
+         FUTURE PACKAGES
+    ========================================================= -->
+
     <section class="hero">
-        <h1>Explore <span>Your Future Package</span></h1>
-        <p style="font-size: 18px;"><b>Exclusive deals on 15+ dream destinations.</b></p>
+
+        <h1>
+            Explore
+            <span>Your Future Package</span>
+        </h1>
+
+        <p style="font-size:18px;">
+            <b>Exclusive deals on 15+ dream destinations.</b>
+        </p>
+
     </section>
+
 
     <section class="container" id="packageContainer">
-        <!-- 1. MANALI -->
+
+
+        <!-- 1 MANALI -->
+
         <div class="card">
-            <div class="card-img"><img src="{% static 'home/Image/Home1.png' %}" alt="Manali">
-                <div class="future-tag">🏆 Best Seller</div>
-                <div class="rating-badge">⭐ 4.9</div>
+
+            <div class="card-img">
+
+                <img src="{% static 'home/Image/Home1.png' %}"
+                    alt="Manali">
+
+                <div class="future-tag">
+                    🏆 Best Seller
+                </div>
+
+                <div class="rating-badge">
+                    ⭐ 4.9
+                </div>
+
             </div>
+
+
             <div class="card-content">
-                <h3>Manali Tour Package</h3>
-                <div class="days">⏰ 7 Days • 6 Nights</div>
-                <div class="price">₹12,999 <span>/ Per Person</span></div>
+
+                <h3>
+                    Manali Tour Package
+                </h3>
+
+                <div class="days">
+                    ⏰ 7 Days • 6 Nights
+                </div>
+
+                <div class="price">
+                    ₹12,999
+                    <span>/ Per Person</span>
+                </div>
+
                 <ul class="itinerary">
-                    <li><b>Day 1:</b> Mall Road + Hadimba Temple</li>
-                    <li><b>Day 2:</b> Solang Valley</li>
-                    <li><b>Day 3:</b> Rohtang Pass</li>
-                    <li class="extra-day"><b>Day 4:</b> Vashisth Temple</li>
-                    <li class="extra-day"><b>Day 5:</b> Old Manali</li>
-                    <li class="extra-day"><b>Day 6:</b> Naggar Castle</li>
-                    <li class="extra-day"><b>Day 7:</b> Jogini Waterfall</li>
+
+                    <li>
+                        <b>Day 1:</b>
+                        Mall Road + Hadimba Temple
+                    </li>
+
+                    <li>
+                        <b>Day 2:</b>
+                        Solang Valley
+                    </li>
+
+                    <li>
+                        <b>Day 3:</b>
+                        Rohtang Pass
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 4:</b>
+                        Vashisth Temple
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 5:</b>
+                        Old Manali
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 6:</b>
+                        Naggar Castle
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 7:</b>
+                        Jogini Waterfall
+                    </li>
+
                 </ul>
-                <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button></div>
+
+                <div class="btn-group">
+
+                    <button class="btn"
+                        onclick="toggleDays(this)">
+                        View Itinerary ⬇️
+                    </button>
+
+                </div>
+
             </div>
+
         </div>
 
-        <!-- 2. SHIMLA -->
+
+        <!-- 2 SHIMLA -->
+
         <div class="card">
-            <div class="card-img"><img src="{% static 'home/Image/Home2.png' %}" alt="Shimla">
-                <div class="future-tag">🏆 Best Seller</div>
-                <div class="rating-badge">⭐ 4.8</div>
+
+            <div class="card-img">
+
+                <img src="{% static 'home/Image/Home2.png' %}"
+                    alt="Shimla">
+
+                <div class="future-tag">
+                    🏆 Best Seller
+                </div>
+
+                <div class="rating-badge">
+                    ⭐ 4.8
+                </div>
+
             </div>
+
+
             <div class="card-content">
-                <h3>Shimla Tour Package</h3>
-                <div class="days">⏰ 5 Days • 4 Nights</div>
-                <div class="price">₹9,499 <span>/ Per Person</span></div>
+
+                <h3>
+                    Shimla Tour Package
+                </h3>
+
+                <div class="days">
+                    ⏰ 5 Days • 4 Nights
+                </div>
+
+                <div class="price">
+                    ₹9,499
+                    <span>/ Per Person</span>
+                </div>
+
                 <ul class="itinerary">
-                    <li><b>Day 1:</b> The Ridge + Mall Road</li>
-                    <li><b>Day 2:</b> Kufri + Chini Bungalow</li>
-                    <li><b>Day 3:</b> Jakhoo Temple</li>
-                    <li class="extra-day"><b>Day 4:</b> Naldehra + Tattapani</li>
-                    <li class="extra-day"><b>Day 5:</b> Departure</li>
+
+                    <li>
+                        <b>Day 1:</b>
+                        The Ridge + Mall Road
+                    </li>
+
+                    <li>
+                        <b>Day 2:</b>
+                        Kufri + Chini Bungalow
+                    </li>
+
+                    <li>
+                        <b>Day 3:</b>
+                        Jakhoo Temple
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 4:</b>
+                        Naldehra + Tattapani
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 5:</b>
+                        Departure
+                    </li>
+
                 </ul>
-                <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button></div>
+
+                <div class="btn-group">
+
+                    <button class="btn"
+                        onclick="toggleDays(this)">
+                        View Itinerary ⬇️
+                    </button>
+
+                </div>
+
             </div>
+
         </div>
 
-        <!-- 3. KASHMIR -->
+
+        <!-- 3 KASHMIR -->
+
         <div class="card">
-            <div class="card-img"><img src="{% static 'home/Image/Home3.png' %}" alt="Kashmir">
-                <div class="future-tag">🏆 Best Seller</div>
-                <div class="rating-badge">⭐ 4.9</div>
+
+            <div class="card-img">
+
+                <img src="{% static 'home/Image/Home3.png' %}"
+                    alt="Kashmir">
+
+                <div class="future-tag">
+                    🏆 Best Seller
+                </div>
+
+                <div class="rating-badge">
+                    ⭐ 4.9
+                </div>
+
             </div>
+
+
             <div class="card-content">
-                <h3>Kashmir Tour Package</h3>
-                <div class="days">⏰ 8 Days • 7 Nights</div>
-                <div class="price">₹18,999 <span>/ Per Person</span></div>
+
+                <h3>
+                    Kashmir Tour Package
+                </h3>
+
+                <div class="days">
+                    ⏰ 8 Days • 7 Nights
+                </div>
+
+                <div class="price">
+                    ₹18,999
+                    <span>/ Per Person</span>
+                </div>
+
                 <ul class="itinerary">
-                    <li><b>Day 1:</b> Srinagar + Dal Lake</li>
-                    <li><b>Day 2:</b> Gulmarg Gondola</li>
-                    <li><b>Day 3:</b> Pahalgam</li>
-                    <li class="extra-day"><b>Day 4:</b> Sonamarg</li>
-                    <li class="extra-day"><b>Day 5:</b> Mughal Gardens</li>
-                    <li class="extra-day"><b>Day 6:</b> Shankaracharya Temple</li>
-                    <li class="extra-day"><b>Day 7:</b> Shopping</li>
-                    <li class="extra-day"><b>Day 8:</b> Departure</li>
+
+                    <li>
+                        <b>Day 1:</b>
+                        Srinagar + Dal Lake
+                    </li>
+
+                    <li>
+                        <b>Day 2:</b>
+                        Gulmarg Gondola
+                    </li>
+
+                    <li>
+                        <b>Day 3:</b>
+                        Pahalgam
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 4:</b>
+                        Sonamarg
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 5:</b>
+                        Mughal Gardens
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 6:</b>
+                        Shankaracharya Temple
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 7:</b>
+                        Shopping
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 8:</b>
+                        Departure
+                    </li>
+
                 </ul>
-                <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button></div>
+
+                <div class="btn-group">
+
+                    <button class="btn"
+                        onclick="toggleDays(this)">
+                        View Itinerary ⬇️
+                    </button>
+
+                </div>
+
             </div>
+
         </div>
 
-        <!-- 4. LEH-LADAKH -->
+
+        <!-- 4 LADAKH -->
+
         <div class="card">
-            <div class="card-img"><img src="{% static 'home/Image/Home4.png' %}" alt="Leh">
-                <div class="future-tag">🏆 Best Seller</div>
-                <div class="rating-badge">⭐ 4.7</div>
+
+            <div class="card-img">
+
+                <img src="{% static 'home/Image/Home4.png' %}"
+                    alt="Leh Ladakh">
+
+                <div class="future-tag">
+                    🏆 Best Seller
+                </div>
+
+                <div class="rating-badge">
+                    ⭐ 4.7
+                </div>
+
             </div>
+
+
             <div class="card-content">
-                <h3>Ladakh Adventure Tour</h3>
-                <div class="days">⏰ 10 Days • 9 Nights</div>
-                <div class="price">₹24,999 <span>/ Per Person</span></div>
+
+                <h3>
+                    Ladakh Adventure Tour
+                </h3>
+
+                <div class="days">
+                    ⏰ 10 Days • 9 Nights
+                </div>
+
+                <div class="price">
+                    ₹24,999
+                    <span>/ Per Person</span>
+                </div>
+
                 <ul class="itinerary">
-                    <li><b>Day 1:</b> Leh Arrival + Local</li>
-                    <li><b>Day 2:</b> Khardung La Pass</li>
-                    <li><b>Day 3:</b> Nubra Valley</li>
-                    <li class="extra-day"><b>Day 4:</b> Turtuk Village</li>
-                    <li class="extra-day"><b>Day 5:</b> Pangong Lake</li>
-                    <li class="extra-day"><b>Day 6:</b> Tso Moriri</li>
-                    <li class="extra-day"><b>Day 7:</b> Alchi Monastery</li>
-                    <li class="extra-day"><b>Day 8:</b> Lamayuru</li>
-                    <li class="extra-day"><b>Day 9:</b> Magnetic Hill</li>
-                    <li class="extra-day"><b>Day 10:</b> Departure</li>
+
+                    <li>
+                        <b>Day 1:</b>
+                        Leh Arrival + Local
+                    </li>
+
+                    <li>
+                        <b>Day 2:</b>
+                        Khardung La Pass
+                    </li>
+
+                    <li>
+                        <b>Day 3:</b>
+                        Nubra Valley
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 4:</b>
+                        Turtuk Village
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 5:</b>
+                        Pangong Lake
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 6:</b>
+                        Tso Moriri
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 7:</b>
+                        Alchi Monastery
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 8:</b>
+                        Lamayuru
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 9:</b>
+                        Magnetic Hill
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 10:</b>
+                        Departure
+                    </li>
+
                 </ul>
-                <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button></div>
+
+                <div class="btn-group">
+
+                    <button class="btn"
+                        onclick="toggleDays(this)">
+                        View Itinerary ⬇️
+                    </button>
+
+                </div>
+
             </div>
+
         </div>
 
-        <!-- 5. GOA -->
+
+        <!-- 5 GOA -->
+
         <div class="card">
-            <div class="card-img"><img src="{% static 'home/Image/Home5.png' %}" alt="Goa">
-                <div class="future-tag">🏆 Best Seller</div>
-                <div class="rating-badge">⭐ 4.8</div>
+
+            <div class="card-img">
+
+                <img src="{% static 'home/Image/Home5.png' %}"
+                    alt="Goa">
+
+                <div class="future-tag">
+                    🏆 Best Seller
+                </div>
+
+                <div class="rating-badge">
+                    ⭐ 4.8
+                </div>
+
             </div>
+
+
             <div class="card-content">
-                <h3>Goa Tour Package</h3>
-                <div class="days">⏰ 5 Days • 4 Nights</div>
-                <div class="price">₹9,999 <span>/ Per Person</span></div>
+
+                <h3>
+                    Goa Tour Package
+                </h3>
+
+                <div class="days">
+                    ⏰ 5 Days • 4 Nights
+                </div>
+
+                <div class="price">
+                    ₹9,999
+                    <span>/ Per Person</span>
+                </div>
+
                 <ul class="itinerary">
-                    <li><b>Day 1:</b> Baga Beach + Nightlife</li>
-                    <li><b>Day 2:</b> North Goa Tour</li>
-                    <li><b>Day 3:</b> South Goa Tour</li>
-                    <li class="extra-day"><b>Day 4:</b> Water Sports + Cruise</li>
-                    <li class="extra-day"><b>Day 5:</b> Departure</li>
+
+                    <li>
+                        <b>Day 1:</b>
+                        Baga Beach + Nightlife
+                    </li>
+
+                    <li>
+                        <b>Day 2:</b>
+                        North Goa Tour
+                    </li>
+
+                    <li>
+                        <b>Day 3:</b>
+                        South Goa Tour
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 4:</b>
+                        Water Sports + Cruise
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 5:</b>
+                        Departure
+                    </li>
+
                 </ul>
-                <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button></div>
+
+                <div class="btn-group">
+
+                    <button class="btn"
+                        onclick="toggleDays(this)">
+                        View Itinerary ⬇️
+                    </button>
+
+                </div>
+
             </div>
+
         </div>
 
-        <!-- 6. JAIPUR -->
+
+        <!-- 6 JAIPUR -->
+
         <div class="card">
-            <div class="card-img"><img src="{% static 'home/Image/Home6.png' %}" alt="Jaipur">
-                <div class="future-tag">🏆 Best Seller</div>
-                <div class="rating-badge">⭐ 4.6</div>
+
+            <div class="card-img">
+
+                <img src="{% static 'home/Image/Home6.png' %}"
+                    alt="Jaipur">
+
+                <div class="future-tag">
+                    🏆 Best Seller
+                </div>
+
+                <div class="rating-badge">
+                    ⭐ 4.6
+                </div>
+
             </div>
+
+
             <div class="card-content">
-                <h3>Jaipur Tour Package</h3>
-                <div class="days">⏰ 4 Days • 3 Nights</div>
-                <div class="price">₹7,499 <span>/ Per Person</span></div>
+
+                <h3>
+                    Jaipur Tour Package
+                </h3>
+
+                <div class="days">
+                    ⏰ 4 Days • 3 Nights
+                </div>
+
+                <div class="price">
+                    ₹7,499
+                    <span>/ Per Person</span>
+                </div>
+
                 <ul class="itinerary">
-                    <li><b>Day 1:</b> Amer Fort + Palace</li>
-                    <li><b>Day 2:</b> City Palace + Jantar Mantar</li>
-                    <li><b>Day 3:</b> Hawa Mahal + Bazaar</li>
-                    <li class="extra-day"><b>Day 4:</b> Departure</li>
+
+                    <li>
+                        <b>Day 1:</b>
+                        Amer Fort + Palace
+                    </li>
+
+                    <li>
+                        <b>Day 2:</b>
+                        City Palace + Jantar Mantar
+                    </li>
+
+                    <li>
+                        <b>Day 3:</b>
+                        Hawa Mahal + Bazaar
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 4:</b>
+                        Departure
+                    </li>
+
                 </ul>
-                <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button></div>
+
+                <div class="btn-group">
+
+                    <button class="btn"
+                        onclick="toggleDays(this)">
+                        View Itinerary ⬇️
+                    </button>
+
+                </div>
+
             </div>
+
         </div>
 
-        <!-- 7. UDAIPUR -->
+
+        <!-- 7 UDAIPUR -->
+
         <div class="card hide-card">
-            <div class="card-img"><img src="{% static 'home/Image/Home7.png' %}" alt="Udaipur">
-                <div class="future-tag">🏆 Best Seller</div>
-                <div class="rating-badge">⭐ 4.7</div>
+
+            <div class="card-img">
+
+                <img src="{% static 'home/Image/Home7.png' %}"
+                    alt="Udaipur">
+
+                <div class="future-tag">
+                    🏆 Best Seller
+                </div>
+
+                <div class="rating-badge">
+                    ⭐ 4.7
+                </div>
+
             </div>
+
             <div class="card-content">
-                <h3>Udaipur Tour Package</h3>
-                <div class="days">⏰ 4 Days • 3 Nights</div>
-                <div class="price">₹8,299 <span>/ Per Person</span></div>
+
+                <h3>
+                    Udaipur Tour Package
+                </h3>
+
+                <div class="days">
+                    ⏰ 4 Days • 3 Nights
+                </div>
+
+                <div class="price">
+                    ₹8,299
+                    <span>/ Per Person</span>
+                </div>
+
                 <ul class="itinerary">
-                    <li><b>Day 1:</b> City Palace + Lake Pichola</li>
-                    <li><b>Day 2:</b> Jagdish Temple + Saheliyon ki Bari</li>
-                    <li><b>Day 3:</b> Boat Ride + Folk Dance</li>
-                    <li class="extra-day"><b>Day 4:</b> Departure</li>
+
+                    <li>
+                        <b>Day 1:</b>
+                        City Palace + Lake Pichola
+                    </li>
+
+                    <li>
+                        <b>Day 2:</b>
+                        Jagdish Temple + Saheliyon ki Bari
+                    </li>
+
+                    <li>
+                        <b>Day 3:</b>
+                        Boat Ride + Folk Dance
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 4:</b>
+                        Departure
+                    </li>
+
                 </ul>
-                <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button></div>
+
+                <div class="btn-group">
+
+                    <button class="btn"
+                        onclick="toggleDays(this)">
+                        View Itinerary ⬇️
+                    </button>
+
+                </div>
+
             </div>
+
         </div>
 
-        <!-- 8. MUSSOORIE -->
+
+        <!-- 8 MUSSOORIE -->
+
         <div class="card hide-card">
-            <div class="card-img"><img src="{% static 'home/Image/Home8.png' %}" alt="Mussoorie">
-                <div class="future-tag">🏆 Best Seller</div>
-                <div class="rating-badge">⭐ 4.5</div>
+
+            <div class="card-img">
+
+                <img src="{% static 'home/Image/Home8.png' %}"
+                    alt="Mussoorie">
+
+                <div class="future-tag">
+                    🏆 Best Seller
+                </div>
+
+                <div class="rating-badge">
+                    ⭐ 4.5
+                </div>
+
             </div>
+
             <div class="card-content">
-                <h3>Mussoorie Tour Package</h3>
-                <div class="days">⏰ 4 Days • 3 Nights</div>
-                <div class="price">₹6,999 <span>/ Per Person</span></div>
+
+                <h3>
+                    Mussoorie Tour Package
+                </h3>
+
+                <div class="days">
+                    ⏰ 4 Days • 3 Nights
+                </div>
+
+                <div class="price">
+                    ₹6,999
+                    <span>/ Per Person</span>
+                </div>
+
                 <ul class="itinerary">
-                    <li><b>Day 1:</b> Mall Road + Kempty Falls</li>
-                    <li><b>Day 2:</b> Gun Hill + Camel Back Road</li>
-                    <li><b>Day 3:</b> Company Garden</li>
-                    <li class="extra-day"><b>Day 4:</b> Departure</li>
+
+                    <li>
+                        <b>Day 1:</b>
+                        Mall Road + Kempty Falls
+                    </li>
+
+                    <li>
+                        <b>Day 2:</b>
+                        Gun Hill + Camel Back Road
+                    </li>
+
+                    <li>
+                        <b>Day 3:</b>
+                        Company Garden
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 4:</b>
+                        Departure
+                    </li>
+
                 </ul>
-                <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button></div>
+
+                <div class="btn-group">
+
+                    <button class="btn"
+                        onclick="toggleDays(this)">
+                        View Itinerary ⬇️
+                    </button>
+
+                </div>
+
             </div>
+
         </div>
 
-        <!-- 9. NAINITAL -->
+
+        <!-- 9 NAINITAL -->
+
         <div class="card hide-card">
-            <div class="card-img"><img src="{% static 'home/Image/Home9.png' %}" alt="Nainital">
-                <div class="future-tag">🏆 Best Seller</div>
-                <div class="rating-badge">⭐ 4.6</div>
+
+            <div class="card-img">
+
+                <img src="{% static 'home/Image/Home9.png' %}"
+                    alt="Nainital">
+
+                <div class="future-tag">
+                    🏆 Best Seller
+                </div>
+
+                <div class="rating-badge">
+                    ⭐ 4.6
+                </div>
+
             </div>
+
             <div class="card-content">
-                <h3>Nainital Tour Package</h3>
-                <div class="days">⏰ 3 Days • 2 Nights</div>
-                <div class="price">₹5,999 <span>/ Per Person</span></div>
+
+                <h3>
+                    Nainital Tour Package
+                </h3>
+
+                <div class="days">
+                    ⏰ 3 Days • 2 Nights
+                </div>
+
+                <div class="price">
+                    ₹5,999
+                    <span>/ Per Person</span>
+                </div>
+
                 <ul class="itinerary">
-                    <li><b>Day 1:</b> Naini Lake + Boating</li>
-                    <li><b>Day 2:</b> Snow View Point + Cable Car</li>
-                    <li class="extra-day"><b>Day 3:</b> Tiffin Top + Departure</li>
+
+                    <li>
+                        <b>Day 1:</b>
+                        Naini Lake + Boating
+                    </li>
+
+                    <li>
+                        <b>Day 2:</b>
+                        Snow View Point + Cable Car
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 3:</b>
+                        Tiffin Top + Departure
+                    </li>
+
                 </ul>
-                <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button></div>
+
+                <div class="btn-group">
+
+                    <button class="btn"
+                        onclick="toggleDays(this)">
+                        View Itinerary ⬇️
+                    </button>
+
+                </div>
+
             </div>
+
         </div>
 
-        <!-- 10. ANDAMAN -->
+
+        <!-- 10 ANDAMAN -->
+
         <div class="card hide-card">
-            <div class="card-img"><img src="{% static 'home/Image/Home10.png' %}" alt="Andaman">
-                <div class="future-tag">🏆 Best Seller</div>
-                <div class="rating-badge">⭐ 4.8</div>
+
+            <div class="card-img">
+
+                <img src="{% static 'home/Image/Home10.png' %}"
+                    alt="Andaman">
+
+                <div class="future-tag">
+                    🏆 Best Seller
+                </div>
+
+                <div class="rating-badge">
+                    ⭐ 4.8
+                </div>
+
             </div>
+
             <div class="card-content">
-                <h3>Andaman Tour Package</h3>
-                <div class="days">⏰ 7 Days • 6 Nights</div>
-                <div class="price">₹22,999 <span>/ Per Person</span></div>
+
+                <h3>
+                    Andaman Tour Package
+                </h3>
+
+                <div class="days">
+                    ⏰ 7 Days • 6 Nights
+                </div>
+
+                <div class="price">
+                    ₹22,999
+                    <span>/ Per Person</span>
+                </div>
+
                 <ul class="itinerary">
-                    <li><b>Day 1:</b> Port Blair + Cellular Jail</li>
-                    <li><b>Day 2:</b> Ross Island</li>
-                    <li><b>Day 3:</b> North Bay Island</li>
-                    <li class="extra-day"><b>Day 4:</b> Havelock Island</li>
-                    <li class="extra-day"><b>Day 5:</b> Radhanagar Beach</li>
-                    <li class="extra-day"><b>Day 6:</b> Neil Island</li>
-                    <li class="extra-day"><b>Day 7:</b> Departure</li>
+
+                    <li>
+                        <b>Day 1:</b>
+                        Port Blair + Cellular Jail
+                    </li>
+
+                    <li>
+                        <b>Day 2:</b>
+                        Ross Island
+                    </li>
+
+                    <li>
+                        <b>Day 3:</b>
+                        North Bay Island
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 4:</b>
+                        Havelock Island
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 5:</b>
+                        Radhanagar Beach
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 6:</b>
+                        Neil Island
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 7:</b>
+                        Departure
+                    </li>
+
                 </ul>
-                <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button></div>
+
+                <div class="btn-group">
+
+                    <button class="btn"
+                        onclick="toggleDays(this)">
+                        View Itinerary ⬇️
+                    </button>
+
+                </div>
+
             </div>
+
         </div>
 
-        <!-- 11. DUBAI -->
+
+        <!-- 11 DUBAI -->
+
         <div class="card hide-card">
-            <div class="card-img"><img src="{% static 'home/Image/Home11.png' %}" alt="Dubai">
-                <div class="future-tag">🏆 Best Seller</div>
-                <div class="rating-badge">⭐ 4.9</div>
+
+            <div class="card-img">
+
+                <img src="{% static 'home/Image/Home11.png' %}"
+                    alt="Dubai">
+
+                <div class="future-tag">
+                    🏆 Best Seller
+                </div>
+
+                <div class="rating-badge">
+                    ⭐ 4.9
+                </div>
+
             </div>
+
             <div class="card-content">
-                <h3>Dubai Tour Package</h3>
-                <div class="days">⏰ 6 Days • 5 Nights</div>
-                <div class="price">₹45,999 <span>/ Per Person</span></div>
+
+                <h3>
+                    Dubai Tour Package
+                </h3>
+
+                <div class="days">
+                    ⏰ 6 Days • 5 Nights
+                </div>
+
+                <div class="price">
+                    ₹45,999
+                    <span>/ Per Person</span>
+                </div>
+
                 <ul class="itinerary">
-                    <li><b>Day 1:</b> Dubai City Tour</li>
-                    <li><b>Day 2:</b> Desert Safari + BBQ</li>
-                    <li><b>Day 3:</b> Burj Khalifa + Dubai Mall</li>
-                    <li class="extra-day"><b>Day 4:</b> Abu Dhabi Tour</li>
-                    <li class="extra-day"><b>Day 5:</b> Dhow Cruise + Shopping</li>
-                    <li class="extra-day"><b>Day 6:</b> Departure</li>
+
+                    <li>
+                        <b>Day 1:</b>
+                        Dubai City Tour
+                    </li>
+
+                    <li>
+                        <b>Day 2:</b>
+                        Desert Safari + BBQ
+                    </li>
+
+                    <li>
+                        <b>Day 3:</b>
+                        Burj Khalifa + Dubai Mall
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 4:</b>
+                        Abu Dhabi Tour
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 5:</b>
+                        Dhow Cruise + Shopping
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 6:</b>
+                        Departure
+                    </li>
+
                 </ul>
-                <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button></div>
+
+                <div class="btn-group">
+
+                    <button class="btn"
+                        onclick="toggleDays(this)">
+                        View Itinerary ⬇️
+                    </button>
+
+                </div>
+
             </div>
+
         </div>
 
-        <!-- 12. BALI -->
+
+        <!-- 12 BALI -->
+
         <div class="card hide-card">
-            <div class="card-img"><img src="{% static 'home/Image/Home12.png' %}" alt="Bali">
-                <div class="future-tag">🏆 Best Seller</div>
-                <div class="rating-badge">⭐ 4.8</div>
+
+            <div class="card-img">
+
+                <img src="{% static 'home/Image/Home12.png' %}"
+                    alt="Bali">
+
+                <div class="future-tag">
+                    🏆 Best Seller
+                </div>
+
+                <div class="rating-badge">
+                    ⭐ 4.8
+                </div>
+
             </div>
+
             <div class="card-content">
-                <h3>Bali Tour Package</h3>
-                <div class="days">⏰ 5 Days • 4 Nights</div>
-                <div class="price">₹39,999 <span>/ Per Person</span></div>
+
+                <h3>
+                    Bali Tour Package
+                </h3>
+
+                <div class="days">
+                    ⏰ 5 Days • 4 Nights
+                </div>
+
+                <div class="price">
+                    ₹39,999
+                    <span>/ Per Person</span>
+                </div>
+
                 <ul class="itinerary">
-                    <li><b>Day 1:</b> Ubud + Monkey Forest</li>
-                    <li><b>Day 2:</b> Tanah Lot Temple</li>
-                    <li><b>Day 3:</b> Nusa Penida Tour</li>
-                    <li class="extra-day"><b>Day 4:</b> Water Sports + Beach</li>
-                    <li class="extra-day"><b>Day 5:</b> Departure</li>
+
+                    <li>
+                        <b>Day 1:</b>
+                        Ubud + Monkey Forest
+                    </li>
+
+                    <li>
+                        <b>Day 2:</b>
+                        Tanah Lot Temple
+                    </li>
+
+                    <li>
+                        <b>Day 3:</b>
+                        Nusa Penida Tour
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 4:</b>
+                        Water Sports + Beach
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 5:</b>
+                        Departure
+                    </li>
+
                 </ul>
-                <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button></div>
+
+                <div class="btn-group">
+
+                    <button class="btn"
+                        onclick="toggleDays(this)">
+                        View Itinerary ⬇️
+                    </button>
+
+                </div>
+
             </div>
+
         </div>
 
-        <!-- 13. MALDIVES -->
+
+        <!-- 13 MALDIVES -->
+
         <div class="card hide-card">
-            <div class="card-img"><img src="{% static 'home/Image/Home13.png' %}" alt="Maldives">
-                <div class="future-tag">🏆 Best Seller</div>
-                <div class="rating-badge">⭐ 5.0</div>
+
+            <div class="card-img">
+
+                <img src="{% static 'home/Image/Home13.png' %}"
+                    alt="Maldives">
+
+                <div class="future-tag">
+                    🏆 Best Seller
+                </div>
+
+                <div class="rating-badge">
+                    ⭐ 5.0
+                </div>
+
             </div>
+
             <div class="card-content">
-                <h3>Maldives Tour Package</h3>
-                <div class="days">⏰ 5 Days • 4 Nights</div>
-                <div class="price">₹65,999 <span>/ Per Person</span></div>
+
+                <h3>
+                    Maldives Tour Package
+                </h3>
+
+                <div class="days">
+                    ⏰ 5 Days • 4 Nights
+                </div>
+
+                <div class="price">
+                    ₹65,999
+                    <span>/ Per Person</span>
+                </div>
+
                 <ul class="itinerary">
-                    <li><b>Day 1:</b> Water Villa Check-in</li>
-                    <li><b>Day 2:</b> Snorkeling + Dolphin Cruise</li>
-                    <li><b>Day 3:</b> Island Hopping</li>
-                    <li class="extra-day"><b>Day 4:</b> Spa + Water Sports</li>
-                    <li class="extra-day"><b>Day 5:</b> Departure</li>
+
+                    <li>
+                        <b>Day 1:</b>
+                        Water Villa Check-in
+                    </li>
+
+                    <li>
+                        <b>Day 2:</b>
+                        Snorkeling + Dolphin Cruise
+                    </li>
+
+                    <li>
+                        <b>Day 3:</b>
+                        Island Hopping
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 4:</b>
+                        Spa + Water Sports
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 5:</b>
+                        Departure
+                    </li>
+
                 </ul>
-                <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button></div>
+
+                <div class="btn-group">
+
+                    <button class="btn"
+                        onclick="toggleDays(this)">
+                        View Itinerary ⬇️
+                    </button>
+
+                </div>
+
             </div>
+
         </div>
 
-        <!-- 14. SINGAPORE -->
+
+        <!-- 14 SINGAPORE -->
+
         <div class="card hide-card">
-            <div class="card-img"><img src="{% static 'home/Image/Home14.png' %}" alt="Singapore">
-                <div class="future-tag">🏆 Best Seller</div>
-                <div class="rating-badge">⭐ 4.8</div>
+
+            <div class="card-img">
+
+                <img src="{% static 'home/Image/Home14.png' %}"
+                    alt="Singapore">
+
+                <div class="future-tag">
+                    🏆 Best Seller
+                </div>
+
+                <div class="rating-badge">
+                    ⭐ 4.8
+                </div>
+
             </div>
+
             <div class="card-content">
-                <h3>Singapore Tour Package</h3>
-                <div class="days">⏰ 4 Days • 3 Nights</div>
-                <div class="price">₹35,999 <span>/ Per Person</span></div>
+
+                <h3>
+                    Singapore Tour Package
+                </h3>
+
+                <div class="days">
+                    ⏰ 4 Days • 3 Nights
+                </div>
+
+                <div class="price">
+                    ₹35,999
+                    <span>/ Per Person</span>
+                </div>
+
                 <ul class="itinerary">
-                    <li><b>Day 1:</b> City Tour + Merlion Park</li>
-                    <li><b>Day 2:</b> Sentosa Island + USS</li>
-                    <li><b>Day 3:</b> Gardens by the Bay</li>
-                    <li class="extra-day"><b>Day 4:</b> Shopping + Departure</li>
+
+                    <li>
+                        <b>Day 1:</b>
+                        City Tour + Merlion Park
+                    </li>
+
+                    <li>
+                        <b>Day 2:</b>
+                        Sentosa Island + USS
+                    </li>
+
+                    <li>
+                        <b>Day 3:</b>
+                        Gardens by the Bay
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 4:</b>
+                        Shopping + Departure
+                    </li>
+
                 </ul>
-                <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button></div>
+
+                <div class="btn-group">
+
+                    <button class="btn"
+                        onclick="toggleDays(this)">
+                        View Itinerary ⬇️
+                    </button>
+
+                </div>
+
             </div>
+
         </div>
 
-        <!-- 15. THAILAND -->
+
+        <!-- 15 THAILAND -->
+
         <div class="card hide-card">
-            <div class="card-img"><img src="{% static 'home/Image/Home15.png' %}" alt="Thailand">
-                <div class="future-tag">🏆 Best Seller</div>
-                <div class="rating-badge">⭐ 4.7</div>
+
+            <div class="card-img">
+
+                <img src="{% static 'home/Image/Home15.png' %}"
+                    alt="Thailand">
+
+                <div class="future-tag">
+                    🏆 Best Seller
+                </div>
+
+                <div class="rating-badge">
+                    ⭐ 4.7
+                </div>
+
             </div>
+
             <div class="card-content">
-                <h3>Thailand Tour Package</h3>
-                <div class="days">⏰ 6 Days • 5 Nights</div>
-                <div class="price">₹32,999 <span>/ Per Person</span></div>
+
+                <h3>
+                    Thailand Tour Package
+                </h3>
+
+                <div class="days">
+                    ⏰ 6 Days • 5 Nights
+                </div>
+
+                <div class="price">
+                    ₹32,999
+                    <span>/ Per Person</span>
+                </div>
+
                 <ul class="itinerary">
-                    <li><b>Day 1:</b> Bangkok City + Temple</li>
-                    <li><b>Day 2:</b> Floating Market</li>
-                    <li><b>Day 3:</b> Pattaya + Coral Island</li>
-                    <li class="extra-day"><b>Day 4:</b> Alcazar Show</li>
-                    <li class="extra-day"><b>Day 5:</b> Shopping</li>
-                    <li class="extra-day"><b>Day 6:</b> Departure</li>
+
+                    <li>
+                        <b>Day 1:</b>
+                        Bangkok City + Temple
+                    </li>
+
+                    <li>
+                        <b>Day 2:</b>
+                        Floating Market
+                    </li>
+
+                    <li>
+                        <b>Day 3:</b>
+                        Pattaya + Coral Island
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 4:</b>
+                        Alcazar Show
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 5:</b>
+                        Shopping
+                    </li>
+
+                    <li class="extra-day">
+                        <b>Day 6:</b>
+                        Departure
+                    </li>
+
                 </ul>
-                <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button></div>
+
+                <div class="btn-group">
+
+                    <button class="btn"
+                        onclick="toggleDays(this)">
+                        View Itinerary ⬇️
+                    </button>
+
+                </div>
+
             </div>
+
         </div>
+
     </section>
+
+
+    <!-- =========================================================
+         DISCOVER BUTTON
+    ========================================================= -->
 
     <div class="explore-btn">
-        <button id="exploreBtn" onclick="showAllPackages()">Discover All Packages ✈️</button>
+
+        <button id="exploreBtn"
+            onclick="showAllPackages()">
+
+            Discover All Packages ✈️
+
+        </button>
+
     </div>
 
-    <!-- PREMIUM SERVICES -->
-<section class="services-section">
-<div class="services-header"><h2>Our <span>Premium Services</span></h2><p class="desc">Making every journey comfortable, safe, and unforgettable.</p></div>
-<div class="services-container">
-<div class="service-card"><div class="icon-box">🧭</div><h3>Bespoke Journeys</h3><p>Handcrafted itineraries, private guides, VIP access & hidden gems.</p></div>
-<div class="service-card"><div class="icon-box">✈️</div><h3>Private Jet & Charter</h3><p>On-demand jets, helicopter transfers & first-class worldwide.</p></div>
-<div class="service-card"><div class="icon-box">🏖️</div><h3>Luxury Stays & Resorts</h3><p>5-Star resorts, private villas & overwater bungalows upgrade.</p></div>
-<div class="service-card"><div class="icon-box">🤵</div><h3>24/7 Concierge</h3><p>Personal butler for dining, tickets, yachts - anytime anywhere.</p></div>
-<div class="service-card"><div class="icon-box">📜</div><h3>VIP Visa & Passport</h3><p>Express visa, meet & greet, fast-track immigration - VIP entry.</p></div>
-<div class="service-card"><div class="icon-box">🚗</div><h3>Luxury Transport</h3><p>Mercedes, BMW chauffeur, yacht charters for ultimate comfort.</p></div>
-<div class="service-card"><div class="icon-box">🛥️</div><h3>Private Yacht & Cruise</h3><p>Private yacht in Goa, Maldives, Dubai - sunset & party cruise.</p></div>
-<div class="service-card"><div class="icon-box">🍽️</div><h3>Gourmet Dining</h3><p>Michelin restaurants, private chef dinner & exclusive events access.</p></div>
-</div>
-</section>
 
-<section class="achievement-section">
-<h1 class="section-heading"><span class="blue">Our</span> <span class="orange">Achievements</span></h1>
-<p class="section-subheading">Numbers that reflect our journey, trust, and commitment.</p>
-<div class="achievement-container">
-<div class="achievement-card"><h2>10K+</h2><h3>Happy Travelers</h3></div>
-<div class="achievement-card"><h2>500+</h2><h3>Tour Packages</h3></div>
-<div class="achievement-card"><h2>300+</h2><h3>Hotel Partners</h3></div>
-<div class="achievement-card"><h2>24/7</h2><h3>Customer Support</h3></div>
-<div class="achievement-card"><h2>98%</h2><h3>Customer Satisfaction</h3></div>
-<div class="achievement-card"><h2>4.9★</h2><h3>Customer Rating</h3></div>
-<div class="achievement-card"><h2>10+</h2><h3>Years Experience</h3></div>
-<div class="achievement-card"><h2>20K+</h2><h3>Trips Completed</h3></div>
-</div>
-</section>
+    <!-- =========================================================
+         PREMIUM SERVICES
+    ========================================================= -->
 
-    <!-- =========== FAQ SECTION =========== -->
-    <section class="faq-section">
-        <div class="faq-container">
-            <div class="faq-header">
-                <h2>Frequently <span>Asked Questions</span></h2>
-                <p class="desc">Everything you need to know about booking your luxury journey with us</p>
-            </div>
+    <section class="services-section">
 
-            <div class="faq-wrapper">
-                <div class="faq-item">
-                    <button class="faq-question">
-                        <span>How far in advance should I book my luxury trip?</span>
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <p>We recommend booking 3-6 months in advance for peak seasons and private jet charters.
-                            However, our team can arrange last-minute luxury trips within 72 hours based on
-                            availability.</p>
-                    </div>
-                </div>
+        <div class="services-header">
 
-                <div class="faq-item">
-                    <button class="faq-question">
-                        <span>Are your prices negotiable? Do you offer payment plans?</span>
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <p>Yes! We offer flexible payment plans and best price guarantee. Found a lower price? We'll
-                            beat it and add exclusive perks worth $1000+. Speak to your travel curator for details.</p>
-                    </div>
-                </div>
+            <h2>
+                Our
+                <span>Premium Services</span>
+            </h2>
 
-                <div class="faq-item">
-                    <button class="faq-question">
-                        <span>What if I need to cancel or change my booking?</span>
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <p>Your comfort is priority. We offer free changes up to 14 days before travel. Cancellations
-                            are handled case-by-case with our partners to get you maximum refunds and credits.</p>
-                    </div>
-                </div>
+            <p class="desc">
+                Making every journey comfortable, safe, and unforgettable.
+            </p>
 
-                <div class="faq-item">
-                    <button class="faq-question">
-                        <span>Do you provide 24/7 support during my trip?</span>
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <p>Absolutely. Every client gets a dedicated travel curator + 24/7 emergency hotline. Lost
-                            passport, flight delay, medical emergency - we handle everything instantly, anywhere in the
-                            world.</p>
-                    </div>
-                </div>
-
-                <div class="faq-item">
-                    <button class="faq-question">
-                        <span>How do you ensure privacy and security for VIP clients?</span>
-                        <span class="faq-icon">+</span>
-                    </button>
-                    <div class="faq-answer">
-                        <p>We use bank-level encryption for all bookings. NDAs available for high-profile clients.
-                            Private jet terminals, discreet hotels, and security coordination can be arranged on
-                            request.</p>
-                    </div>
-                </div>
-            </div>
         </div>
+
+
+        <div class="services-container">
+
+            <div class="service-card">
+                <div class="icon-box">🧭</div>
+                <h3>Bespoke Journeys</h3>
+                <p>
+                    Handcrafted itineraries, private guides, VIP access & hidden gems.
+                </p>
+            </div>
+
+            <div class="service-card">
+                <div class="icon-box">✈️</div>
+                <h3>Private Jet & Charter</h3>
+                <p>
+                    On-demand jets, helicopter transfers & first-class worldwide.
+                </p>
+            </div>
+
+            <div class="service-card">
+                <div class="icon-box">🏖️</div>
+                <h3>Luxury Stays & Resorts</h3>
+                <p>
+                    5-Star resorts, private villas & overwater bungalows upgrade.
+                </p>
+            </div>
+
+            <div class="service-card">
+                <div class="icon-box">🤵</div>
+                <h3>24/7 Concierge</h3>
+                <p>
+                    Personal butler for dining, tickets, yachts - anytime anywhere.
+                </p>
+            </div>
+
+            <div class="service-card">
+                <div class="icon-box">📜</div>
+                <h3>VIP Visa & Passport</h3>
+                <p>
+                    Express visa, meet & greet, fast-track immigration - VIP entry.
+                </p>
+            </div>
+
+            <div class="service-card">
+                <div class="icon-box">🚗</div>
+                <h3>Luxury Transport</h3>
+                <p>
+                    Mercedes, BMW chauffeur, yacht charters for ultimate comfort.
+                </p>
+            </div>
+
+            <div class="service-card">
+                <div class="icon-box">🛥️</div>
+                <h3>Private Yacht & Cruise</h3>
+                <p>
+                    Private yacht in Goa, Maldives, Dubai - sunset & party cruise.
+                </p>
+            </div>
+
+            <div class="service-card">
+                <div class="icon-box">🍽️</div>
+                <h3>Gourmet Dining</h3>
+                <p>
+                    Michelin restaurants, private chef dinner & exclusive events access.
+                </p>
+            </div>
+
+        </div>
+
     </section>
 
-    <footer class="footer">
-        <div class="footer-container">
-            <div class="footer-box">
-                <h2>✈️ Travel<span>Ease</span></h2>
-                <p>Your trusted travel partner for unforgettable journeys across India and the world.</p>
+
+    <!-- =========================================================
+         ACHIEVEMENTS
+    ========================================================= -->
+
+    <section class="achievement-section">
+
+        <h1 class="section-heading">
+
+            <span class="blue">Our</span>
+
+            <span class="orange">
+                Achievements
+            </span>
+
+        </h1>
+
+        <p class="section-subheading">
+            Numbers that reflect our journey, trust, and commitment.
+        </p>
+
+
+        <div class="achievement-container">
+
+            <div class="achievement-card">
+                <h2>10K+</h2>
+                <h3>Happy Travelers</h3>
             </div>
 
-            <div class="footer-box">
-                <h3>Quick Links</h3>
-                <a href="/">Home</a>
-                <a href="/about/">About</a>
-                <a href="#">Packages</a>
-                <a href="#">Services</a>
-                <a href="/contact/">Contact</a>
+            <div class="achievement-card">
+                <h2>500+</h2>
+                <h3>Tour Packages</h3>
             </div>
+
+            <div class="achievement-card">
+                <h2>300+</h2>
+                <h3>Hotel Partners</h3>
+            </div>
+
+            <div class="achievement-card">
+                <h2>24/7</h2>
+                <h3>Customer Support</h3>
+            </div>
+
+            <div class="achievement-card">
+                <h2>98%</h2>
+                <h3>Customer Satisfaction</h3>
+            </div>
+
+            <div class="achievement-card">
+                <h2>4.9★</h2>
+                <h3>Customer Rating</h3>
+            </div>
+
+            <div class="achievement-card">
+                <h2>10+</h2>
+                <h3>Years Experience</h3>
+            </div>
+
+            <div class="achievement-card">
+                <h2>20K+</h2>
+                <h3>Trips Completed</h3>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         FAQ
+    ========================================================= -->
+
+    <section class="faq-section">
+
+        <div class="faq-container">
+
+            <div class="faq-header">
+
+                <h2>
+                    Frequently
+                    <span>Asked Questions</span>
+                </h2>
+
+                <p class="desc">
+                    Everything you need to know about booking your luxury journey with us
+                </p>
+
+            </div>
+
+
+            <div class="faq-wrapper">
+
+
+                <div class="faq-item">
+
+                    <button class="faq-question">
+
+                        <span>
+                            How far in advance should I book my luxury trip?
+                        </span>
+
+                        <span class="faq-icon">
+                            +
+                        </span>
+
+                    </button>
+
+                    <div class="faq-answer">
+
+                        <p>
+                            We recommend booking 3-6 months in advance for peak seasons
+                            and private jet charters. However, our team can arrange
+                            last-minute luxury trips within 72 hours based on availability.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="faq-item">
+
+                    <button class="faq-question">
+
+                        <span>
+                            Are your prices negotiable? Do you offer payment plans?
+                        </span>
+
+                        <span class="faq-icon">
+                            +
+                        </span>
+
+                    </button>
+
+                    <div class="faq-answer">
+
+                        <p>
+                            Yes! We offer flexible payment plans and best price guarantee.
+                            Found a lower price? We'll beat it and add exclusive perks
+                            worth $1000+. Speak to your travel curator for details.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="faq-item">
+
+                    <button class="faq-question">
+
+                        <span>
+                            What if I need to cancel or change my booking?
+                        </span>
+
+                        <span class="faq-icon">
+                            +
+                        </span>
+
+                    </button>
+
+                    <div class="faq-answer">
+
+                        <p>
+                            Your comfort is priority. We offer free changes up to 14 days
+                            before travel. Cancellations are handled case-by-case with
+                            our partners to get you maximum refunds and credits.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="faq-item">
+
+                    <button class="faq-question">
+
+                        <span>
+                            Do you provide 24/7 support during my trip?
+                        </span>
+
+                        <span class="faq-icon">
+                            +
+                        </span>
+
+                    </button>
+
+                    <div class="faq-answer">
+
+                        <p>
+                            Absolutely. Every client gets a dedicated travel curator +
+                            24/7 emergency hotline. Lost passport, flight delay,
+                            medical emergency - we handle everything instantly,
+                            anywhere in the world.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="faq-item">
+
+                    <button class="faq-question">
+
+                        <span>
+                            How do you ensure privacy and security for VIP clients?
+                        </span>
+
+                        <span class="faq-icon">
+                            +
+                        </span>
+
+                    </button>
+
+                    <div class="faq-answer">
+
+                        <p>
+                            We use bank-level encryption for all bookings. NDAs available
+                            for high-profile clients. Private jet terminals, discreet
+                            hotels, and security coordination can be arranged on request.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         FOOTER
+    ========================================================= -->
+
+    <footer class="footer">
+
+        <div class="footer-container">
+
+
+            <div class="footer-box">
+
+                <h2>
+                    ✈️ Travel<span>Ease</span>
+                </h2>
+
+                <p>
+                    Your trusted travel partner for unforgettable journeys
+                    across India and the world.
+                </p>
+
+            </div>
+
+
+            <div class="footer-box">
+
+                <h3>
+                    Quick Links
+                </h3>
+
+                <a href="/">
+                    Home
+                </a>
+
+                <a href="/about/">
+                    About
+                </a>
+
+                <a href="#">
+                    Packages
+                </a>
+
+                <a href="#">
+                    Services
+                </a>
+
+                <a href="/contact/">
+                    Contact
+                </a>
+
+            </div>
+
 
             <div class="footer-box contact-box">
-                <h3>Contact</h3>
-                <div class="c-item"><span>📍</span><span>Ballia, India</span></div>
-                <div class="c-item"><span>📞</span><span>+91 7618007640</span></div>
-                <div class="c-item"><span>📞</span><span>+91 9889576557</span></div>
-                <div class="c-item"><span>✉️</span><span>abhikumar761800@gmail.com</span></div>
+
+                <h3>
+                    Contact
+                </h3>
+
+                <div class="c-item">
+                    <span>📍</span>
+                    <span>Ballia, India</span>
+                </div>
+
+                <div class="c-item">
+                    <span>📞</span>
+                    <span>+91 7618007640</span>
+                </div>
+
+                <div class="c-item">
+                    <span>📞</span>
+                    <span>+91 9889576557</span>
+                </div>
+
+                <div class="c-item">
+                    <span>✉️</span>
+                    <span>abhikumar761800@gmail.com</span>
+                </div>
+
             </div>
+
 
             <div class="footer-box">
-                <h3>Follow Us</h3>
+
+                <h3>
+                    Follow Us
+                </h3>
+
                 <div class="social">
-                    <a href="#" aria-label="Website"><svg viewBox="0 0 24 24">
+
+
+                    <a href="#" aria-label="Website">
+
+                        <svg viewBox="0 0 24 24">
+
                             <path
                                 d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
-                        </svg></a>
-                    <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24">
+
+                        </svg>
+
+                    </a>
+
+
+                    <a href="#" aria-label="Facebook">
+
+                        <svg viewBox="0 0 24 24">
+
                             <path
                                 d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z" />
-                        </svg></a>
-                    <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24">
+
+                        </svg>
+
+                    </a>
+
+
+                    <a href="#" aria-label="Instagram">
+
+                        <svg viewBox="0 0 24 24">
+
                             <path
                                 d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm10 2c1.65 0 3 1.35 3 3v10c0 1.65-1.35 3-3 3H7c-1.65 0-3-1.35-3-3V7c0-1.65 1.35-3 3-3h10zm-5 2c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 2c1.65 0 3 1.35 3 3s-1.35 3-3 3-3-1.35-3-3 1.35-3 3-3zm4.5-3c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1z" />
-                        </svg></a>
-                    <a href="#" aria-label="Youtube"><svg viewBox="0 0 24 24">
+
+                        </svg>
+
+                    </a>
+
+
+                    <a href="#" aria-label="Youtube">
+
+                        <svg viewBox="0 0 24 24">
+
                             <path
-                                d="M21.58 7.19c-.23-.86-.9-1.52-1.76-1.76C18.94 5 12 5 12 5s-6.94 0-7.82.43c-.86.23-1.52.9-1.76 1.76C2 8.06 2 12 2 12s0 3.94.42 4.81c.23.86.9 1.52 1.76 1.76 1.3.42 7.82.42 7.82.42s6.94 0 7.82-.42c.86-.23 1.52-.9 1.76-1.76.42-.87.42-4.81.42-4.81s0-3.94-.42-4.81zM10 15V9l5.2 3L10 15z" />
-                        </svg></a>
+                                d="M21.58 7.19c-.23-.86-.9-1.52-1.76-1.76C18.94 5 12 5 12 5s-6.94 0-7.82.43c-.86.23-1.52.9-1.76 1.76C2 8.06 2 12 2 12s0 3.94.42 4.81c.23.86.9 1.76 1.76 1.76 1.3.42 7.82.42 7.82.42s6.94 0 7.82-.42c.86-.87 1.76-4.81 1.76-4.81s0-3.94-.42-4.81zM10 15V9l5.2 3L10 15z" />
+
+                        </svg>
+
+                    </a>
+
                 </div>
+
             </div>
+
         </div>
+
 
         <div class="footer-bottom">
-            © 2026 TravelEase | All Rights Reserved. | developed By<br><br>
-            <strong>Abhishek Kumar</strong>
+
+            © 2026 TravelEase | All Rights Reserved. |
+            developed By
+
+            <br><br>
+
+            <strong>
+                Abhishek Kumar
+            </strong>
+
         </div>
+
     </footer>
 
-    <!-- Sticky WhatsApp Button -->
+
+    <!-- =========================================================
+         STICKY WHATSAPP
+    ========================================================= -->
+
     <div class="sticky-whatsapp">
-        <a href="https://wa.me/917618007640?text=Hello%20TravelEase" target="_blank">
+
+        <a href="https://wa.me/917618007640?text=Hello%20TravelEase"
+            target="_blank"
+            rel="noopener">
+
             <i class="fa-brands fa-whatsapp"></i>
+
         </a>
+
     </div>
 
-    <!-- Sticky Call Button -->
+
+    <!-- =========================================================
+         STICKY CALL
+    ========================================================= -->
+
     <div class="sticky-call">
+
         <a href="tel:+917618007640">
+
             <i class="fa-solid fa-phone"></i>
+
         </a>
+
     </div>
+
+
+    <!-- =========================================================
+         JAVASCRIPT
+    ========================================================= -->
+
     <script>
+
+        /* =====================================================
+           ITINERARY
+        ===================================================== */
+
         function toggleDays(btn) {
-            let card = btn.closest(".card");
-            let extraDays = card.querySelectorAll(".extra-day");
+
+            const card = btn.closest(".card");
+
+            const extraDays =
+                card.querySelectorAll(".extra-day");
+
             if (btn.classList.contains("active")) {
-                extraDays.forEach(day => day.style.display = "none");
-                btn.innerHTML = "View Itinerary ⬇️";
+
+                extraDays.forEach(day => {
+                    day.style.display = "none";
+                });
+
+                btn.innerHTML =
+                    "View Itinerary ⬇️";
+
                 btn.classList.remove("active");
+
             } else {
-                extraDays.forEach(day => day.style.display = "block");
-                btn.innerHTML = "Hide Itinerary ⬆️";
+
+                extraDays.forEach(day => {
+                    day.style.display = "block";
+                });
+
+                btn.innerHTML =
+                    "Hide Itinerary ⬆️";
+
                 btn.classList.add("active");
             }
         }
 
-        let allShow = false;
-        function showAllPackages() {
-            let cards = document.querySelectorAll("#packageContainer .card");
-            let btn = document.getElementById("exploreBtn");
 
-            if (allShow == false) {
-                cards.forEach(card => card.classList.remove("hide-card"));
-                btn.innerHTML = "Back to Featured Packages ⬆️";
+        /* =====================================================
+           SHOW ALL PACKAGES
+        ===================================================== */
+
+        let allShow = false;
+
+        function showAllPackages() {
+
+            const cards =
+                document.querySelectorAll(
+                    "#packageContainer .card"
+                );
+
+            const btn =
+                document.getElementById("exploreBtn");
+
+            if (!allShow) {
+
+                cards.forEach(card => {
+                    card.classList.remove("hide-card");
+                });
+
+                btn.innerHTML =
+                    "Back to Featured Packages ⬆️";
+
                 allShow = true;
+
             } else {
+
                 cards.forEach((card, index) => {
+
                     if (index >= 6) {
                         card.classList.add("hide-card");
                     }
+
                 });
-                btn.innerHTML = "Discover All Packages ✈️";
+
+                btn.innerHTML =
+                    "Discover All Packages ✈️";
+
                 allShow = false;
-                window.scrollTo({ top: document.querySelector(".hero").offsetTop, behavior: "smooth" });
+
+                window.scrollTo({
+                    top:
+                        document.querySelector(".hero").offsetTop,
+                    behavior: "smooth"
+                });
             }
         }
 
-        const faqItems = document.querySelectorAll('.faq-item');
+
+        /* =====================================================
+           FAQ
+        ===================================================== */
+
+        const faqItems =
+            document.querySelectorAll(".faq-item");
+
         faqItems.forEach(item => {
-            const question = item.querySelector('.faq-question');
-            question.addEventListener('click', () => {
+
+            const question =
+                item.querySelector(".faq-question");
+
+            question.addEventListener("click", () => {
+
                 faqItems.forEach(otherItem => {
+
                     if (otherItem !== item) {
-                        otherItem.classList.remove('active');
+                        otherItem.classList.remove("active");
                     }
+
                 });
-                item.classList.toggle('active');
+
+                item.classList.toggle("active");
+
             });
+
         });
+
+
+        /* =====================================================
+           MOBILE / TABLET MENU
+        ===================================================== */
+
+        const menuToggle =
+            document.getElementById("menuToggle");
+
+        const mainNav =
+            document.getElementById("mainNav");
+
+
+        menuToggle.addEventListener("click", function () {
+
+            mainNav.classList.toggle("active");
+
+            menuToggle.classList.toggle("active");
+
+            const isOpen =
+                mainNav.classList.contains("active");
+
+            menuToggle.setAttribute(
+                "aria-expanded",
+                isOpen
+            );
+
+            menuToggle.setAttribute(
+                "aria-label",
+                isOpen ? "Close Menu" : "Open Menu"
+            );
+
+        });
+
+
+        /* =====================================================
+           MOBILE DROPDOWNS
+        ===================================================== */
+
+        const dropdownTriggers =
+            document.querySelectorAll(
+                ".dropdown-trigger"
+            );
+
+
+        dropdownTriggers.forEach(trigger => {
+
+            trigger.addEventListener("click", function (event) {
+
+                if (window.innerWidth <= 991) {
+
+                    event.preventDefault();
+
+                    const parent =
+                        this.closest(".dropdown-item");
+
+                    document
+                        .querySelectorAll(".dropdown-item")
+                        .forEach(item => {
+
+                            if (item !== parent) {
+                                item.classList.remove(
+                                    "dropdown-open"
+                                );
+                            }
+
+                        });
+
+                    parent.classList.toggle(
+                        "dropdown-open"
+                    );
+                }
+
+            });
+
+        });
+
+
+        /* =====================================================
+           CLOSE MENU AFTER NORMAL LINK CLICK
+        ===================================================== */
+
+        mainNav.querySelectorAll(
+            "a:not(.dropdown-trigger)"
+        ).forEach(link => {
+
+            link.addEventListener("click", () => {
+
+                if (window.innerWidth <= 991) {
+
+                    mainNav.classList.remove("active");
+
+                    menuToggle.classList.remove("active");
+
+                    menuToggle.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+
+                    menuToggle.setAttribute(
+                        "aria-label",
+                        "Open Menu"
+                    );
+
+                }
+
+            });
+
+        });
+
+
+        /* =====================================================
+           CLICK OUTSIDE MENU
+        ===================================================== */
+
+        document.addEventListener("click", function (event) {
+
+            if (window.innerWidth <= 991) {
+
+                const clickedInsideNav =
+                    mainNav.contains(event.target);
+
+                const clickedMenuButton =
+                    menuToggle.contains(event.target);
+
+                if (!clickedInsideNav &&
+                    !clickedMenuButton) {
+
+                    mainNav.classList.remove("active");
+
+                    menuToggle.classList.remove("active");
+
+                    menuToggle.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+
+                    menuToggle.setAttribute(
+                        "aria-label",
+                        "Open Menu"
+                    );
+
+                }
+
+            }
+
+        });
+
+
+        /* =====================================================
+           RESET MENU WHEN GOING BACK TO DESKTOP
+        ===================================================== */
+
+        window.addEventListener("resize", function () {
+
+            if (window.innerWidth > 991) {
+
+                mainNav.classList.remove("active");
+
+                menuToggle.classList.remove("active");
+
+                menuToggle.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+
+                document
+                    .querySelectorAll(".dropdown-item")
+                    .forEach(item => {
+
+                        item.classList.remove(
+                            "dropdown-open"
+                        );
+
+                    });
+
+            }
+
+        });
+
     </script>
 </body>
 </html>
+
