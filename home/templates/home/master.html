@@ -1,213 +1,200 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{% block title %}TravelEase{% endblock %}</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+<title>TravelEase - Discover the World</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
-/* GLOBAL */
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Montserrat',sans-serif}
-html,body{background:#f4f6fb;color:#222;overflow-x:hidden;width:100%}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Poppins',sans-serif;background:#f7f9fc;color:#222;padding-top:80px}
 /* NAVBAR */
-.Box1{height:70px;width:100%;background:linear-gradient(135deg,#141E30,#243B55,#1B2735);display:flex;align-items:center;justify-content:space-between;padding:0 45px;position:fixed;top:0;left:0;z-index:9999;box-shadow:0 12px 30px rgba(0,0,0,.25);border-bottom:1px solid rgba(255,255,255,.08)}
+.Box1{position:fixed;top:0;left:0;width:100%;height:80px;display:flex;align-items:center;justify-content:space-between;padding:0 5%;background:rgba(255,255,255,0.96);backdrop-filter:blur(12px);box-shadow:0 4px 20px rgba(0,0,0,0.08);z-index:9999}
 /* LOGO */
-.Logo{color:#fff;font-size:32px;font-weight:800;letter-spacing:1px;cursor:pointer;transition:.3s;white-space:nowrap}
-.Logo:hover{transform:scale(1.03)}
-.Logo span{color:#FFD700}
-/* NAVIGATION */
-.Navbaar ul{list-style:none;display:flex;gap:2px;align-items:center;flex-wrap:nowrap}
+.Logo{text-decoration:none;font-size:28px;font-weight:800;background:linear-gradient(135deg,#0d47a1,#ff7a00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;white-space:nowrap}
+/* NAV */
+.Navbaar>ul{list-style:none;display:flex;align-items:center;gap:5px}
 .Navbaar>ul>li{position:relative}
-.Navbaar>ul>li>a{text-decoration:none;color:#fff;font-size:17px;font-weight:700;padding:12px 12px;border-radius:8px;display:flex;align-items:center;gap:5px;position:relative;transition:.35s ease;letter-spacing:.5px;white-space:nowrap}
-.Navbaar>ul>li>a::after{content:"";position:absolute;left:15%;bottom:5px;width:0%;height:3px;background:#FFD700;border-radius:10px;transition:.35s}
-.Navbaar>ul>li>a:hover::after{width:70%}
-.Navbaar>ul>li>a:hover{background:rgba(255,255,255,.08);color:#FFD700;transform:translateY(-2px)}
-/* ARROW */
-.arrow-icon{width:12px;height:20px;fill:white;transition:.35s}
-.Navbaar>ul>li:hover .arrow-icon{fill:#FFD700;transform:rotate(180deg)}
-/* DROPDOWN */
-.dropdown-menu{position:absolute;top:65px;left:0;width:225px;background:linear-gradient(135deg,#141E30,#243B55,#1B2735);border-radius:12px;box-shadow:0 18px 45px rgba(0,0,0,.18);padding:5px;display:flex;flex-direction:column;opacity:0;visibility:hidden;transform:translateY(15px);transition:all .35s ease;overflow:hidden;z-index:999}
+.Navbaar>ul>li>a{text-decoration:none;color:#222;display:flex;align-items:center;gap:6px;padding:10px 14px;font-size:14px;font-weight:600;border-radius:8px;transition:0.25s ease}
+.Navbaar>ul>li>a:hover{color:#0d47a1;background:rgba(13,71,161,0.08)}
+/* DROPDOWN DESKTOP */
+.dropdown-menu{position:absolute;top:calc(100% + 8px);left:0;min-width:210px;list-style:none;background:#fff;border-radius:12px;padding:8px;box-shadow:0 15px 35px rgba(0,0,0,0.15);opacity:0;visibility:hidden;transform:translateY(10px);transition:0.25s ease;z-index:10000}
 .Navbaar>ul>li:hover>.dropdown-menu{opacity:1;visibility:visible;transform:translateY(0)}
-.dropdown-menu li{list-style:none;width:100%}
-.dropdown-menu li a{display:block;text-decoration:none;color:white;font-size:16px;font-weight:600;padding:10px;transition:.30s;border-left:4px solid transparent}
-.dropdown-menu li a:hover{color:#FFD700;border-bottom:4px solid #FFD700;background:rgba(255,255,255,.08);border-radius:10px}
-/* HAMBURGER BUTTON */
-.menu-toggle{display:none;width:45px;height:45px;border:none;outline:none;background:rgba(255,255,255,.10);border-radius:10px;cursor:pointer;align-items:center;justify-content:center;flex-direction:column;gap:5px;transition:.3s}
-.menu-toggle:hover{background:rgba(255,255,255,.18)}
-.menu-toggle span{width:24px;height:3px;background:#fff;border-radius:5px;transition:.3s}
-.menu-toggle.active span:nth-child(1){transform:rotate(45deg) translate(6px,6px)}
+.dropdown-menu li a{display:flex;align-items:center;gap:10px;padding:11px 13px;text-decoration:none;color:#333;font-size:13px;font-weight:500;border-radius:8px;transition:0.2s ease}
+.dropdown-menu li a:hover{background:#f1f5ff;color:#0d47a1}
+/* HAMBURGER */
+.menu-toggle{display:none;width:42px;height:42px;border:none;border-radius:10px;background:linear-gradient(135deg,#0d47a1,#ff7a00);cursor:pointer;align-items:center;justify-content:center;flex-direction:column;gap:5px;box-shadow:0 5px 15px rgba(0,0,0,0.15)}
+.menu-toggle span{width:21px;height:2px;background:#fff;border-radius:5px;transition:0.25s ease}
+.menu-toggle.active span:nth-child(1){transform:translateY(7px) rotate(45deg)}
 .menu-toggle.active span:nth-child(2){opacity:0}
-.menu-toggle.active span:nth-child(3){transform:rotate(-45deg) translate(6px,-6px)}
-/* TABLET + MOBILE */
+.menu-toggle.active span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+/* MOBILE + TABLET */
 @media(max-width:991px){
-.Box1{height:70px;flex-direction:row;align-items:center;padding:0 20px}
-.Logo{font-size:28px}
+body{padding-top:75px}
+.Box1{height:75px;padding:0 18px}
+.Logo{font-size:25px}
 .menu-toggle{display:flex}
-.Navbaar{position:absolute;top:80px;right:20px;width:min(320px,calc(100vw - 40px));background:linear-gradient(135deg,#141E30,#243B55,#1B2735);border-radius:15px;padding:10px;box-shadow:0 20px 45px rgba(0,0,0,.30);opacity:0;visibility:hidden;transform:translateY(-10px);transition:.30s ease;max-height:calc(100vh - 100px);overflow-y:auto}
+.Navbaar{position:absolute;top:83px;right:12px;width:280px;max-width:calc(100vw - 24px);background:linear-gradient(135deg,#141E30,#243B55,#1B2735);border-radius:14px;padding:8px;box-shadow:0 18px 40px rgba(0,0,0,0.30);opacity:0;visibility:hidden;transform:translateY(-8px);transition:0.25s ease;max-height:70vh;overflow-y:auto;z-index:99999}
 .Navbaar.active{opacity:1;visibility:visible;transform:translateY(0)}
-.Navbaar>ul{width:100%;flex-direction:column;gap:3px;align-items:stretch}
+.Navbaar>ul{width:100%;display:flex;flex-direction:column;align-items:stretch;gap:3px;list-style:none}
 .Navbaar>ul>li{width:100%}
-.Navbaar>ul>li>a{width:100%;justify-content:space-between;padding:13px 14px;font-size:14px;white-space:normal}
-.Navbaar>ul>li>a::after{display:none}
-.dropdown-menu{position:static;width:100%;display:none;opacity:1;visibility:visible;transform:none;box-shadow:none;border-radius:10px;margin-top:3px;background:rgba(0,0,0,.18)}
-.Navbaar>ul>li.dropdown-open>.dropdown-menu{display:flex}
-.dropdown-menu li a{padding:11px 18px;font-size:13px}
+.Navbaar>ul>li>a{width:100%;color:#fff;padding:11px 13px;font-size:13px;justify-content:space-between;border-radius:8px}
+.Navbaar>ul>li>a:hover{color:#fff;background:rgba(255,255,255,0.10)}
+.dropdown-menu{position:static;width:100%;min-width:0;margin-top:3px;padding:4px;background:rgba(255,255,255,0.08);border-radius:9px;box-shadow:none;opacity:1;visibility:visible;transform:none;display:none}
+.Navbaar>ul>li.dropdown-open>.dropdown-menu{display:block}
 .Navbaar>ul>li:hover>.dropdown-menu{opacity:1;visibility:visible;transform:none}
 .Navbaar>ul>li:not(.dropdown-open)>.dropdown-menu{display:none}
+.dropdown-menu li a{color:#fff;padding:9px 12px;font-size:12px}
+.dropdown-menu li a:hover{color:#fff;background:rgba(255,255,255,0.12)}
 }
-/* SMALL MOBILE */
+/* ANDROID SMALL SCREEN */
 @media(max-width:600px){
 .Box1{padding:0 14px}
-.Logo{font-size:24px}
-.menu-toggle{width:42px;height:42px}
-.Navbaar{top:78px;right:14px;width:min(300px,calc(100vw - 28px))}
+.Logo{font-size:22px}
+.menu-toggle{width:40px;height:40px}
+.Navbaar{top:81px;right:10px;width:280px;max-width:calc(100vw - 20px);max-height:68vh;border-radius:13px;padding:7px}
+.Navbaar>ul>li>a{padding:10px 12px;font-size:12.5px}
+.dropdown-menu li a{padding:8px 11px;font-size:11.5px}
 }
 /* FOOTER */
-.footer{background:linear-gradient(135deg,#141E30,#243B55,#1B2735);color:#fff;padding:45px 8% 15px;font-family:'Poppins',sans-serif}
-.footer-container{display:grid;grid-template-columns:1.4fr 0.8fr 1.3fr 0.8fr;gap:30px;max-width:1200px;margin:0 auto}
-.footer-box h2{font-size:52px;margin-bottom:12px;font-weight:800}
-.footer-box h2 span{color:#FFD700}
-.footer-box p{color:#ddd;font-size:15px;line-height:1.7}
-.contact-box .c-item{display:flex;align-items:center;gap:8px;color:#ddd;font-size:15px;margin-bottom:12px;white-space:nowrap;line-height:1.5}
-.contact-box .c-item span:first-child{flex-shrink:0}
-.footer-box h3{color:#FFD700;margin-bottom:15px;font-size:20px;font-weight:700}
-.footer-box a{color:#ddd;text-decoration:none;display:block;margin-bottom:10px;transition:.3s;font-size:15px}
-.footer-box a:hover{color:#FFD700;padding-left:6px}
-.social{display:flex;gap:12px}
-.social a{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;transition:.3s;border:1px solid rgba(255,255,255,.1)}
-.social a svg{width:22px;height:22px;fill:#fff;transition:.3s}
-.social a:hover{background:#FFD700;transform:translateY(-4px);border-color:#FFD700}
-.social a:hover svg{fill:#111}
-.footer-bottom{margin-top:35px;padding-top:15px;text-align:center;border-top:1px solid rgba(255,255,255,.15);color:#bbb;font-size:14px;max-width:1200px;margin-left:auto;margin-right:auto}
-@media(max-width:900px){.footer-container{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:600px){.footer{padding:35px 5% 15px}.footer-container{grid-template-columns:1fr;text-align:center;gap:30px;justify-items:center}.contact-box .c-item{justify-content:center;white-space:normal}.social{justify-content:center}.footer-box a:hover{padding-left:0}}
-/* STICKY BUTTONS */
-.sticky-whatsapp,.sticky-call{position:fixed;right:20px;z-index:9999}
-.sticky-whatsapp{bottom:90px}
-.sticky-call{bottom:20px}
-.sticky-whatsapp a,.sticky-call a{width:55px;height:55px;border-radius:50%;display:flex;justify-content:center;align-items:center;font-size:26px;color:#fff;text-decoration:none!important;box-shadow:0 4px 12px rgba(0,0,0,.25);transition:all .3s ease}
-.sticky-whatsapp a{background:#25D366}
-.sticky-call a{background:#007AFF}
-.sticky-whatsapp a:hover,.sticky-call a:hover{transform:scale(1.12)}
-@media(min-width:992px){.sticky-whatsapp{bottom:auto;top:45%;transform:translateY(-50%)}.sticky-call{bottom:auto;top:57%;transform:translateY(-50%)}}
-@media(max-width:991px){.sticky-whatsapp{right:12px;bottom:80px}.sticky-call{right:12px;bottom:18px}.sticky-whatsapp a,.sticky-call a{width:50px;height:50px;font-size:22px}}
+footer{background:#101820;color:#fff;margin-top:50px;padding:45px 6% 20px}
+.footer-container{max-width:1200px;margin:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:35px}
+.footer-box h3{margin-bottom:15px;font-size:18px}
+.footer-box p,.footer-box a{color:#cfd6df;text-decoration:none;font-size:13px;line-height:1.9}
+.footer-box a:hover{color:#ff9800}
+.social-icons{display:flex;gap:10px;margin-top:15px}
+.social-icons a{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.08);transition:0.25s ease}
+.social-icons a:hover{transform:translateY(-3px);background:#ff7a00;color:#fff}
+.footer-bottom{margin-top:35px;padding-top:18px;border-top:1px solid rgba(255,255,255,0.12);text-align:center;color:#9fa8b3;font-size:12px}
+@media(max-width:800px){.footer-container{grid-template-columns:1fr 1fr;gap:25px}}
+@media(max-width:500px){.footer-container{grid-template-columns:1fr;text-align:center}.social-icons{justify-content:center}}
+/* FLOATING BUTTONS */
+.floating-buttons{position:fixed;right:18px;bottom:20px;display:flex;flex-direction:column;gap:10px;z-index:9998}
+.floating-buttons a{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;box-shadow:0 8px 20px rgba(0,0,0,0.20);transition:0.25s ease}
+.floating-buttons a:hover{transform:translateY(-3px) scale(1.04)}
+.whatsapp-btn{background:#25D366}
+.call-btn{background:#0d47a1}
+@media(max-width:600px){.floating-buttons{right:12px;bottom:15px}.floating-buttons a{width:44px;height:44px}}
 </style>
 </head>
 <body>
 <!-- NAVBAR -->
-<div class="Box1">
-<!-- LOGO -->
-<div class="Logo">✈️ Travel<span>Ease</span></div>
+<header class="Box1">
+<a href="{% url 'home' %}" class="Logo">TravelEase</a>
 <!-- HAMBURGER -->
 <button class="menu-toggle" id="menuToggle" aria-label="Open Menu" aria-expanded="false"><span></span><span></span><span></span></button>
 <!-- NAVIGATION -->
-<div class="Navbaar" id="mainNav">
+<nav class="Navbaar" id="mainNav">
 <ul>
-<li><a href="/">Home</a></li>
-<li><a href="/about/">About</a></li>
-<!-- PACKAGES -->
+<li><a href="{% url 'home' %}"><span>Home</span></a></li>
+<li><a href="{% url 'about' %}"><span>About</span></a></li>
+<!-- PACKAGE -->
 <li class="has-dropdown">
-<a href="#" class="dropdown-trigger">Packages<svg class="arrow-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></a>
+<a href="javascript:void(0);" class="dropdown-trigger"><span>Package</span><i class="fa-solid fa-chevron-down"></i></a>
 <ul class="dropdown-menu">
-<li><a href="/domestic/">Domestic Packages</a></li>
-<li><a href="/international/">International Packages</a></li>
+<li><a href="{% url 'domestic' %}"><i class="fa-solid fa-location-dot"></i>Domestic</a></li>
+<li><a href="{% url 'international' %}"><i class="fa-solid fa-plane"></i>International</a></li>
 </ul>
 </li>
-<!-- SERVICE -->
+<!-- SERVICES -->
 <li class="has-dropdown">
-<a href="#" class="dropdown-trigger">Service<svg class="arrow-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></a>
+<a href="javascript:void(0);" class="dropdown-trigger"><span>Services</span><i class="fa-solid fa-chevron-down"></i></a>
 <ul class="dropdown-menu">
-<li><a href="/flight-booking/">Flight Booking</a></li>
-<li><a href="/hotel/">Hotel Booking</a></li>
+<li><a href="{% url 'flight_booking' %}"><i class="fa-solid fa-plane-departure"></i>Flight Booking</a></li>
+<li><a href="{% url 'hotel_page' %}"><i class="fa-solid fa-hotel"></i>Hotel Booking</a></li>
 </ul>
 </li>
-<li><a href="/gallery/">Gallery</a></li>
-<li><a href="/contact/">Contact</a></li>
-<!-- ACCOUNT -->
-<li class="has-dropdown">
-<a href="#" class="dropdown-trigger">Account<svg class="arrow-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></a>
-<ul class="dropdown-menu">
-<li><a href="/login/">Login</a></li>
+<li><a href="{% url 'gallery' %}"><span>Gallery</span></a></li>
+<li><a href="{% url 'contact' %}"><span>Contact</span></a></li>
+<li><a href="{% url 'login' %}"><span>Login</span></a></li>
 </ul>
-</li>
-</ul>
-</div>
-</div>
+</nav>
+</header>
 <!-- PAGE CONTENT -->
 {% block content %}{% endblock %}
 <!-- FOOTER -->
-<footer class="footer">
+<footer>
 <div class="footer-container">
 <div class="footer-box">
-<h2>✈️ Travel<span>Ease</span></h2>
-<p>Your trusted travel partner for unforgettable journeys across India and the world.</p>
+<h3>TravelEase</h3>
+<p>Discover amazing destinations, explore unforgettable journeys and travel the world with TravelEase.</p>
+<div class="social-icons">
+<a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+<a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+<a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+<a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+</div>
 </div>
 <div class="footer-box">
 <h3>Quick Links</h3>
-<a href="/">Home</a>
-<a href="/about/">About</a>
-<a href="#">Packages</a>
-<a href="#">Services</a>
-<a href="/contact/">Contact</a>
-</div>
-<div class="footer-box contact-box">
-<h3>Contact</h3>
-<div class="c-item"><span>📍</span><span>Ballia, India</span></div>
-<div class="c-item"><span>📞</span><span>+91 7618007640</span></div>
-<div class="c-item"><span>📞</span><span>+91 9889576557</span></div>
-<div class="c-item"><span>✉️</span><span>abhikumar761800@gmail.com</span></div>
+<p><a href="{% url 'home' %}">Home</a></p>
+<p><a href="{% url 'about' %}">About Us</a></p>
+<p><a href="{% url 'gallery' %}">Gallery</a></p>
+<p><a href="{% url 'contact' %}">Contact</a></p>
 </div>
 <div class="footer-box">
-<h3>Follow Us</h3>
-<div class="social">
-<a href="#" aria-label="Website"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg></a>
-<a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg></a>
-<a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24"><path d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm10 2c1.65 0 3 1.35 3 3v10c0 1.65-1.35 3-3 3H7c-1.65 0-3-1.35-3-3V7c0-1.65 1.35-3 3-3h10zm-5 2c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 2c1.65 0 3 1.35 3 3s-1.35 3-3 3-3-1.35-3-3 1.35-3 3-3zm4.5-3c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1z"/></svg></a>
-<a href="#" aria-label="Youtube"><svg viewBox="0 0 24 24"><path d="M21.58 7.19c-.23-.86-.9-1.52-1.76-1.76C18.94 5 12 5 12 5s-6.94 0-7.82.43c-.86.23-1.52.9-1.76 1.76C2 8.06 2 12 2 12s0 3.94.42 4.81c.23.86.9 1.52 1.76 1.76 1.3.42 7.82.42 7.82.42s6.94 0 7.82-.42c.86-.23 1.52-.9 1.76-1.76.42-.87.42-4.81.42-4.81s0-3.94-.42-4.81zM10 15V9l5.2 3L10 15z"/></svg></a>
+<h3>Services</h3>
+<p><a href="{% url 'flight_booking' %}">Flight Booking</a></p>
+<p><a href="{% url 'hotel_page' %}">Hotel Booking</a></p>
+<p><a href="{% url 'domestic' %}">Domestic Packages</a></p>
+<p><a href="{% url 'international' %}">International Packages</a></p>
+</div>
+<div class="footer-box">
+<h3>Contact</h3>
+<p><i class="fa-solid fa-location-dot"></i> India</p>
+<p><i class="fa-solid fa-phone"></i> +91 00000 00000</p>
+<p><i class="fa-solid fa-envelope"></i> info@travelease.com</p>
 </div>
 </div>
-</div>
-<div class="footer-bottom">© 2026 TravelEase | All Rights Reserved. | developed By<br><br><strong>Abhishek Kumar</strong></div>
+<div class="footer-bottom">© 2026 TravelEase. All Rights Reserved.</div>
 </footer>
-<!-- STICKY WHATSAPP -->
-<div class="sticky-whatsapp">
-<a href="https://wa.me/917618007640?text=Hi" target="_blank" id="only-chat-btn" aria-label="Chat on WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+<!-- FLOATING BUTTONS -->
+<div class="floating-buttons">
+<a href="https://wa.me/910000000000" class="whatsapp-btn" target="_blank" aria-label="WhatsApp"><i class="fa-brands fa-whatsapp"></i></a>
+<a href="tel:+910000000000" class="call-btn" aria-label="Call"><i class="fa-solid fa-phone"></i></a>
 </div>
-<!-- STICKY CALL -->
-<div class="sticky-call">
-<a href="tel:+917618007640" aria-label="Call"><i class="fa-solid fa-phone"></i></a>
-</div>
-<!-- NAVBAR JAVASCRIPT -->
+<!-- JAVASCRIPT -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 const menuToggle = document.getElementById("menuToggle");
 const mainNav = document.getElementById("mainNav");
-/* HAMBURGER OPEN/CLOSE */
+/* HAMBURGER */
 menuToggle.addEventListener("click", function (event) {
 event.stopPropagation();
-mainNav.classList.toggle("active");
-menuToggle.classList.toggle("active");
-const isOpen = mainNav.classList.contains("active");
+const isOpen = mainNav.classList.toggle("active");
+menuToggle.classList.toggle("active", isOpen);
 menuToggle.setAttribute("aria-expanded", isOpen);
 });
 /* MOBILE DROPDOWNS */
 const dropdownTriggers = document.querySelectorAll(".dropdown-trigger");
 dropdownTriggers.forEach(function (trigger) {
 trigger.addEventListener("click", function (event) {
-/* MOBILE ONLY */
 if (window.innerWidth <= 991) {
 event.preventDefault();
 event.stopPropagation();
 const parent = trigger.parentElement;
-/* CLOSE OTHER DROPDOWNS */
+const isOpen = parent.classList.contains("dropdown-open");
 document.querySelectorAll(".has-dropdown").forEach(function (item) {
-if (item !== parent) {
 item.classList.remove("dropdown-open");
+});
+if (!isOpen) {
+parent.classList.add("dropdown-open");
+}
 }
 });
-/* OPEN/CLOSE CURRENT */
-parent.classList.toggle("dropdown-open");
+});
+/* CLOSE WHEN LINK CLICKED */
+mainNav.querySelectorAll("a:not(.dropdown-trigger)").forEach(function (link) {
+link.addEventListener("click", function () {
+if (window.innerWidth <= 991) {
+mainNav.classList.remove("active");
+menuToggle.classList.remove("active");
+menuToggle.setAttribute("aria-expanded", "false");
 }
 });
 });
@@ -222,34 +209,17 @@ item.classList.remove("dropdown-open");
 });
 }
 });
-/* CLOSE AFTER CLICKING NORMAL MENU LINK */
-const normalLinks = document.querySelectorAll(".Navbaar > ul > li:not(.has-dropdown) > a");
-normalLinks.forEach(function (link) {
-link.addEventListener("click", function () {
-if (window.innerWidth <= 991) {
-mainNav.classList.remove("active");
-menuToggle.setAttribute("aria-expanded", "false");
-}
-});
-});
-/* RESIZE FIX */
+/* RESET ON DESKTOP */
 window.addEventListener("resize", function () {
 if (window.innerWidth > 991) {
 mainNav.classList.remove("active");
+menuToggle.classList.remove("active");
 menuToggle.setAttribute("aria-expanded", "false");
 document.querySelectorAll(".has-dropdown").forEach(function (item) {
 item.classList.remove("dropdown-open");
 });
 }
 });
-/* WHATSAPP SAFETY */
-const btn = document.getElementById("only-chat-btn");
-if (btn) {
-btn.setAttribute("href", "https://wa.me/917618007640?text=Hi");
-btn.addEventListener("click", function (e) {
-e.stopPropagation();
-});
-}
 });
 </script>
 </body>
