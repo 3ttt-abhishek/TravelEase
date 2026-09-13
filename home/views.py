@@ -22,7 +22,7 @@ def login(request):
 
 
 def registration(request):
-    return render(request, 'home/Create_Account.html')
+    return render(request, 'home/create_account.html')
 
 
 def domestic(request):
@@ -38,14 +38,17 @@ def flight_booking(request):
 
 
 def hotel_page(request):
-    return render(request, 'home/Hotel_Page.HTML')
+    return render(request, 'home/hotel_page.html')
 
 
 def hotel_booking(request):
-    return render(request, 'home/Hotel_Booking.html')
+    return render(request, 'home/hotel_booking.html')
+
 
 def booknow(request):
-    return render(request, 'home/Booknow.html')
+    return render(request, 'home/booknow.html')
+
 
 def password(request):
-    return render(request, 'home/Password.html')
+    return render(request, 'home/password.html')
+
