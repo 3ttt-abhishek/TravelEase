@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,6 +16,7 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <style>
+
         /* =========================================================
            GLOBAL
         ========================================================= */
@@ -40,6 +40,7 @@
             background: #f4f6fb;
             color: #222;
             overflow-x: hidden;
+            padding-top: 70px;
         }
 
         img {
@@ -67,7 +68,7 @@
             position: fixed;
             top: 0;
             left: 0;
-            z-index: 9999;
+            z-index: 99999;
             box-shadow: 0 12px 30px rgba(0, 0, 0, .25);
             border-bottom: 1px solid rgba(255, 255, 255, .08);
         }
@@ -90,18 +91,25 @@
             color: #FFD700;
         }
 
+
+        /* =========================================================
+           HAMBURGER
+        ========================================================= */
+
         .menu-toggle {
-            display: none;
+            display: none !important;
             width: 45px;
             height: 45px;
             border: none;
-            background: rgba(255, 255, 255, .08);
+            outline: none;
+            background: rgba(255, 255, 255, .10);
             border-radius: 10px;
             cursor: pointer;
             align-items: center;
             justify-content: center;
             flex-direction: column;
             gap: 5px;
+            flex-shrink: 0;
         }
 
         .menu-toggle span {
@@ -110,7 +118,7 @@
             height: 3px;
             border-radius: 5px;
             background: #fff;
-            transition: .3s;
+            transition: .3s ease;
         }
 
         .menu-toggle.active span:nth-child(1) {
@@ -124,6 +132,11 @@
         .menu-toggle.active span:nth-child(3) {
             transform: translateY(-8px) rotate(-45deg);
         }
+
+
+        /* =========================================================
+           DESKTOP NAVBAR
+        ========================================================= */
 
         .Navbaar ul {
             list-style: none;
@@ -187,6 +200,11 @@
             transform: rotate(180deg);
         }
 
+
+        /* =========================================================
+           DESKTOP DROPDOWN
+        ========================================================= */
+
         .dropdown-menu {
             position: absolute;
             top: 65px;
@@ -203,7 +221,7 @@
             transform: translateY(15px);
             transition: all .35s ease;
             overflow: hidden;
-            z-index: 999;
+            z-index: 99999;
         }
 
         .Navbaar>ul>li:hover>.dropdown-menu {
@@ -252,14 +270,16 @@
             }
 
             .menu-toggle {
-                display: flex;
+                display: flex !important;
             }
 
             .Navbaar {
                 position: absolute;
                 top: 80px;
                 right: 20px;
+
                 width: min(320px, calc(100vw - 40px));
+
                 max-height: calc(100vh - 100px);
                 overflow-y: auto;
                 overflow-x: hidden;
@@ -273,14 +293,21 @@
 
                 opacity: 0;
                 visibility: hidden;
+                pointer-events: none;
+
                 transform: translateY(-10px);
 
-                transition: .30s ease;
+                transition: opacity .30s ease,
+                    transform .30s ease,
+                    visibility .30s ease;
+
+                z-index: 100000;
             }
 
             .Navbaar.active {
                 opacity: 1;
                 visibility: visible;
+                pointer-events: auto;
                 transform: translateY(0);
             }
 
@@ -322,21 +349,16 @@
 
                 box-shadow: none;
                 border-radius: 10px;
-                background: rgba(0, 0, 0, .18);
+                background: rgba(0, 0, 0, .20);
             }
 
             .Navbaar>ul>li.dropdown-open>.dropdown-menu {
                 display: flex;
             }
 
-            .Navbaar>ul>li.dropdown-open>.dropdown-menu {
-                opacity: 1;
-                visibility: visible;
-                transform: none;
-            }
-
             .Navbaar>ul>li.dropdown-open>.arrow-icon {
                 transform: rotate(180deg);
+                fill: #FFD700;
             }
 
             .dropdown-menu li a {
@@ -351,7 +373,7 @@
 
 
         /* =========================================================
-           SMALL MOBILE NAVBAR
+           SMALL MOBILE
         ========================================================= */
 
         @media (max-width: 600px) {
@@ -367,6 +389,10 @@
             .menu-toggle {
                 width: 42px;
                 height: 42px;
+            }
+
+            .menu-toggle span {
+                width: 22px;
             }
 
             .Navbaar {
@@ -468,49 +494,22 @@
 
         @keyframes slide {
 
-            0% {
-                margin-left: 0;
-            }
+            0% { margin-left: 0; }
+            16% { margin-left: 0; }
 
-            16% {
-                margin-left: 0;
-            }
+            20% { margin-left: -100%; }
+            36% { margin-left: -100%; }
 
-            20% {
-                margin-left: -100%;
-            }
+            40% { margin-left: -200%; }
+            56% { margin-left: -200%; }
 
-            36% {
-                margin-left: -100%;
-            }
+            60% { margin-left: -300%; }
+            76% { margin-left: -300%; }
 
-            40% {
-                margin-left: -200%;
-            }
+            80% { margin-left: -400%; }
+            96% { margin-left: -400%; }
 
-            56% {
-                margin-left: -200%;
-            }
-
-            60% {
-                margin-left: -300%;
-            }
-
-            76% {
-                margin-left: -300%;
-            }
-
-            80% {
-                margin-left: -400%;
-            }
-
-            96% {
-                margin-left: -400%;
-            }
-
-            100% {
-                margin-left: 0;
-            }
+            100% { margin-left: 0; }
         }
 
         @media (max-width: 768px) {
@@ -531,7 +530,7 @@
         @media (max-width: 600px) {
 
             .slider-container {
-                height: 270px;
+                height: 240px;
             }
 
             .slide-content {
@@ -539,13 +538,14 @@
             }
 
             .slide-content h2 {
-                font-size: 25px;
+                font-size: 24px;
                 line-height: 1.25;
             }
 
             .slide-content p {
                 font-size: 12px;
                 line-height: 1.5;
+                padding: 0 10px;
             }
 
             .dots {
@@ -781,7 +781,6 @@
         .btn:hover {
             background: linear-gradient(135deg, #ff5722, #ff9800);
             transform: translateY(-3px);
-            box-shadow: 0 12px 25px rgba(255, 87, 34, .35);
         }
 
         .explore-btn {
@@ -806,8 +805,6 @@
 
         .explore-btn button:hover {
             transform: translateY(-5px) scale(1.04);
-            box-shadow: 0 18px 40px rgba(255, 87, 34, .45);
-            background: linear-gradient(135deg, #ff5722, #ff9800);
         }
 
         .hide-card {
@@ -838,7 +835,7 @@
             }
 
             .card-content h3 {
-                min-height: auto;
+                min-height: 0;
                 height: auto;
                 font-size: 22px;
                 margin-bottom: 12px;
@@ -854,6 +851,10 @@
         }
 
         @media (max-width: 600px) {
+
+            .hero {
+                padding: 30px 15px;
+            }
 
             .hero h1 {
                 font-size: 29px;
@@ -947,7 +948,6 @@
             background: linear-gradient(90deg, #ffb300, #ff7a00, #ff5722);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
         .services-header .desc {
@@ -980,7 +980,6 @@
 
         .service-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 20px 45px rgba(0, 0, 0, .18);
         }
 
         .icon-box {
@@ -1012,7 +1011,7 @@
         @media (max-width: 768px) {
 
             .services-section {
-                padding: 40px 15px;
+                padding: 35px 15px;
             }
 
             .services-container {
@@ -1022,6 +1021,7 @@
 
             .services-header h2 {
                 font-size: 30px;
+                line-height: 1.25;
             }
 
             .services-header .desc {
@@ -1059,7 +1059,6 @@
             background: linear-gradient(90deg, #ffb300, #ff7a00, #ff5722);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
         .section-subheading {
@@ -1091,7 +1090,6 @@
 
         .achievement-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, .2);
         }
 
         .achievement-card h2 {
@@ -1100,7 +1098,6 @@
             background: linear-gradient(90deg, #ffb300, #ff7a00, #ff5722);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
             margin-bottom: 6px;
         }
 
@@ -1121,7 +1118,7 @@
         @media (max-width: 768px) {
 
             .achievement-section {
-                padding: 40px 15px;
+                padding: 35px 15px;
             }
 
             .achievement-container {
@@ -1131,6 +1128,7 @@
 
             .section-heading {
                 font-size: 30px;
+                line-height: 1.25;
             }
 
             .section-subheading {
@@ -1156,7 +1154,6 @@
             width: 100%;
             padding: 50px 20px;
             background: #f4f6fb;
-            color: #fff;
         }
 
         .faq-container {
@@ -1219,11 +1216,6 @@
             justify-content: space-between;
             align-items: center;
             gap: 15px;
-            transition: .3s ease;
-        }
-
-        .faq-question:hover {
-            transform: translateY(-2px);
         }
 
         .faq-question span:first-child {
@@ -1281,7 +1273,7 @@
         @media (max-width: 768px) {
 
             .faq-section {
-                padding: 45px 15px;
+                padding: 40px 15px;
             }
 
             .faq-header {
@@ -1297,14 +1289,15 @@
             }
 
             .faq-question {
-                font-size: 14px;
+                font-size: 13px;
                 padding: 16px 14px;
+                gap: 10px;
             }
 
             .faq-icon {
-                width: 29px;
-                height: 29px;
-                min-width: 29px;
+                width: 28px;
+                height: 28px;
+                min-width: 28px;
                 font-size: 18px;
             }
 
@@ -1407,25 +1400,12 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: .3s;
-            border: 1px solid rgba(255, 255, 255, .1);
         }
 
         .social a svg {
             width: 22px;
             height: 22px;
             fill: #fff;
-            transition: .3s;
-        }
-
-        .social a:hover {
-            background: #FFD700;
-            transform: translateY(-4px);
-            border-color: #FFD700;
-        }
-
-        .social a:hover svg {
-            fill: #111;
         }
 
         .footer-bottom {
@@ -1477,15 +1457,11 @@
             .social {
                 justify-content: center;
             }
-
-            .footer-box a:hover {
-                padding-left: 0;
-            }
         }
 
 
         /* =========================================================
-           STICKY WHATSAPP
+           STICKY BUTTONS
         ========================================================= */
 
         .sticky-whatsapp {
@@ -1507,17 +1483,7 @@
             color: #fff;
             text-decoration: none;
             box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
-            transition: all .3s ease;
         }
-
-        .sticky-whatsapp a:hover {
-            transform: scale(1.12);
-        }
-
-
-        /* =========================================================
-           STICKY CALL
-        ========================================================= */
 
         .sticky-call {
             position: fixed;
@@ -1538,11 +1504,6 @@
             color: #fff;
             text-decoration: none;
             box-shadow: 0 4px 12px rgba(0, 0, 0, .25);
-            transition: all .3s ease;
-        }
-
-        .sticky-call a:hover {
-            transform: scale(1.12);
         }
 
         @media (min-width: 992px) {
@@ -1581,6 +1542,7 @@
                 font-size: 22px;
             }
         }
+
     </style>
 </head>
 
@@ -1597,7 +1559,9 @@
             ✈️ Travel<span>Ease</span>
         </div>
 
-        <button class="menu-toggle" id="menuToggle"
+        <button class="menu-toggle"
+            id="menuToggle"
+            type="button"
             aria-label="Open Menu"
             aria-expanded="false">
 
@@ -1606,6 +1570,7 @@
             <span></span>
 
         </button>
+
 
         <div class="Navbaar" id="mainNav">
 
@@ -1621,12 +1586,15 @@
 
                 <li class="dropdown-item">
 
-                    <a href="#" class="dropdown-trigger">
+                    <a href="#"
+                        class="dropdown-trigger">
+
                         Packages
 
                         <svg class="arrow-icon" viewBox="0 0 24 24">
                             <path d="M7 10l5 5 5-5z" />
                         </svg>
+
                     </a>
 
                     <ul class="dropdown-menu">
@@ -1650,12 +1618,15 @@
 
                 <li class="dropdown-item">
 
-                    <a href="#" class="dropdown-trigger">
+                    <a href="#"
+                        class="dropdown-trigger">
+
                         Service
 
                         <svg class="arrow-icon" viewBox="0 0 24 24">
                             <path d="M7 10l5 5 5-5z" />
                         </svg>
+
                     </a>
 
                     <ul class="dropdown-menu">
@@ -1678,28 +1649,37 @@
 
 
                 <li>
-                    <a href="/gallery/">Gallery</a>
+                    <a href="/gallery/">
+                        Gallery
+                    </a>
                 </li>
 
                 <li>
-                    <a href="/contact/">Contact</a>
+                    <a href="/contact/">
+                        Contact
+                    </a>
                 </li>
 
 
                 <li class="dropdown-item">
 
-                    <a href="#" class="dropdown-trigger">
+                    <a href="#"
+                        class="dropdown-trigger">
+
                         Account
 
                         <svg class="arrow-icon" viewBox="0 0 24 24">
                             <path d="M7 10l5 5 5-5z" />
                         </svg>
+
                     </a>
 
                     <ul class="dropdown-menu">
 
                         <li>
-                            <a href="/login/">Login</a>
+                            <a href="/login/">
+                                Login
+                            </a>
                         </li>
 
                     </ul>
@@ -1812,7 +1792,7 @@
     <section class="container" id="packageContainer">
 
 
-        <!-- 1 MANALI -->
+        <!-- MANALI -->
 
         <div class="card">
 
@@ -1834,9 +1814,7 @@
 
             <div class="card-content">
 
-                <h3>
-                    Manali Tour Package
-                </h3>
+                <h3>Manali Tour Package</h3>
 
                 <div class="days">
                     ⏰ 7 Days • 6 Nights
@@ -1900,7 +1878,7 @@
         </div>
 
 
-        <!-- 2 SHIMLA -->
+        <!-- SHIMLA -->
 
         <div class="card">
 
@@ -1919,12 +1897,9 @@
 
             </div>
 
-
             <div class="card-content">
 
-                <h3>
-                    Shimla Tour Package
-                </h3>
+                <h3>Shimla Tour Package</h3>
 
                 <div class="days">
                     ⏰ 5 Days • 4 Nights
@@ -1978,7 +1953,7 @@
         </div>
 
 
-        <!-- 3 KASHMIR -->
+        <!-- KASHMIR -->
 
         <div class="card">
 
@@ -1997,12 +1972,9 @@
 
             </div>
 
-
             <div class="card-content">
 
-                <h3>
-                    Kashmir Tour Package
-                </h3>
+                <h3>Kashmir Tour Package</h3>
 
                 <div class="days">
                     ⏰ 8 Days • 7 Nights
@@ -2071,7 +2043,7 @@
         </div>
 
 
-        <!-- 4 LADAKH -->
+        <!-- LADAKH -->
 
         <div class="card">
 
@@ -2090,12 +2062,9 @@
 
             </div>
 
-
             <div class="card-content">
 
-                <h3>
-                    Ladakh Adventure Tour
-                </h3>
+                <h3>Ladakh Adventure Tour</h3>
 
                 <div class="days">
                     ⏰ 10 Days • 9 Nights
@@ -2174,7 +2143,7 @@
         </div>
 
 
-        <!-- 5 GOA -->
+        <!-- GOA -->
 
         <div class="card">
 
@@ -2193,12 +2162,9 @@
 
             </div>
 
-
             <div class="card-content">
 
-                <h3>
-                    Goa Tour Package
-                </h3>
+                <h3>Goa Tour Package</h3>
 
                 <div class="days">
                     ⏰ 5 Days • 4 Nights
@@ -2252,7 +2218,7 @@
         </div>
 
 
-        <!-- 6 JAIPUR -->
+        <!-- JAIPUR -->
 
         <div class="card">
 
@@ -2271,12 +2237,9 @@
 
             </div>
 
-
             <div class="card-content">
 
-                <h3>
-                    Jaipur Tour Package
-                </h3>
+                <h3>Jaipur Tour Package</h3>
 
                 <div class="days">
                     ⏰ 4 Days • 3 Nights
@@ -2325,34 +2288,23 @@
         </div>
 
 
-        <!-- 7 UDAIPUR -->
+        <!-- UDAIPUR -->
 
         <div class="card hide-card">
 
             <div class="card-img">
-
                 <img src="{% static 'home/Image/Home7.png' %}"
                     alt="Udaipur">
 
-                <div class="future-tag">
-                    🏆 Best Seller
-                </div>
-
-                <div class="rating-badge">
-                    ⭐ 4.7
-                </div>
-
+                <div class="future-tag">🏆 Best Seller</div>
+                <div class="rating-badge">⭐ 4.7</div>
             </div>
 
             <div class="card-content">
 
-                <h3>
-                    Udaipur Tour Package
-                </h3>
+                <h3>Udaipur Tour Package</h3>
 
-                <div class="days">
-                    ⏰ 4 Days • 3 Nights
-                </div>
+                <div class="days">⏰ 4 Days • 3 Nights</div>
 
                 <div class="price">
                     ₹8,299
@@ -2384,12 +2336,10 @@
                 </ul>
 
                 <div class="btn-group">
-
                     <button class="btn"
                         onclick="toggleDays(this)">
                         View Itinerary ⬇️
                     </button>
-
                 </div>
 
             </div>
@@ -2397,34 +2347,23 @@
         </div>
 
 
-        <!-- 8 MUSSOORIE -->
+        <!-- MUSSOORIE -->
 
         <div class="card hide-card">
 
             <div class="card-img">
-
                 <img src="{% static 'home/Image/Home8.png' %}"
                     alt="Mussoorie">
 
-                <div class="future-tag">
-                    🏆 Best Seller
-                </div>
-
-                <div class="rating-badge">
-                    ⭐ 4.5
-                </div>
-
+                <div class="future-tag">🏆 Best Seller</div>
+                <div class="rating-badge">⭐ 4.5</div>
             </div>
 
             <div class="card-content">
 
-                <h3>
-                    Mussoorie Tour Package
-                </h3>
+                <h3>Mussoorie Tour Package</h3>
 
-                <div class="days">
-                    ⏰ 4 Days • 3 Nights
-                </div>
+                <div class="days">⏰ 4 Days • 3 Nights</div>
 
                 <div class="price">
                     ₹6,999
@@ -2456,12 +2395,10 @@
                 </ul>
 
                 <div class="btn-group">
-
                     <button class="btn"
                         onclick="toggleDays(this)">
                         View Itinerary ⬇️
                     </button>
-
                 </div>
 
             </div>
@@ -2469,34 +2406,23 @@
         </div>
 
 
-        <!-- 9 NAINITAL -->
+        <!-- NAINITAL -->
 
         <div class="card hide-card">
 
             <div class="card-img">
-
                 <img src="{% static 'home/Image/Home9.png' %}"
                     alt="Nainital">
 
-                <div class="future-tag">
-                    🏆 Best Seller
-                </div>
-
-                <div class="rating-badge">
-                    ⭐ 4.6
-                </div>
-
+                <div class="future-tag">🏆 Best Seller</div>
+                <div class="rating-badge">⭐ 4.6</div>
             </div>
 
             <div class="card-content">
 
-                <h3>
-                    Nainital Tour Package
-                </h3>
+                <h3>Nainital Tour Package</h3>
 
-                <div class="days">
-                    ⏰ 3 Days • 2 Nights
-                </div>
+                <div class="days">⏰ 3 Days • 2 Nights</div>
 
                 <div class="price">
                     ₹5,999
@@ -2523,12 +2449,10 @@
                 </ul>
 
                 <div class="btn-group">
-
                     <button class="btn"
                         onclick="toggleDays(this)">
                         View Itinerary ⬇️
                     </button>
-
                 </div>
 
             </div>
@@ -2536,34 +2460,23 @@
         </div>
 
 
-        <!-- 10 ANDAMAN -->
+        <!-- ANDAMAN -->
 
         <div class="card hide-card">
 
             <div class="card-img">
-
                 <img src="{% static 'home/Image/Home10.png' %}"
                     alt="Andaman">
 
-                <div class="future-tag">
-                    🏆 Best Seller
-                </div>
-
-                <div class="rating-badge">
-                    ⭐ 4.8
-                </div>
-
+                <div class="future-tag">🏆 Best Seller</div>
+                <div class="rating-badge">⭐ 4.8</div>
             </div>
 
             <div class="card-content">
 
-                <h3>
-                    Andaman Tour Package
-                </h3>
+                <h3>Andaman Tour Package</h3>
 
-                <div class="days">
-                    ⏰ 7 Days • 6 Nights
-                </div>
+                <div class="days">⏰ 7 Days • 6 Nights</div>
 
                 <div class="price">
                     ₹22,999
@@ -2610,12 +2523,10 @@
                 </ul>
 
                 <div class="btn-group">
-
                     <button class="btn"
                         onclick="toggleDays(this)">
                         View Itinerary ⬇️
                     </button>
-
                 </div>
 
             </div>
@@ -2623,34 +2534,23 @@
         </div>
 
 
-        <!-- 11 DUBAI -->
+        <!-- DUBAI -->
 
         <div class="card hide-card">
 
             <div class="card-img">
-
                 <img src="{% static 'home/Image/Home11.png' %}"
                     alt="Dubai">
 
-                <div class="future-tag">
-                    🏆 Best Seller
-                </div>
-
-                <div class="rating-badge">
-                    ⭐ 4.9
-                </div>
-
+                <div class="future-tag">🏆 Best Seller</div>
+                <div class="rating-badge">⭐ 4.9</div>
             </div>
 
             <div class="card-content">
 
-                <h3>
-                    Dubai Tour Package
-                </h3>
+                <h3>Dubai Tour Package</h3>
 
-                <div class="days">
-                    ⏰ 6 Days • 5 Nights
-                </div>
+                <div class="days">⏰ 6 Days • 5 Nights</div>
 
                 <div class="price">
                     ₹45,999
@@ -2692,12 +2592,10 @@
                 </ul>
 
                 <div class="btn-group">
-
                     <button class="btn"
                         onclick="toggleDays(this)">
                         View Itinerary ⬇️
                     </button>
-
                 </div>
 
             </div>
@@ -2705,34 +2603,23 @@
         </div>
 
 
-        <!-- 12 BALI -->
+        <!-- BALI -->
 
         <div class="card hide-card">
 
             <div class="card-img">
-
                 <img src="{% static 'home/Image/Home12.png' %}"
                     alt="Bali">
 
-                <div class="future-tag">
-                    🏆 Best Seller
-                </div>
-
-                <div class="rating-badge">
-                    ⭐ 4.8
-                </div>
-
+                <div class="future-tag">🏆 Best Seller</div>
+                <div class="rating-badge">⭐ 4.8</div>
             </div>
 
             <div class="card-content">
 
-                <h3>
-                    Bali Tour Package
-                </h3>
+                <h3>Bali Tour Package</h3>
 
-                <div class="days">
-                    ⏰ 5 Days • 4 Nights
-                </div>
+                <div class="days">⏰ 5 Days • 4 Nights</div>
 
                 <div class="price">
                     ₹39,999
@@ -2769,12 +2656,10 @@
                 </ul>
 
                 <div class="btn-group">
-
                     <button class="btn"
                         onclick="toggleDays(this)">
                         View Itinerary ⬇️
                     </button>
-
                 </div>
 
             </div>
@@ -2782,34 +2667,23 @@
         </div>
 
 
-        <!-- 13 MALDIVES -->
+        <!-- MALDIVES -->
 
         <div class="card hide-card">
 
             <div class="card-img">
-
                 <img src="{% static 'home/Image/Home13.png' %}"
                     alt="Maldives">
 
-                <div class="future-tag">
-                    🏆 Best Seller
-                </div>
-
-                <div class="rating-badge">
-                    ⭐ 5.0
-                </div>
-
+                <div class="future-tag">🏆 Best Seller</div>
+                <div class="rating-badge">⭐ 5.0</div>
             </div>
 
             <div class="card-content">
 
-                <h3>
-                    Maldives Tour Package
-                </h3>
+                <h3>Maldives Tour Package</h3>
 
-                <div class="days">
-                    ⏰ 5 Days • 4 Nights
-                </div>
+                <div class="days">⏰ 5 Days • 4 Nights</div>
 
                 <div class="price">
                     ₹65,999
@@ -2846,12 +2720,10 @@
                 </ul>
 
                 <div class="btn-group">
-
                     <button class="btn"
                         onclick="toggleDays(this)">
                         View Itinerary ⬇️
                     </button>
-
                 </div>
 
             </div>
@@ -2859,34 +2731,23 @@
         </div>
 
 
-        <!-- 14 SINGAPORE -->
+        <!-- SINGAPORE -->
 
         <div class="card hide-card">
 
             <div class="card-img">
-
                 <img src="{% static 'home/Image/Home14.png' %}"
                     alt="Singapore">
 
-                <div class="future-tag">
-                    🏆 Best Seller
-                </div>
-
-                <div class="rating-badge">
-                    ⭐ 4.8
-                </div>
-
+                <div class="future-tag">🏆 Best Seller</div>
+                <div class="rating-badge">⭐ 4.8</div>
             </div>
 
             <div class="card-content">
 
-                <h3>
-                    Singapore Tour Package
-                </h3>
+                <h3>Singapore Tour Package</h3>
 
-                <div class="days">
-                    ⏰ 4 Days • 3 Nights
-                </div>
+                <div class="days">⏰ 4 Days • 3 Nights</div>
 
                 <div class="price">
                     ₹35,999
@@ -2918,12 +2779,10 @@
                 </ul>
 
                 <div class="btn-group">
-
                     <button class="btn"
                         onclick="toggleDays(this)">
                         View Itinerary ⬇️
                     </button>
-
                 </div>
 
             </div>
@@ -2931,34 +2790,23 @@
         </div>
 
 
-        <!-- 15 THAILAND -->
+        <!-- THAILAND -->
 
         <div class="card hide-card">
 
             <div class="card-img">
-
                 <img src="{% static 'home/Image/Home15.png' %}"
                     alt="Thailand">
 
-                <div class="future-tag">
-                    🏆 Best Seller
-                </div>
-
-                <div class="rating-badge">
-                    ⭐ 4.7
-                </div>
-
+                <div class="future-tag">🏆 Best Seller</div>
+                <div class="rating-badge">⭐ 4.7</div>
             </div>
 
             <div class="card-content">
 
-                <h3>
-                    Thailand Tour Package
-                </h3>
+                <h3>Thailand Tour Package</h3>
 
-                <div class="days">
-                    ⏰ 6 Days • 5 Nights
-                </div>
+                <div class="days">⏰ 6 Days • 5 Nights</div>
 
                 <div class="price">
                     ₹32,999
@@ -3000,12 +2848,10 @@
                 </ul>
 
                 <div class="btn-group">
-
                     <button class="btn"
                         onclick="toggleDays(this)">
                         View Itinerary ⬇️
                     </button>
-
                 </div>
 
             </div>
@@ -3015,9 +2861,7 @@
     </section>
 
 
-    <!-- =========================================================
-         DISCOVER BUTTON
-    ========================================================= -->
+    <!-- DISCOVER BUTTON -->
 
     <div class="explore-btn">
 
@@ -3031,9 +2875,7 @@
     </div>
 
 
-    <!-- =========================================================
-         PREMIUM SERVICES
-    ========================================================= -->
+    <!-- PREMIUM SERVICES -->
 
     <section class="services-section">
 
@@ -3122,9 +2964,7 @@
     </section>
 
 
-    <!-- =========================================================
-         ACHIEVEMENTS
-    ========================================================= -->
+    <!-- ACHIEVEMENTS -->
 
     <section class="achievement-section">
 
@@ -3190,9 +3030,7 @@
     </section>
 
 
-    <!-- =========================================================
-         FAQ
-    ========================================================= -->
+    <!-- FAQ -->
 
     <section class="faq-section">
 
@@ -3260,8 +3098,8 @@
 
                         <p>
                             Yes! We offer flexible payment plans and best price guarantee.
-                            Found a lower price? We'll beat it and add exclusive perks
-                            worth $1000+. Speak to your travel curator for details.
+                            Found a lower price? We'll beat it and add exclusive perks.
+                            Speak to your travel curator for details.
                         </p>
 
                     </div>
@@ -3315,8 +3153,7 @@
                         <p>
                             Absolutely. Every client gets a dedicated travel curator +
                             24/7 emergency hotline. Lost passport, flight delay,
-                            medical emergency - we handle everything instantly,
-                            anywhere in the world.
+                            medical emergency - we handle everything instantly.
                         </p>
 
                     </div>
@@ -3358,9 +3195,7 @@
     </section>
 
 
-    <!-- =========================================================
-         FOOTER
-    ========================================================= -->
+    <!-- FOOTER -->
 
     <footer class="footer">
 
@@ -3387,25 +3222,11 @@
                     Quick Links
                 </h3>
 
-                <a href="/">
-                    Home
-                </a>
-
-                <a href="/about/">
-                    About
-                </a>
-
-                <a href="#">
-                    Packages
-                </a>
-
-                <a href="#">
-                    Services
-                </a>
-
-                <a href="/contact/">
-                    Contact
-                </a>
+                <a href="/">Home</a>
+                <a href="/about/">About</a>
+                <a href="/domestic/">Packages</a>
+                <a href="/flight-booking/">Services</a>
+                <a href="/contact/">Contact</a>
 
             </div>
 
@@ -3447,52 +3268,28 @@
 
                 <div class="social">
 
-
                     <a href="#" aria-label="Website">
-
                         <svg viewBox="0 0 24 24">
-
-                            <path
-                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z" />
-
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z" />
                         </svg>
-
                     </a>
-
 
                     <a href="#" aria-label="Facebook">
-
                         <svg viewBox="0 0 24 24">
-
-                            <path
-                                d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z" />
-
+                            <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z" />
                         </svg>
-
                     </a>
-
 
                     <a href="#" aria-label="Instagram">
-
                         <svg viewBox="0 0 24 24">
-
-                            <path
-                                d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7zm10 2c1.65 0 3 1.35 3 3v10c0 1.65-1.35 3-3 3H7c-1.65 0-3-1.35-3-3V7c0-1.65 1.35-3 3-3h10zm-5 2c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 2c1.65 0 3 1.35 3 3s-1.35 3-3 3-3-1.35-3-3 1.35-3 3-3zm4.5-3c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1z" />
-
+                            <path d="M7 2C4.24 2 2 4.24 2 7v10c0 2.76 2.24 5 5 5h10c2.76 0 5-2.24 5-5V7c0-2.76-2.24-5-5-5H7z" />
                         </svg>
-
                     </a>
 
-
                     <a href="#" aria-label="Youtube">
-
                         <svg viewBox="0 0 24 24">
-
-                            <path
-                                d="M21.58 7.19c-.23-.86-.9-1.52-1.76-1.76C18.94 5 12 5 12 5s-6.94 0-7.82.43c-.86.23-1.52.9-1.76 1.76C2 8.06 2 12 2 12s0 3.94.42 4.81c.23.86.9 1.76 1.76 1.76 1.3.42 7.82.42 7.82.42s6.94 0 7.82-.42c.86-.87 1.76-4.81 1.76-4.81s0-3.94-.42-4.81zM10 15V9l5.2 3L10 15z" />
-
+                            <path d="M21.58 7.19c-.23-.86-.9-1.52-1.76-1.76C18.94 5 12 5 12 5s-6.94 0-7.82.43c-.86.23-1.52.9-1.76 1.76C2 8.06 2 12 2 12s0 3.94.42 4.81c.23.86.9 1.76 1.76 1.76 1.3.42 7.82.42 7.82.42s6.94 0 7.82-.42c.86-.87 1.76-4.81 1.76-4.81s0-3.94-.42-4.81z" />
                         </svg>
-
                     </a>
 
                 </div>
@@ -3518,9 +3315,7 @@
     </footer>
 
 
-    <!-- =========================================================
-         STICKY WHATSAPP
-    ========================================================= -->
+    <!-- WHATSAPP -->
 
     <div class="sticky-whatsapp">
 
@@ -3535,9 +3330,7 @@
     </div>
 
 
-    <!-- =========================================================
-         STICKY CALL
-    ========================================================= -->
+    <!-- CALL -->
 
     <div class="sticky-call">
 
@@ -3563,9 +3356,7 @@
         function toggleDays(btn) {
 
             const card = btn.closest(".card");
-
-            const extraDays =
-                card.querySelectorAll(".extra-day");
+            const extraDays = card.querySelectorAll(".extra-day");
 
             if (btn.classList.contains("active")) {
 
@@ -3573,9 +3364,7 @@
                     day.style.display = "none";
                 });
 
-                btn.innerHTML =
-                    "View Itinerary ⬇️";
-
+                btn.innerHTML = "View Itinerary ⬇️";
                 btn.classList.remove("active");
 
             } else {
@@ -3584,9 +3373,7 @@
                     day.style.display = "block";
                 });
 
-                btn.innerHTML =
-                    "Hide Itinerary ⬆️";
-
+                btn.innerHTML = "Hide Itinerary ⬆️";
                 btn.classList.add("active");
             }
         }
@@ -3635,8 +3422,7 @@
                 allShow = false;
 
                 window.scrollTo({
-                    top:
-                        document.querySelector(".hero").offsetTop,
+                    top: document.querySelector(".hero").offsetTop,
                     behavior: "smooth"
                 });
             }
@@ -3673,7 +3459,7 @@
 
 
         /* =====================================================
-           MOBILE / TABLET MENU
+           HAMBURGER MENU
         ===================================================== */
 
         const menuToggle =
@@ -3683,24 +3469,55 @@
             document.getElementById("mainNav");
 
 
-        menuToggle.addEventListener("click", function () {
+        function closeMobileMenu() {
 
-            mainNav.classList.toggle("active");
-
-            menuToggle.classList.toggle("active");
-
-            const isOpen =
-                mainNav.classList.contains("active");
+            mainNav.classList.remove("active");
+            menuToggle.classList.remove("active");
 
             menuToggle.setAttribute(
                 "aria-expanded",
-                isOpen
+                "false"
             );
 
             menuToggle.setAttribute(
                 "aria-label",
-                isOpen ? "Close Menu" : "Open Menu"
+                "Open Menu"
             );
+
+            document
+                .querySelectorAll(".dropdown-item")
+                .forEach(item => {
+                    item.classList.remove("dropdown-open");
+                });
+        }
+
+
+        menuToggle.addEventListener("click", function (event) {
+
+            event.stopPropagation();
+
+            const isOpen =
+                mainNav.classList.contains("active");
+
+            if (isOpen) {
+
+                closeMobileMenu();
+
+            } else {
+
+                mainNav.classList.add("active");
+                menuToggle.classList.add("active");
+
+                menuToggle.setAttribute(
+                    "aria-expanded",
+                    "true"
+                );
+
+                menuToggle.setAttribute(
+                    "aria-label",
+                    "Close Menu"
+                );
+            }
 
         });
 
@@ -3710,9 +3527,7 @@
         ===================================================== */
 
         const dropdownTriggers =
-            document.querySelectorAll(
-                ".dropdown-trigger"
-            );
+            document.querySelectorAll(".dropdown-trigger");
 
 
         dropdownTriggers.forEach(trigger => {
@@ -3722,6 +3537,7 @@
                 if (window.innerWidth <= 991) {
 
                     event.preventDefault();
+                    event.stopPropagation();
 
                     const parent =
                         this.closest(".dropdown-item");
@@ -3749,31 +3565,17 @@
 
 
         /* =====================================================
-           CLOSE MENU AFTER NORMAL LINK CLICK
+           CLOSE AFTER NORMAL LINK
         ===================================================== */
 
         mainNav.querySelectorAll(
             "a:not(.dropdown-trigger)"
         ).forEach(link => {
 
-            link.addEventListener("click", () => {
+            link.addEventListener("click", function () {
 
                 if (window.innerWidth <= 991) {
-
-                    mainNav.classList.remove("active");
-
-                    menuToggle.classList.remove("active");
-
-                    menuToggle.setAttribute(
-                        "aria-expanded",
-                        "false"
-                    );
-
-                    menuToggle.setAttribute(
-                        "aria-label",
-                        "Open Menu"
-                    );
-
+                    closeMobileMenu();
                 }
 
             });
@@ -3782,36 +3584,18 @@
 
 
         /* =====================================================
-           CLICK OUTSIDE MENU
+           CLICK OUTSIDE
         ===================================================== */
 
         document.addEventListener("click", function (event) {
 
             if (window.innerWidth <= 991) {
 
-                const clickedInsideNav =
-                    mainNav.contains(event.target);
-
-                const clickedMenuButton =
-                    menuToggle.contains(event.target);
-
-                if (!clickedInsideNav &&
-                    !clickedMenuButton) {
-
-                    mainNav.classList.remove("active");
-
-                    menuToggle.classList.remove("active");
-
-                    menuToggle.setAttribute(
-                        "aria-expanded",
-                        "false"
-                    );
-
-                    menuToggle.setAttribute(
-                        "aria-label",
-                        "Open Menu"
-                    );
-
+                if (
+                    !mainNav.contains(event.target) &&
+                    !menuToggle.contains(event.target)
+                ) {
+                    closeMobileMenu();
                 }
 
             }
@@ -3820,37 +3604,18 @@
 
 
         /* =====================================================
-           RESET MENU WHEN GOING BACK TO DESKTOP
+           RESIZE
         ===================================================== */
 
         window.addEventListener("resize", function () {
 
             if (window.innerWidth > 991) {
-
-                mainNav.classList.remove("active");
-
-                menuToggle.classList.remove("active");
-
-                menuToggle.setAttribute(
-                    "aria-expanded",
-                    "false"
-                );
-
-                document
-                    .querySelectorAll(".dropdown-item")
-                    .forEach(item => {
-
-                        item.classList.remove(
-                            "dropdown-open"
-                        );
-
-                    });
-
+                closeMobileMenu();
             }
 
         });
 
     </script>
+
 </body>
 </html>
-
