@@ -51,4 +51,3 @@ def booknow(request):
 
 def password(request):
     return render(request, 'home/password.html')
-
