@@ -15,7 +15,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Montserrat', sans-serif
+            font-family: 'Poppins', sans-serif
         }
 
         html {
@@ -41,7 +41,6 @@
             -webkit-tap-highlight-color: transparent
         }
 
-        /* ===== HEADER / NAVBAR CSS - FIXED FONT SAME ===== */
         .Box1 {
             height: 70px;
             width: 100%;
@@ -116,7 +115,7 @@
 
         .Navbaar>ul>li>a {
             color: #fff;
-            font-size: 17px;
+            font-size: 15px;
             font-weight: 700;
             padding: 12px;
             text-decoration: none;
@@ -174,7 +173,7 @@
         .dropdown-menu li a {
             display: block;
             color: #fff;
-            font-size: 17px;
+            font-size: 14px;
             font-weight: 700;
             padding: 12px 18px;
             text-decoration: none;
@@ -279,7 +278,6 @@
             }
         }
 
-        /* ===== SLIDER CSS ===== */
         .slider-container {
             width: 100%;
             height: 500px;
@@ -322,7 +320,8 @@
         .slide-content h2 {
             font-size: 50px;
             font-weight: 800;
-            text-shadow: 0 5px 15px rgba(0, 0, 0, .6)
+            text-shadow: 0 5px 15px rgba(0, 0, 0, .6);
+            line-height: 1.2;
         }
 
         .slide-content p {
@@ -403,23 +402,22 @@
             }
         }
 
-        @media(max-width:700px) { 
-        .slider-container { 
-            height: 250px;
+        @media(max-width:700px) {
+            .slider-container {
+                height: 250px
+            }
+
+            .slide-content h2 {
+                font-size: 28px
+            }
+
+            .slide-content p {
+                font-size: 14px
+            }
         }
 
-        .slide-content h2 { 
-            font-size: 28px;
-        }
-
-        .slide-content p { 
-            font-size: 14px;
-        }
-    }
-
-        /* ===== HERO SECTION CSS ===== */
         .hero {
-            padding: 50px 20px 20px;
+            padding: 60px 20px 20px;
             text-align: center;
             background: #f4f6fb
         }
@@ -427,7 +425,8 @@
         .hero h1 {
             font-size: 52px;
             font-weight: 800;
-            color: #0d47a1
+            color: #0d47a1;
+            line-height: 1.2;
         }
 
         .hero h1 span {
@@ -436,7 +435,6 @@
             -webkit-text-fill-color: transparent
         }
 
-        /* ===== PACKAGE CARD CSS ===== */
         .container {
             width: 95%;
             max-width: 1400px;
@@ -508,7 +506,8 @@
             font-size: 20px;
             color: #0d47a1;
             min-height: 50px;
-            font-weight: 700
+            font-weight: 700;
+            line-height: 1.3;
         }
 
         .days {
@@ -627,8 +626,13 @@
         }
 
         @media(max-width:768px) {
+            .hero {
+                padding: 20px 12px 15px !important;
+            }
+
             .hero h1 {
-                font-size: 32px
+                font-size: 32px !important;
+                line-height: 1.2 !important;
             }
 
             .container {
@@ -644,9 +648,8 @@
             }
         }
 
-        /* ===== PREMIUM SERVICES CSS ===== */
         .services-section {
-            padding: 50px;
+            padding: 50px 20px;
             text-align: center;
             background: #f4f6fb
         }
@@ -654,7 +657,8 @@
         .services-header h2 {
             font-size: 52px;
             font-weight: 800;
-            color: #0d47a1
+            color: #0d47a1;
+            line-height: 1.2;
         }
 
         .services-header h2 span {
@@ -664,10 +668,10 @@
         }
 
         .services-header .s-desc {
-            font-size: 15px;
-            color: #666;
-            line-height: 1.7;
-            font-weight: 600;
+            font-size: 15px !important;
+            color: #666 !important;
+            line-height: 1.7 !important;
+            font-weight: 600 !important;
             max-width: 650px;
             margin: 10px auto 30px
         }
@@ -706,10 +710,10 @@
         }
 
         .service-card p {
-            font-size: 15px;
-            color: #666;
-            font-weight: 600;
-            line-height: 1.7
+            font-size: 15px !important;
+            color: #666 !important;
+            font-weight: 600 !important;
+            line-height: 1.7 !important
         }
 
         @media(max-width:1200px) {
@@ -725,6 +729,20 @@
         }
 
         @media(max-width:768px) {
+            .services-section {
+                padding: 30px 12px !important;
+            }
+
+            .services-header h2 {
+                font-size: 32px !important;
+                line-height: 1.2 !important;
+            }
+
+            .services-header .s-desc {
+                font-size: 15px !important;
+                padding: 0 8px;
+            }
+
             .services-container {
                 grid-template-columns: 1fr;
                 justify-items: center;
@@ -738,7 +756,6 @@
             }
         }
 
-        /* ===== WHY CHOOSE US CSS ===== */
         .why-choose-section {
             background: #f4f6fb;
             padding: 50px 20px;
@@ -749,7 +766,8 @@
             font-size: 52px;
             font-weight: 800;
             color: #0d47a1;
-            margin-bottom: 10px
+            margin-bottom: 10px;
+            line-height: 1.2;
         }
 
         .why-heading .blue {
@@ -765,10 +783,10 @@
         .why-subheading {
             max-width: 750px;
             margin: 0 auto 35px;
-            font-size: 15px;
-            color: #666;
-            font-weight: 600;
-            line-height: 1.7
+            font-size: 15px !important;
+            color: #666 !important;
+            font-weight: 600 !important;
+            line-height: 1.7 !important
         }
 
         .why-container {
@@ -808,10 +826,10 @@
         }
 
         .why-card p {
-            font-size: 15px;
-            color: #666;
-            font-weight: 600;
-            line-height: 1.7
+            font-size: 15px !important;
+            color: #666 !important;
+            font-weight: 600 !important;
+            line-height: 1.7 !important
         }
 
         @media(max-width:991px) {
@@ -821,6 +839,19 @@
         }
 
         @media(max-width:768px) {
+            .why-choose-section {
+                padding: 30px 12px !important;
+            }
+
+            .why-heading {
+                font-size: 32px !important;
+            }
+
+            .why-subheading {
+                font-size: 15px !important;
+                padding: 0 8px;
+            }
+
             .why-container {
                 grid-template-columns: 1fr;
                 justify-items: center;
@@ -833,7 +864,6 @@
             }
         }
 
-        /* ===== ACHIEVEMENT SECTION CSS - MOBILE FIX ===== */
         .achievement-section {
             padding: 50px 20px;
             text-align: center;
@@ -842,7 +872,8 @@
 
         .section-heading {
             font-size: 52px;
-            font-weight: 800
+            font-weight: 800;
+            line-height: 1.2;
         }
 
         .section-heading .blue {
@@ -858,10 +889,10 @@
         .section-subheading {
             max-width: 850px;
             margin: 0 auto 35px;
-            font-size: 15px;
-            color: #666;
-            font-weight: 600;
-            line-height: 1.7
+            font-size: 15px !important;
+            color: #666 !important;
+            font-weight: 600 !important;
+            line-height: 1.7 !important
         }
 
         .achievement-container {
@@ -913,7 +944,11 @@
 
         @media(max-width:768px) {
             .achievement-section {
-                padding: 50px 16px
+                padding: 30px 12px !important;
+            }
+
+            .section-heading {
+                font-size: 32px !important;
             }
 
             .achievement-container {
@@ -936,7 +971,6 @@
             }
         }
 
-        /* ===== REVIEW SECTION CSS ===== */
         .review-section {
             background: #f4f6fb;
             padding: 50px 20px;
@@ -963,12 +997,12 @@
         }
 
         .review-section .sub-heading {
-            color: #666;
-            font-size: 15px;
-            font-weight: 600;
+            color: #666 !important;
+            font-size: 15px !important;
+            font-weight: 600 !important;
             max-width: 600px;
             margin: 0 auto 50px;
-            line-height: 1.7
+            line-height: 1.7 !important
         }
 
         .review-container {
@@ -1041,10 +1075,10 @@
         }
 
         .review-content .text {
-            color: #666;
-            font-size: 15px;
-            font-weight: 600;
-            line-height: 1.7;
+            color: #666 !important;
+            font-size: 15px !important;
+            font-weight: 600 !important;
+            line-height: 1.7 !important;
             text-align: center
         }
 
@@ -1059,17 +1093,17 @@
         }
 
         @media(max-width:768px) {
-            .review-container {
-                grid-template-columns: 1fr;
-                justify-items: center
-            }
-
             .review-section {
-                padding: 50px 16px 60px
+                padding: 30px 12px 40px !important;
             }
 
             .review-section .main-heading {
-                font-size: 28px
+                font-size: 32px !important;
+            }
+
+            .review-container {
+                grid-template-columns: 1fr;
+                justify-items: center
             }
 
             .review-card {
@@ -1078,7 +1112,6 @@
             }
         }
 
-        /* ===== FAQ SECTION CSS ===== */
         .faq-section {
             padding: 50px 20px;
             background: #f4f6fb
@@ -1097,7 +1130,8 @@
         .faq-header h2 {
             font-size: 52px;
             font-weight: 800;
-            color: #0d47a1
+            color: #0d47a1;
+            line-height: 1.2;
         }
 
         .faq-header h2 span {
@@ -1107,12 +1141,12 @@
         }
 
         .faq-header .desc {
-            font-size: 15px;
-            color: #666;
+            font-size: 15px !important;
+            color: #666 !important;
             max-width: 600px;
             margin: 0 auto;
-            font-weight: 600;
-            line-height: 1.7
+            font-weight: 600 !important;
+            line-height: 1.7 !important
         }
 
         .faq-wrapper {
@@ -1132,7 +1166,7 @@
             display: flex;
             justify-content: space-between;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 15px;
             text-align: left
         }
 
@@ -1172,13 +1206,13 @@
         }
 
         .faq-answer p {
-            font-size: 15px;
-            color: #666;
-            line-height: 1.7;
+            font-size: 15px !important;
+            color: #666 !important;
+            line-height: 1.7 !important;
             border-top: 1px solid #f0f2f7;
             padding-top: 15px;
             margin: 0;
-            font-weight: 600
+            font-weight: 600 !important
         }
 
         @media(max-width:991px) {
@@ -1187,7 +1221,20 @@
             }
         }
 
-        /* ===== FOOTER CSS ===== */
+        @media(max-width:600px) {
+            .faq-section {
+                padding: 30px 12px !important;
+            }
+
+            .faq-header h2 {
+                font-size: 32px !important;
+            }
+
+            .faq-header .desc {
+                padding: 0 8px;
+            }
+        }
+
         .footer {
             background: linear-gradient(135deg, #141E30, #243B55, #1B2735);
             color: #fff;
@@ -1292,7 +1339,6 @@
             }
         }
 
-        /* ===== STICKY WHATSAPP & CALL CSS ===== */
         .sticky-container {
             position: fixed;
             right: 15px;

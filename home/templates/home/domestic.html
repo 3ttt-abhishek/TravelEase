@@ -221,7 +221,6 @@
       display: none
     }
 
-    /* ===== BUTTON FIX - 1 LINE ===== */
     .btn-group {
       display: flex !important;
       justify-content: center !important;
@@ -604,9 +603,11 @@
       .review-container {
         grid-template-columns: repeat(2, 1fr)
       }
+
       .review-section .main-heading {
         font-size: 34px
       }
+
       .faq-header h2 {
         font-size: 34px
       }
@@ -623,16 +624,20 @@
         grid-template-columns: 1fr;
         justify-items: center
       }
+
       .review-section {
         padding: 50px 16px 60px
       }
+
       .review-section .main-heading {
         font-size: 28px
       }
+
       .review-card {
         width: 92%;
         max-width: 360px
       }
+
       .faq-section {
         padding: 50px 5%
       }
@@ -643,24 +648,29 @@
         grid-template-columns: 1fr;
         justify-items: center
       }
+
       .card {
         width: 92%;
         max-width: 360px;
         height: auto;
         min-height: auto
       }
+
       .hero h1 {
         font-size: 32px
       }
+
       /* WHY CHOOSE 1 CARD IN MOBILE */
       .why-container {
         grid-template-columns: 1fr !important;
         justify-items: center !important;
       }
+
       .why-card {
         width: 92% !important;
         max-width: 360px !important;
       }
+
       /* FONT SAME IN MOBILE */
       .why-subheading,
       .why-card p,
@@ -673,14 +683,20 @@
         font-weight: 600 !important;
       }
     }
+
     @media(max-width:380px) {
-      .btn,.btn-book{
+
+      .btn,
+      .btn-book {
         font-size: 11px !important;
         padding: 11px 6px !important;
       }
-      .btn-group{ gap: 8px !important; }
+
+      .btn-group {
+        gap: 8px !important;
+      }
     }
-</style>
+  </style>
 </head>
 </head>
 
@@ -3426,5 +3442,6 @@
     });
   </script>
 </body>
+
 </html>
 {% endblock %}
