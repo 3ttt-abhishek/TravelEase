@@ -9,7 +9,6 @@
   <title>Flight Booking</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    /* ========== COMMON CSS ========== */
     * {
       margin: 0;
       padding: 0;
@@ -22,7 +21,6 @@
       overflow-x: hidden
     }
 
-    /* ========== BOOKING HEADER CSS ========== */
     .booking-header {
       padding: 60px 0 15px;
       text-align: center
@@ -30,7 +28,8 @@
 
     .booking-header h1 {
       font-size: 52px;
-      font-weight: 800
+      font-weight: 800;
+      line-height: 1.2;
     }
 
     .first-word {
@@ -55,7 +54,6 @@
       margin-right: auto
     }
 
-    /* ========== PAGE CONTAINER & CARD CSS ========== */
     .page-container {
       max-width: 1050px;
       margin: 25px auto 60px;
@@ -151,7 +149,8 @@
       border: 1px solid #dce2e9;
       border-radius: 20px;
       font-size: 13px;
-      cursor: pointer
+      cursor: pointer;
+      white-space: nowrap;
     }
 
     .trip-tabs input:checked+label {
@@ -244,7 +243,6 @@
       margin-top: 20px
     }
 
-    /* ========== PAYMENT MODAL CSS ========== */
     .payment-overlay {
       position: fixed;
       inset: 0;
@@ -372,7 +370,6 @@
       }
     }
 
-    /* ========== VOUCHER MODAL CSS ========== */
     .voucher-overlay {
       position: fixed;
       inset: 0;
@@ -433,7 +430,7 @@
       color: #111827
     }
 
-    /* ========== RESPONSIVE CSS ========== */
+    /* ========== RESPONSIVE - PACKAGE WALE JAISA ========== */
     @media(max-width:700px) {
       .form-grid {
         grid-template-columns: 1fr
@@ -455,8 +452,46 @@
         grid-template-columns: 1fr
       }
 
+      .booking-header {
+        padding: 20px 12px 10px;
+      }
+
       .booking-header h1 {
-        font-size: 32px
+        font-size: 32px !important;
+        line-height: 1.2 !important;
+      }
+
+      .booking-header p {
+        font-size: 15px !important;
+        line-height: 1.6 !important;
+        font-weight: 600 !important;
+        padding: 0 8px;
+      }
+
+      .page-container {
+        padding: 0 12px;
+      }
+
+      .card-body {
+        padding: 18px 15px;
+      }
+
+      .block-title {
+        font-size: 15px !important;
+      }
+
+      .trip-tabs {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+      }
+
+      .trip-tabs label {
+        padding: 10px 2px !important;
+        font-size: 11.5px !important;
+        text-align: center;
+        justify-content: center;
+        border-radius: 12px;
       }
     }
 
@@ -639,7 +674,7 @@
               <div class="fare-row"><span>Taxes / Fees</span><span id="taxes">₹0</span></div>
               <div class="fare-row total"><span>Grand Total</span><span id="grandTotal">₹0</span></div>
             </div>
-            <button type="submit" class="submit-btn">Continue to Payment →</button>
+            <button type="submit" class="submit-btn">Continue to Payment </button>
           </div>
 
         </div>

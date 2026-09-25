@@ -18,18 +18,21 @@
 
         body {
             background: #f4f6fb;
+            overflow-x: hidden;
         }
 
         .top {
             text-align: center;
-            padding: 22px 18px 10px;
+            padding: 60px 18px 10px;
             background: #f4f6fb;
             border-bottom: 1px solid #eee
         }
 
         .top h1 {
-            font-size: 53px;
-            font-weight: 800
+            font-size: 52px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 10px;
         }
 
         .top h1 b:first-child {
@@ -47,14 +50,15 @@
             justify-content: center;
             align-items: center;
             gap: 10px;
-            margin-top: 14px
+            margin-top: 14px;
+            flex-wrap: wrap;
         }
 
         .step {
             display: flex;
             align-items: center;
             gap: 6px;
-            font-size: 15px;
+            font-size: 13px;
             font-weight: 700;
             color: #94a3b8
         }
@@ -66,7 +70,8 @@
             display: grid;
             place-items: center;
             border: 2px solid #e2e8f0;
-            background: #fff
+            background: #fff;
+            font-size: 11px;
         }
 
         .step.active {
@@ -147,15 +152,17 @@
         }
 
         .hotel-name {
-            font-size: 21px;
-            font-weight: 700;
-            color: #0d6efd;
-            margin-bottom: 6px
+            font-size: 20px !important;
+            font-weight: 700 !important;
+            color: #0d47a1 !important;
+            margin-bottom: 6px;
+            line-height: 1.3;
         }
 
         .hotel-loc {
-            font-size: 13px;
-            color: #64748b;
+            font-size: 13px !important;
+            color: #666 !important;
+            font-weight: 500 !important;
             margin-bottom: 10px
         }
 
@@ -196,7 +203,7 @@
         }
 
         .rent-row strong {
-            font-size: 26px;
+            font-size: 26px !important;
             font-weight: 800;
             color: #ff5722
         }
@@ -219,12 +226,13 @@
         .detail-mini-card {
             padding: 10px 12px;
             border-radius: 12px;
-            font-size: 12px;
-            font-weight: 500;
+            font-size: 12px !important;
+            font-weight: 600 !important;
             display: flex;
             gap: 8px;
             border-left: 4px solid #0d6efd;
-            background: #F8FAFD
+            background: #F8FAFD;
+            color: #666 !important;
         }
 
         .mini-green {
@@ -300,7 +308,6 @@
             border-radius: 10px;
             outline: none;
             font-size: 13px;
-            font-family: 'Inter'
         }
 
         .mob {
@@ -356,7 +363,6 @@
             font-size: 12px;
             margin-bottom: 5px;
             color: #334155;
-            font-family: 'Inter'
         }
 
         .srow.total {
@@ -375,7 +381,8 @@
             border-radius: 12px;
             display: flex;
             justify-content: space-between;
-            margin-top: 12px
+            margin-top: 12px;
+            font-size: 13px;
         }
 
         .paybtn {
@@ -520,11 +527,45 @@
 
         @media(max-width:900px) {
             .main {
-                grid-template-columns: 1fr
+                grid-template-columns: 1fr;
+                justify-items: center;
+                width: 100%;
+                padding: 0 12px;
+            }
+
+            .hotel-card {
+                width: 92%;
+                max-width: 380px;
+            }
+
+            .right {
+                width: 92%;
+                max-width: 500px;
             }
 
             .row {
                 grid-template-columns: 1fr
+            }
+
+            .top {
+                padding: 20px 12px 10px !important;
+            }
+
+            .top h1 {
+                font-size: 32px !important;
+                line-height: 1.2 !important;
+            }
+
+            .steps {
+                gap: 6px;
+            }
+
+            .step {
+                font-size: 11px;
+            }
+
+            .line {
+                width: 20px;
             }
         }
     </style>
@@ -598,7 +639,8 @@
                     <div
                         style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:10px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center">
                         <span style="font-size:11px;font-weight:700">Total Nights</span><strong id="nightsCount"
-                            style="color:#15803d">1 Night</strong></div>
+                            style="color:#15803d">1 Night</strong>
+                    </div>
                 </div>
                 <div class="sec">📅 Stay Dates - DD-MM-YY</div>
                 <div class="row">
@@ -736,7 +778,8 @@
                         <div
                             style="background:linear-gradient(135deg,#eef4ff,#fff7ed);border:1px solid #dbe7ff;padding:14px;border-radius:12px;margin-top:14px;display:flex;justify-content:space-between;align-items:center">
                             <span style="font-weight:700">Total Paid (Card Price)</span><strong id="t_amount"
-                                style="color:#ff6a00;font-size:20px"></strong></div>
+                                style="color:#ff6a00;font-size:20px"></strong>
+                        </div>
                         <p style="font-size:9px;color:#94a3b8;text-align:center;margin-top:10px">This is computer
                             generated receipt. Please carry valid ID proof at hotel.</p><button onclick="window.print()"
                             style="width:100%;margin-top:14px;padding:14px;background:#004AAD;color:#fff;border:0;border-radius:12px;font-weight:800">🖨️

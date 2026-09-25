@@ -11,7 +11,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
         rel="stylesheet">
     <style>
-        /* ========== COMMON CSS - ========== */
         * {
             margin: 0;
             padding: 0;
@@ -32,7 +31,6 @@
             width: 100%
         }
 
-        /* ========== HEADING CSS ========== */
         .domestic-heading {
             text-align: center;
             margin-bottom: 35px;
@@ -65,7 +63,6 @@
             margin: 0 auto
         }
 
-        /* ========== HOTEL CARD CSS  ========== */
         .hotel-grid {
             width: 100%;
             display: grid;
@@ -327,7 +324,6 @@
             box-shadow: 0 10px 20px rgba(255, 87, 34, .35) !important
         }
 
-        /* ========== PAGINATION CSS ========== */
         .pagination-wrap {
             width: 95%;
             max-width: 1220px;
@@ -367,7 +363,6 @@
             cursor: not-allowed
         }
 
-        /* ========== RESPONSIVE CSS ========== */
         @media(max-width:992px) {
             .hotel-grid {
                 grid-template-columns: repeat(2, 1fr)
@@ -376,7 +371,7 @@
 
         @media(max-width:600px) {
             .domestic-wrap {
-                padding: 0 15px
+                padding: 0 12px
             }
 
             .hotel-grid {
@@ -389,13 +384,19 @@
                 max-width: 360px
             }
 
+            .domestic-heading {
+                padding: 20px 12px 0;
+            }
+
             .domestic-heading h2 {
-                font-size: 32px
+                font-size: 32px !important;
+                line-height: 1.2 !important;
             }
 
             .domestic-heading p {
                 font-size: 15px !important;
-                color: #666 !important
+                line-height: 1.6 !important;
+                padding: 0 8px;
             }
 
             .pagination-wrap {
@@ -2168,7 +2169,7 @@
             renderPagination(gridId, totalPages);
         }
 
-        // 2. Pagination number wala - < Previous | 1 2 3 4 5 | Next >
+        // 2. Pagination number wala - < Previous | 1 2 3 | Next > with sliding
         function renderPagination(gridId, totalPages) {
             const wrapId = gridId === 'domesticGrid' ? 'domesticPagination' : 'internationalPagination';
             const topId = gridId === 'domesticGrid' ? 'domesticTop' : 'internationalTop';
@@ -2177,9 +2178,29 @@
             const current = currentPages[gridId];
 
             let html = `<button class="pg-btn" ${current === 1 ? 'disabled' : ''} onclick="changePage('${gridId}',-1,'${topId}')">‹ Previous</button>`;
-            for (let i = 1; i <= totalPages; i++) {
+
+            // Sliding logic - 3 numbers at a time
+            let startPage, endPage;
+            if (totalPages <= 3) {
+                startPage = 1;
+                endPage = totalPages;
+            } else {
+                if (current <= 2) {
+                    startPage = 1;
+                    endPage = 3;
+                } else if (current >= totalPages - 1) {
+                    startPage = totalPages - 2;
+                    endPage = totalPages;
+                } else {
+                    startPage = current - 1;
+                    endPage = current + 1;
+                }
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
                 html += `<button class="pg-btn ${i === current ? 'active' : ''}" onclick="goToPage('${gridId}',${i},'${topId}')">${i}</button>`;
             }
+
             html += `<button class="pg-btn" ${current === totalPages ? 'disabled' : ''} onclick="changePage('${gridId}',1,'${topId}')">Next ›</button>`;
             wrap.innerHTML = html;
         }

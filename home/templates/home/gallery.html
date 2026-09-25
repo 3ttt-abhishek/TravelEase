@@ -4,7 +4,6 @@
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
-    /* ========== COMMON CSS ========== */
     * {
         margin: 0;
         padding: 0;
@@ -13,26 +12,28 @@
     }
 
     body {
-        overflow-x: hidden
+        overflow-x: hidden;
+        background: #f4f6fb;
     }
 
-    /* ========== GALLERY WRAP CSS ========== */
     .gallery {
         width: 90%;
-        margin: 60px auto
+        max-width: 1400px;
+        margin: 40px auto 60px;
     }
 
-    /* ========== HEADING CSS - HOME JAISA ========== */
     .main-heading {
         text-align: center;
-        margin-bottom: 40px
+        margin-bottom: 35px;
+        padding: 60px 0 0;
     }
 
     .main-heading h1 {
         font-size: 52px;
         font-weight: 800;
         color: #0d47a1;
-        line-height: 1.2
+        line-height: 1.2;
+        margin-bottom: 15px;
     }
 
     .main-heading h1 span {
@@ -46,43 +47,41 @@
         font-size: 15px !important;
         font-weight: 600 !important;
         line-height: 1.7 !important;
-        margin-top: 10px;
         max-width: 800px;
-        margin-left: auto;
-        margin-right: auto
+        margin: 0 auto;
     }
 
-    /* ========== FILTER BUTTONS CSS ========== */
     .filter-buttons {
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
-        gap: 15px;
-        margin-bottom: 40px
+        gap: 12px;
+        margin-bottom: 35px
     }
 
     .filter-buttons button {
-        padding: 12px 28px;
+        padding: 11px 24px;
         border: none;
         border-radius: 50px;
         background: #fff;
         color: #0d47a1;
-        font-weight: 600;
+        font-size: 14px;
+        font-weight: 700;
         cursor: pointer;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, .08);
         transition: .3s
     }
 
     .filter-buttons button.active {
         background: linear-gradient(135deg, #ffb300, #ff7300);
-        color: #fff
+        color: #fff;
+        transform: translateY(-2px);
     }
 
-    /* ========== GALLERY CARD CSS ========== */
     .gallery-container {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 30px
+        gap: 24px
     }
 
     .gallery-card {
@@ -91,14 +90,15 @@
         border-radius: 22px;
         height: 320px;
         background: #fff;
-        box-shadow: 0 15px 35px rgba(0, 0, 0, .10);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
         cursor: pointer;
         border: 2px solid #eee;
         transition: .4s
     }
 
     .gallery-card:hover {
-        transform: translateY(-8px)
+        transform: translateY(-8px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
     }
 
     .gallery-card img {
@@ -116,14 +116,14 @@
 
     .badge {
         position: absolute;
-        top: 18px;
-        left: 18px;
+        top: 15px;
+        left: 15px;
         background: linear-gradient(135deg, #ffb300, #ff7300);
         color: #fff;
-        padding: 6px 16px;
+        padding: 6px 14px;
         border-radius: 50px;
-        font-size: 12px;
-        font-weight: 600;
+        font-size: 11px;
+        font-weight: 700;
         z-index: 5
     }
 
@@ -142,7 +142,8 @@
         visibility: hidden;
         transition: all .4s ease;
         z-index: 4;
-        text-align: center
+        text-align: center;
+        padding: 15px;
     }
 
     .gallery-card:hover .overlay {
@@ -152,19 +153,19 @@
 
     .overlay h3 {
         color: #fff;
-        font-size: 36px;
+        font-size: 28px;
         font-weight: 800;
         transform: translateY(30px);
         transition: .4s ease;
         text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
-        line-height: 1.1
+        line-height: 1.2
     }
 
     .overlay p {
         color: #fff;
-        font-size: 15px !important;
+        font-size: 14px !important;
         font-weight: 500;
-        margin-top: 8px;
+        margin-top: 6px;
         transform: translateY(30px);
         transition: .4s .1s ease;
         text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
@@ -176,13 +177,12 @@
         transform: translateY(0)
     }
 
-    /* ========== PAGINATION CSS ========== */
     .pagination {
         display: flex;
         justify-content: center;
         align-items: center;
         gap: 12px;
-        margin: 60px auto;
+        margin: 50px auto 0;
         flex-wrap: wrap
     }
 
@@ -192,48 +192,89 @@
         border-radius: 50px;
         background: #fff;
         color: #0d47a1;
+        font-size: 14px;
         font-weight: 700;
         cursor: pointer;
         box-shadow: 0 8px 20px rgba(0, 0, 0, .08);
         transition: .3s;
-        min-width: 45px
+        min-width: 48px
     }
 
+    .pagination button:hover,
     .pagination button.active {
         background: linear-gradient(135deg, #ff9800, #ff5722);
         color: #fff;
-        transform: scale(1.08)
+        transform: translateY(-3px)
     }
 
-    /* ========== RESPONSIVE CSS ========== */
+    .pagination button:disabled {
+        opacity: .35;
+        cursor: not-allowed
+    }
+
     @media(max-width:992px) {
         .gallery-container {
             grid-template-columns: repeat(2, 1fr)
         }
     }
 
-    @media(max-width:768px) {
+    @media(max-width:600px) {
+        .gallery {
+            width: 100%;
+            padding: 0 12px;
+            margin: 20px auto 40px;
+        }
+
         .gallery-container {
-            grid-template-columns: 1fr
+            grid-template-columns: 1fr;
+            justify-items: center;
+            gap: 18px;
+        }
+
+        .gallery-card {
+            width: 92%;
+            max-width: 360px;
+            height: 280px
+        }
+
+        .main-heading {
+            padding: 20px 12px 0;
         }
 
         .main-heading h1 {
-            font-size: 32px
+            font-size: 32px !important;
+            line-height: 1.2 !important;
         }
 
         .main-heading p {
             font-size: 15px !important;
-            color: #666 !important
-        }
-    }
-
-    @media(max-width:600px) {
-        .gallery {
-            width: 92%
+            line-height: 1.6 !important;
+            padding: 0 8px;
         }
 
-        .gallery-card {
-            height: 280px
+        .filter-buttons {
+            gap: 8px;
+            padding: 0 10px;
+        }
+
+        .filter-buttons button {
+            padding: 9px 16px;
+            font-size: 12px;
+        }
+
+        .overlay {
+            opacity: 1 !important;
+            visibility: visible !important;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.1) 60%);
+        }
+
+        .overlay h3,
+        .overlay p {
+            transform: translateY(0) !important;
+        }
+
+        .overlay h3 {
+            font-size: 22px;
         }
 
         .pagination {
@@ -413,148 +454,148 @@
             </div>
         </div>
 
-        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery22.webp' %}"><span
-                class="badge">Beach</span>
+        <div class="gallery-card" data-category="beach"><img
+                src="{% static 'home/Image/Gallery/Gallery22.webp' %}"><span class="badge">Beach</span>
             <div class="overlay">
                 <h3>Goa</h3>
                 <p>Goa</p>
             </div>
         </div>
-        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery23.webp' %}"><span
-                class="badge">Beach</span>
+        <div class="gallery-card" data-category="beach"><img
+                src="{% static 'home/Image/Gallery/Gallery23.webp' %}"><span class="badge">Beach</span>
             <div class="overlay">
                 <h3>Andaman</h3>
                 <p>Andaman</p>
             </div>
         </div>
-        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery24.webp' %}"><span
-                class="badge">Beach</span>
+        <div class="gallery-card" data-category="beach"><img
+                src="{% static 'home/Image/Gallery/Gallery24.webp' %}"><span class="badge">Beach</span>
             <div class="overlay">
                 <h3>Kovalam</h3>
                 <p>Kerala</p>
             </div>
         </div>
-        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery25.webp' %}"><span
-                class="badge">Beach</span>
+        <div class="gallery-card" data-category="beach"><img
+                src="{% static 'home/Image/Gallery/Gallery25.webp' %}"><span class="badge">Beach</span>
             <div class="overlay">
                 <h3>Gokarna</h3>
                 <p>Karnataka</p>
             </div>
         </div>
-        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery26.webp' %}"><span
-                class="badge">Beach</span>
+        <div class="gallery-card" data-category="beach"><img
+                src="{% static 'home/Image/Gallery/Gallery26.webp' %}"><span class="badge">Beach</span>
             <div class="overlay">
                 <h3>Pondicherry</h3>
                 <p>Puducherry</p>
             </div>
         </div>
-        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery27.webp' %}"><span
-                class="badge">Beach</span>
+        <div class="gallery-card" data-category="beach"><img
+                src="{% static 'home/Image/Gallery/Gallery27.webp' %}"><span class="badge">Beach</span>
             <div class="overlay">
                 <h3>Digha</h3>
                 <p>WB</p>
             </div>
         </div>
-        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery28.webp' %}"><span
-                class="badge">Beach</span>
+        <div class="gallery-card" data-category="beach"><img
+                src="{% static 'home/Image/Gallery/Gallery28.webp' %}"><span class="badge">Beach</span>
             <div class="overlay">
                 <h3>Varkala</h3>
                 <p>Kerala</p>
             </div>
         </div>
-        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery29.webp' %}"><span
-                class="badge">Beach</span>
+        <div class="gallery-card" data-category="beach"><img
+                src="{% static 'home/Image/Gallery/Gallery29.webp' %}"><span class="badge">Beach</span>
             <div class="overlay">
                 <h3>Marina Beach</h3>
                 <p>TN</p>
             </div>
         </div>
-        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery30.webp' %}"><span
-                class="badge">Beach</span>
+        <div class="gallery-card" data-category="beach"><img
+                src="{% static 'home/Image/Gallery/Gallery30.webp' %}"><span class="badge">Beach</span>
             <div class="overlay">
                 <h3>Radhanagar</h3>
                 <p>Andaman</p>
             </div>
         </div>
-        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery31.webp' %}"><span
-                class="badge">Beach</span>
+        <div class="gallery-card" data-category="beach"><img
+                src="{% static 'home/Image/Gallery/Gallery31.webp' %}"><span class="badge">Beach</span>
             <div class="overlay">
                 <h3>Tarkarli</h3>
                 <p>Maharashtra</p>
             </div>
         </div>
-        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery32.webp' %}"><span
-                class="badge">Beach</span>
+        <div class="gallery-card" data-category="beach"><img
+                src="{% static 'home/Image/Gallery/Gallery32.webp' %}"><span class="badge">Beach</span>
             <div class="overlay">
                 <h3>Puri</h3>
                 <p>Odisha</p>
             </div>
         </div>
-        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery33.webp' %}"><span
-                class="badge">Beach</span>
+        <div class="gallery-card" data-category="beach"><img
+                src="{% static 'home/Image/Gallery/Gallery33.webp' %}"><span class="badge">Beach</span>
             <div class="overlay">
                 <h3>Mandarmani</h3>
                 <p>WB</p>
             </div>
         </div>
-        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery34.webp' %}"><span
-                class="badge">Beach</span>
+        <div class="gallery-card" data-category="beach"><img
+                src="{% static 'home/Image/Gallery/Gallery34.webp' %}"><span class="badge">Beach</span>
             <div class="overlay">
                 <h3>Alibaug</h3>
                 <p>Maharashtra</p>
             </div>
         </div>
-        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery35.webp' %}"><span
-                class="badge">Beach</span>
+        <div class="gallery-card" data-category="beach"><img
+                src="{% static 'home/Image/Gallery/Gallery35.webp' %}"><span class="badge">Beach</span>
             <div class="overlay">
                 <h3>Kanyakumari</h3>
                 <p>TN</p>
             </div>
         </div>
-        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery36.webp' %}"><span
-                class="badge">Beach</span>
+        <div class="gallery-card" data-category="beach"><img
+                src="{% static 'home/Image/Gallery/Gallery36.webp' %}"><span class="badge">Beach</span>
             <div class="overlay">
                 <h3>Bekal</h3>
                 <p>Kerala</p>
             </div>
         </div>
-        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery37.webp' %}"><span
-                class="badge">Beach</span>
+        <div class="gallery-card" data-category="beach"><img
+                src="{% static 'home/Image/Gallery/Gallery37.webp' %}"><span class="badge">Beach</span>
             <div class="overlay">
                 <h3>Om Beach</h3>
                 <p>Karnataka</p>
             </div>
         </div>
-        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery38.webp' %}"><span
-                class="badge">Beach</span>
+        <div class="gallery-card" data-category="beach"><img
+                src="{% static 'home/Image/Gallery/Gallery38.webp' %}"><span class="badge">Beach</span>
             <div class="overlay">
                 <h3>Baga Beach</h3>
                 <p>Goa</p>
             </div>
         </div>
-        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery39.webp' %}"><span
-                class="badge">Beach</span>
+        <div class="gallery-card" data-category="beach"><img
+                src="{% static 'home/Image/Gallery/Gallery39.webp' %}"><span class="badge">Beach</span>
             <div class="overlay">
                 <h3>Palolem</h3>
                 <p>Goa</p>
             </div>
         </div>
-        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery40.webp' %}"><span
-                class="badge">Beach</span>
+        <div class="gallery-card" data-category="beach"><img
+                src="{% static 'home/Image/Gallery/Gallery40.webp' %}"><span class="badge">Beach</span>
             <div class="overlay">
                 <h3>Dwarka</h3>
                 <p>Gujarat</p>
             </div>
         </div>
-        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery41.webp' %}"><span
-                class="badge">Beach</span>
+        <div class="gallery-card" data-category="beach"><img
+                src="{% static 'home/Image/Gallery/Gallery41.webp' %}"><span class="badge">Beach</span>
             <div class="overlay">
                 <h3>Mahabalipuram</h3>
                 <p>TN</p>
             </div>
         </div>
-        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery42.webp' %}"><span
-                class="badge">Beach</span>
+        <div class="gallery-card" data-category="beach"><img
+                src="{% static 'home/Image/Gallery/Gallery42.webp' %}"><span class="badge">Beach</span>
             <div class="overlay">
                 <h3>Agonda Beach</h3>
                 <p>Goa</p>

@@ -221,31 +221,36 @@
       display: none
     }
 
+    /* ===== BUTTON FIX - 1 LINE ===== */
     .btn-group {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-top: auto;
-      padding-top: 20px;
-      flex-shrink: 0
+      display: flex !important;
+      justify-content: center !important;
+      gap: 10px !important;
+      margin-top: auto !important;
+      padding-top: 20px !important;
+      flex-shrink: 0 !important;
+      flex-wrap: nowrap !important;
     }
 
     .btn,
     .btn-book {
-      flex: 1;
-      padding: 15px;
+      flex: 1 1 0 !important;
+      padding: 12px 8px !important;
       border: none;
       border-radius: 50px;
-      font-size: 14px;
-      font-weight: 700;
+      font-size: 13px !important;
+      font-weight: 700 !important;
       cursor: pointer;
       transition: .4s;
-      color: #fff;
+      color: #fff !important;
       box-shadow: 0 6px 15px rgba(255, 87, 34, .25);
       background: linear-gradient(135deg, #ff9800, #ff5722);
       text-decoration: none;
       text-align: center;
-      display: inline-block
+      display: inline-block;
+      white-space: nowrap !important;
+      min-width: 0 !important;
+      line-height: 1 !important;
     }
 
     .btn:hover,
@@ -599,11 +604,9 @@
       .review-container {
         grid-template-columns: repeat(2, 1fr)
       }
-
       .review-section .main-heading {
         font-size: 34px
       }
-
       .faq-header h2 {
         font-size: 34px
       }
@@ -620,20 +623,16 @@
         grid-template-columns: 1fr;
         justify-items: center
       }
-
       .review-section {
         padding: 50px 16px 60px
       }
-
       .review-section .main-heading {
         font-size: 28px
       }
-
       .review-card {
         width: 92%;
         max-width: 360px
       }
-
       .faq-section {
         padding: 50px 5%
       }
@@ -644,19 +643,44 @@
         grid-template-columns: 1fr;
         justify-items: center
       }
-
       .card {
         width: 92%;
         max-width: 360px;
         height: auto;
         min-height: auto
       }
-
       .hero h1 {
         font-size: 32px
       }
+      /* WHY CHOOSE 1 CARD IN MOBILE */
+      .why-container {
+        grid-template-columns: 1fr !important;
+        justify-items: center !important;
+      }
+      .why-card {
+        width: 92% !important;
+        max-width: 360px !important;
+      }
+      /* FONT SAME IN MOBILE */
+      .why-subheading,
+      .why-card p,
+      .why-card h3,
+      .review-content .text,
+      .faq-answer p,
+      .sub-heading,
+      .faq-header .desc {
+        font-size: 15px !important;
+        font-weight: 600 !important;
+      }
     }
-  </style>
+    @media(max-width:380px) {
+      .btn,.btn-book{
+        font-size: 11px !important;
+        padding: 11px 6px !important;
+      }
+      .btn-group{ gap: 8px !important; }
+    }
+</style>
 </head>
 </head>
 
@@ -3402,6 +3426,5 @@
     });
   </script>
 </body>
-
 </html>
 {% endblock %}

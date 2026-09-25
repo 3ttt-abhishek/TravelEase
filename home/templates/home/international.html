@@ -10,7 +10,6 @@
   {% load static %}
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    /* ========== COMMON CSS ========== */
     * {
       margin: 0;
       padding: 0;
@@ -23,7 +22,7 @@
       overflow-x: hidden
     }
 
-    /* ========== HERO SECTION CSS ========== */
+    /* ========== HERO SECTION ========== */
     .hero {
       padding: 60px 0 20px;
       text-align: center;
@@ -31,7 +30,7 @@
     }
 
     .hero h1 {
-      font-size: 48px;
+      font-size: 52px;
       font-weight: 800;
       color: #0d47a1;
       margin-bottom: 15px
@@ -52,7 +51,8 @@
       font-weight: 600 !important
     }
 
-    .hero p.line1 {
+    .hero p.line1,
+    .hero p.line2 {
       display: block;
       font-size: 15px !important;
       color: #666 !important;
@@ -61,15 +61,10 @@
     }
 
     .hero p.line2 {
-      display: block;
-      font-size: 15px !important;
-      color: #666 !important;
-      font-weight: 600 !important;
-      line-height: 1.7 !important;
       margin-top: 5px
     }
 
-    /* ========== PACKAGE CARD CSS ========== */
+    /* ========== PACKAGE CARD ========== */
     .container {
       width: 95%;
       max-width: 1400px;
@@ -267,7 +262,6 @@
       display: block
     }
 
-    /* ========== PACKAGE PAGINATION BUTTONS CSS ========== */
     .package-navigation {
       width: 95%;
       max-width: 1400px;
@@ -286,7 +280,6 @@
       border-radius: 50px;
       background: #fff;
       color: #0d47a1;
-      font-family: 'Poppins', sans-serif;
       font-size: 14px;
       font-weight: 700;
       cursor: pointer;
@@ -307,7 +300,7 @@
       cursor: not-allowed
     }
 
-    /* ========== WHY CHOOSE US SECTION CSS ========== */
+    /* ========== WHY CHOOSE US ========== */
     .why-choose-section {
       background: #f4f6fb;
       padding: 60px 20px 40px;
@@ -380,29 +373,7 @@
       font-weight: 600
     }
 
-    @media(max-width:1200px) {
-      .why-container {
-        grid-template-columns: repeat(2, 1fr)
-      }
-    }
-
-    @media(max-width:600px) {
-      .why-container {
-        grid-template-columns: 1fr;
-        justify-items: center
-      }
-
-      .why-card {
-        width: 92%;
-        max-width: 360px
-      }
-
-      .why-heading {
-        font-size: 34px
-      }
-    }
-
-    /* ===== REVIEW SECTION CSS ===== */
+    /* ===== REVIEW SECTION ===== */
     .review-section {
       background: #f4f6fb;
       padding: 50px 20px;
@@ -514,42 +485,11 @@
       text-align: center
     }
 
-    @media(max-width:991px) {
-      .review-container {
-        grid-template-columns: repeat(2, 1fr)
-      }
-
-      .review-section .main-heading {
-        font-size: 34px
-      }
-    }
-
-    @media(max-width:768px) {
-      .review-container {
-        grid-template-columns: 1fr;
-        justify-items: center
-      }
-
-      .review-section {
-        padding: 50px 16px 60px
-      }
-
-      .review-section .main-heading {
-        font-size: 28px
-      }
-
-      .review-card {
-        width: 92%;
-        max-width: 360px
-      }
-    }
-
-    /* ========== FAQ SECTION CSS ========== */
+    /* ========== FAQ SECTION ========== */
     .faq-section {
       width: 100%;
       padding: 50px 8%;
-      background: #f4f6fb;
-      font-family: 'Poppins', sans-serif
+      background: #f4f6fb
     }
 
     .faq-container {
@@ -666,7 +606,7 @@
       font-weight: 600
     }
 
-    /* ========== RESPONSIVE CSS ========== */
+    /* ========== RESPONSIVE ========== */
     @media(max-width:1200px) {
       .why-container {
         grid-template-columns: repeat(2, 1fr)
@@ -679,6 +619,20 @@
       }
     }
 
+    @media(max-width:991px) {
+      .review-container {
+        grid-template-columns: repeat(2, 1fr)
+      }
+
+      .review-section .main-heading {
+        font-size: 34px !important
+      }
+
+      .faq-header h2 {
+        font-size: 34px !important
+      }
+    }
+
     @media(max-width:900px) {
       .reviews-grid {
         grid-template-columns: repeat(2, 1fr)
@@ -686,21 +640,26 @@
     }
 
     @media(max-width:768px) {
+      .review-container {
+        grid-template-columns: 1fr;
+        justify-items: center
+      }
+
+      .review-section {
+        padding: 50px 16px 60px
+      }
+
+      .review-section .main-heading {
+        font-size: 28px !important
+      }
+
+      .review-card {
+        width: 92%;
+        max-width: 360px
+      }
+
       .faq-section {
         padding: 70px 5%
-      }
-
-      .faq-header h2 {
-        font-size: 34px
-      }
-
-      .faq-question {
-        font-size: 16px;
-        padding: 18px 20px
-      }
-
-      .faq-item.active .faq-answer {
-        padding: 0 20px 20px 20px
       }
     }
 
@@ -718,14 +677,21 @@
       }
 
       .hero h1 {
-        font-size: 32px
+        font-size: 32px !important
       }
 
-      .hero p.line1,
-      .hero p.line2 {
-        font-size: 15px !important;
-        color: #666 !important;
-        font-weight: 600 !important
+      .why-container {
+        grid-template-columns: 1fr;
+        justify-items: center
+      }
+
+      .why-card {
+        width: 92%;
+        max-width: 360px
+      }
+
+      .why-heading {
+        font-size: 32px !important
       }
 
       .package-navigation {
@@ -736,14 +702,6 @@
         padding: 9px 14px;
         font-size: 12px;
         min-width: 38px
-      }
-
-      .reviews-section {
-        padding: 65px 5%
-      }
-
-      .why-heading {
-        font-size: 34px
       }
 
       .reviews-grid {
@@ -3701,7 +3659,7 @@
       return true;
     }
 
-    /* 15 - 15 - 15 Number Pagination */
+        /* 15 - 15 - 15 Number Pagination */
     document.addEventListener('DOMContentLoaded', function () {
       const allCards = document.querySelectorAll('.container .card');
       const paginationBox = document.getElementById('packagePagination');
@@ -3731,7 +3689,16 @@
         prev.onclick = () => { if (currentPageNum > 1) showPageNum(currentPageNum - 1); };
         paginationBox.appendChild(prev);
 
-        for (let i = 1; i <= totalPages; i++) {
+        // CHANGE YAHI HAI - Mobile pe 3, Desktop pe 7
+        let maxVisible = window.innerWidth < 600 ? 3 : totalPages;
+        let startPage = Math.max(1, currentPageNum - 1);
+        if (currentPageNum === totalPages) {
+          startPage = totalPages - maxVisible + 1;
+        }
+        if (startPage < 1) startPage = 1;
+        let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+
+        for (let i = startPage; i <= endPage; i++) {
           let btn = document.createElement("button");
           btn.innerText = i;
           if (i === currentPageNum) btn.classList.add("active");
@@ -3747,6 +3714,7 @@
       }
 
       showPageNum(1);
+      window.addEventListener('resize', () => showPageNum(1));
     });
 
     /*==============FQ=============*/
