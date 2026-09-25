@@ -1,0 +1,2120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#141E30">
+    <title>TravelEase - Tour & Travels</title>
+    {% load static %}
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif
+        }
+
+        html {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth
+        }
+
+        body {
+            width: 100%;
+            background: #f4f6fb;
+            color: #222;
+            overflow-x: hidden;
+            padding-top: 70px
+        }
+
+        img {
+            max-width: 100%
+        }
+
+        button,
+        a {
+            -webkit-tap-highlight-color: transparent
+        }
+
+        /* ===== HEADER / NAVBAR CSS - FIXED FONT SAME ===== */
+        .Box1 {
+            height: 70px;
+            width: 100%;
+            background: linear-gradient(135deg, #141E30, #243B55, #1B2735);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 45px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 99999;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, .25)
+        }
+
+        .Logo {
+            color: #fff;
+            font-size: 32px;
+            font-weight: 800;
+            white-space: nowrap
+        }
+
+        .Logo span {
+            color: #FFD700
+        }
+
+        .menu-toggle {
+            display: none !important;
+            width: 45px;
+            height: 45px;
+            border: none;
+            background: rgba(255, 255, 255, .10);
+            border-radius: 10px;
+            cursor: pointer;
+            flex-direction: column;
+            gap: 5px;
+            align-items: center;
+            justify-content: center
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 23px;
+            height: 3px;
+            background: #fff;
+            border-radius: 5px;
+            transition: .3s
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: translateY(8px) rotate(45deg)
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg)
+        }
+
+        .Navbaar ul {
+            list-style: none;
+            display: flex;
+            gap: 2px;
+            align-items: center
+        }
+
+        .Navbaar>ul>li {
+            position: relative
+        }
+
+        .Navbaar>ul>li>a {
+            color: #fff;
+            font-size: 17px;
+            font-weight: 700;
+            padding: 12px;
+            text-decoration: none;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer
+        }
+
+        .Navbaar>ul>li>a:hover {
+            background: rgba(255, 255, 255, .08);
+            color: #FFD700
+        }
+
+        .arrow-icon {
+            width: 12px;
+            height: 20px;
+            fill: #fff;
+            transition: .3s
+        }
+
+        .dropdown-item.dropdown-open .arrow-icon {
+            transform: rotate(180deg);
+            fill: #FFD700
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 52px;
+            left: 0;
+            width: 300px;
+            min-width: 300px;
+            background: linear-gradient(135deg, #141E30, #243B55, #1B2735);
+            border-radius: 12px;
+            padding: 8px;
+            display: none !important;
+            flex-direction: column;
+            z-index: 999999;
+            text-align: left;
+            align-items: flex-start;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, .3)
+        }
+
+        .dropdown-item.dropdown-open>.dropdown-menu {
+            display: flex !important
+        }
+
+        .dropdown-menu li {
+            list-style: none;
+            width: 100%;
+            text-align: left
+        }
+
+        .dropdown-menu li a {
+            display: block;
+            color: #fff;
+            font-size: 17px;
+            font-weight: 700;
+            padding: 12px 18px;
+            text-decoration: none;
+            border-radius: 8px;
+            text-align: left;
+            width: 100%;
+            white-space: nowrap !important
+        }
+
+        .dropdown-menu li a:hover {
+            color: #FFD700;
+            background: rgba(255, 255, 255, .08)
+        }
+
+        @media(min-width:992px) {
+            .dropdown-item:hover>.dropdown-menu {
+                display: flex !important
+            }
+        }
+
+        @media(max-width:991px) {
+            .Box1 {
+                padding: 0 22px
+            }
+
+            .Logo {
+                font-size: 28px
+            }
+
+            .menu-toggle {
+                display: flex !important
+            }
+
+            .Navbaar {
+                position: absolute;
+                top: 80px;
+                right: 20px;
+                width: min(320px, calc(100vw - 40px));
+                max-height: calc(100vh - 100px);
+                overflow-y: auto;
+                background: linear-gradient(135deg, #141E30, #243B55, #1B2735);
+                border-radius: 15px;
+                padding: 10px;
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+                transform: translateY(-10px);
+                transition: .3s;
+                z-index: 100000
+            }
+
+            .Navbaar.active {
+                opacity: 1;
+                visibility: visible;
+                pointer-events: auto;
+                transform: translateY(0)
+            }
+
+            .Navbaar ul {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 4px;
+                width: 100%
+            }
+
+            .Navbaar>ul>li {
+                width: 100%
+            }
+
+            .Navbaar>ul>li>a {
+                width: 100%;
+                justify-content: space-between;
+                font-size: 14px;
+                padding: 12px 14px
+            }
+
+            .dropdown-menu {
+                position: static !important;
+                width: 100% !important;
+                min-width: 100% !important;
+                margin-top: 4px;
+                display: none !important;
+                background: rgba(0, 0, 0, .20) !important;
+                border-radius: 10px !important;
+                border-left: 2px solid #FFD700;
+                text-align: left
+            }
+
+            .dropdown-item.dropdown-open>.dropdown-menu {
+                display: flex !important
+            }
+
+            .dropdown-menu li a {
+                padding: 11px 18px;
+                font-size: 14px;
+                font-weight: 700;
+                background: rgba(255, 255, 255, .05);
+                margin-bottom: 3px;
+                border-radius: 8px;
+                text-align: left;
+                white-space: nowrap !important
+            }
+        }
+
+        /* ===== SLIDER CSS ===== */
+        .slider-container {
+            width: 100%;
+            height: 600px;
+            position: relative;
+            overflow: hidden;
+            background: white
+        }
+
+        .slider {
+            display: flex;
+            width: 500%;
+            height: 100%;
+            animation: slide 20s infinite
+        }
+
+        .slide {
+            width: 20%;
+            height: 100%;
+            position: relative;
+            flex-shrink: 0
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover
+        }
+
+        .slide-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 90%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #fff;
+            z-index: 2
+        }
+
+        .slide-content h2 {
+            font-size: 50px;
+            font-weight: 800;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, .6)
+        }
+
+        .slide-content p {
+            font-size: 18px;
+            font-weight: 600;
+            text-shadow: 0 3px 10px rgba(0, 0, 0, .6)
+        }
+
+        .slide::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(rgba(0, 0, 0, .3), rgba(0, 0, 0, .5));
+            z-index: 1
+        }
+
+        .dots {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 3
+        }
+
+        .dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .6);
+            border: 2px solid #fff
+        }
+
+        @keyframes slide {
+            0% {
+                margin-left: 0
+            }
+
+            16% {
+                margin-left: 0
+            }
+
+            20% {
+                margin-left: -100%
+            }
+
+            36% {
+                margin-left: -100%
+            }
+
+            40% {
+                margin-left: -200%
+            }
+
+            56% {
+                margin-left: -200%
+            }
+
+            60% {
+                margin-left: -300%
+            }
+
+            76% {
+                margin-left: -300%
+            }
+
+            80% {
+                margin-left: -400%
+            }
+
+            96% {
+                margin-left: -400%
+            }
+
+            100% {
+                margin-left: 0
+            }
+        }
+
+        @media(max-width:768px) {
+            .slider-container {
+                height: 360px
+            }
+        }
+
+        /* ===== HERO SECTION CSS ===== */
+        .hero {
+            padding: 50px 20px 20px;
+            text-align: center;
+            background: #f4f6fb
+        }
+
+        .hero h1 {
+            font-size: 52px;
+            font-weight: 800;
+            color: #0d47a1
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent
+        }
+
+        /* ===== PACKAGE CARD CSS ===== */
+        .container {
+            width: 95%;
+            max-width: 1400px;
+            margin: 20px auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            align-items: start
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(13, 110, 253, .08);
+            display: flex;
+            flex-direction: column;
+            align-self: start;
+            height: auto;
+            transition: all .35s ease
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, .15)
+        }
+
+        .card-img {
+            height: 240px;
+            position: relative;
+            overflow: hidden
+        }
+
+        .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover
+        }
+
+        .future-tag {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 12px;
+            font-weight: 700
+        }
+
+        .rating-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #fff;
+            color: #ff9800;
+            padding: 8px 14px;
+            border-radius: 30px;
+            font-size: 13px;
+            font-weight: 700
+        }
+
+        .card-content {
+            padding: 22px
+        }
+
+        .card-content h3 {
+            font-size: 20px;
+            color: #0d47a1;
+            min-height: 50px;
+            font-weight: 700
+        }
+
+        .days {
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            color: #fff;
+            padding: 7px 14px;
+            border-radius: 25px;
+            font-size: 12px;
+            font-weight: 700;
+            display: inline-block;
+            margin-bottom: 10px
+        }
+
+        .price {
+            font-size: 26px;
+            font-weight: 800;
+            color: #ff5722
+        }
+
+        .price span {
+            font-size: 13px;
+            color: #666;
+            font-weight: 600
+        }
+
+        .itinerary {
+            list-style: none;
+            margin-top: 10px
+        }
+
+        .itinerary li {
+            background: #F8FAFD;
+            padding: 10px 10px 10px 38px;
+            margin-bottom: 8px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #666;
+            position: relative;
+            border-left: 4px solid #0d6efd
+        }
+
+        .itinerary li::before {
+            content: "📍";
+            position: absolute;
+            left: 12px
+        }
+
+        .itinerary li b {
+            font-weight: 800;
+            color: #000
+        }
+
+        .extra-day {
+            display: none
+        }
+
+        .btn-group {
+            text-align: center;
+            width: 100%;
+            margin-top: 12px
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            color: #fff;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-block;
+            margin: 0 auto;
+            transition: .3s
+        }
+
+        .btn:hover {
+            transform: scale(1.05)
+        }
+
+        .explore-btn {
+            text-align: center;
+            margin: 40px 0
+        }
+
+        .explore-btn button {
+            padding: 16px 42px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            color: #fff;
+            font-weight: 700;
+            transition: .3s;
+            cursor: pointer
+        }
+
+        .explore-btn button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(255, 87, 34, .3)
+        }
+
+        .hide-card {
+            display: none !important
+        }
+
+        @media(max-width:1200px) {
+            .container {
+                grid-template-columns: repeat(2, 1fr)
+            }
+        }
+
+        @media(max-width:991px) {
+            .hero h1 {
+                font-size: 34px
+            }
+        }
+
+        @media(max-width:768px) {
+            .hero h1 {
+                font-size: 32px
+            }
+
+            .container {
+                width: 92%;
+                grid-template-columns: 1fr;
+                justify-items: center;
+                gap: 20px
+            }
+
+            .card {
+                width: 92%;
+                max-width: 360px
+            }
+        }
+
+        /* ===== PREMIUM SERVICES CSS ===== */
+        .services-section {
+            padding: 50px;
+            text-align: center;
+            background: #f4f6fb
+        }
+
+        .services-header h2 {
+            font-size: 52px;
+            font-weight: 800;
+            color: #0d47a1
+        }
+
+        .services-header h2 span {
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent
+        }
+
+        .services-header .s-desc {
+            font-size: 15px;
+            color: #666;
+            line-height: 1.7;
+            font-weight: 600;
+            max-width: 650px;
+            margin: 10px auto 30px
+        }
+
+        .services-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto
+        }
+
+        .service-card {
+            background: #fff;
+            padding: 30px 20px;
+            border-radius: 18px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, .08);
+            transition: all .35s ease
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, .12)
+        }
+
+        .icon-box {
+            font-size: 35px;
+            margin-bottom: 8px
+        }
+
+        .service-card h3 {
+            font-size: 16px;
+            color: #0d47a1;
+            margin-bottom: 8px;
+            font-weight: 700
+        }
+
+        .service-card p {
+            font-size: 15px;
+            color: #666;
+            font-weight: 600;
+            line-height: 1.7
+        }
+
+        @media(max-width:1200px) {
+            .services-container {
+                grid-template-columns: repeat(2, 1fr)
+            }
+        }
+
+        @media(max-width:991px) {
+            .services-header h2 {
+                font-size: 34px
+            }
+        }
+
+        @media(max-width:768px) {
+            .services-container {
+                grid-template-columns: 1fr;
+                justify-items: center;
+                gap: 18px
+            }
+
+            .service-card {
+                width: 92%;
+                max-width: 360px;
+                padding: 25px 18px
+            }
+        }
+
+        /* ===== WHY CHOOSE US CSS ===== */
+        .why-choose-section {
+            background: #f4f6fb;
+            padding: 50px 20px;
+            text-align: center
+        }
+
+        .why-heading {
+            font-size: 52px;
+            font-weight: 800;
+            color: #0d47a1;
+            margin-bottom: 10px
+        }
+
+        .why-heading .blue {
+            color: #0d47a1
+        }
+
+        .why-heading .orange {
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent
+        }
+
+        .why-subheading {
+            max-width: 750px;
+            margin: 0 auto 35px;
+            font-size: 15px;
+            color: #666;
+            font-weight: 600;
+            line-height: 1.7
+        }
+
+        .why-container {
+            max-width: 1200px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px
+        }
+
+        .why-card {
+            background: white;
+            padding: 30px 20px;
+            border-radius: 18px;
+            text-align: center;
+            box-shadow: 0 10px 35px rgba(13, 110, 253, .06);
+            border: 1px solid white;
+            transition: all .35s ease
+        }
+
+        .why-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, .12)
+        }
+
+        .why-icon {
+            font-size: 38px;
+            margin-bottom: 12px;
+            display: inline-block
+        }
+
+        .why-card h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #0d47a1;
+            margin-bottom: 8px
+        }
+
+        .why-card p {
+            font-size: 15px;
+            color: #666;
+            font-weight: 600;
+            line-height: 1.7
+        }
+
+        @media(max-width:991px) {
+            .why-heading {
+                font-size: 34px
+            }
+        }
+
+        @media(max-width:768px) {
+            .why-container {
+                grid-template-columns: 1fr;
+                justify-items: center;
+                gap: 18px
+            }
+
+            .why-card {
+                width: 92%;
+                max-width: 360px
+            }
+        }
+
+        /* ===== ACHIEVEMENT SECTION CSS - MOBILE FIX ===== */
+        .achievement-section {
+            padding: 50px 20px;
+            text-align: center;
+            background: #f4f6fb
+        }
+
+        .section-heading {
+            font-size: 52px;
+            font-weight: 800
+        }
+
+        .section-heading .blue {
+            color: #0d47a1
+        }
+
+        .section-heading .orange {
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent
+        }
+
+        .section-subheading {
+            max-width: 850px;
+            margin: 0 auto 35px;
+            font-size: 15px;
+            color: #666;
+            font-weight: 600;
+            line-height: 1.7
+        }
+
+        .achievement-container {
+            max-width: 1200px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px
+        }
+
+        .achievement-card {
+            background: #fff;
+            padding: 30px 15px;
+            border-radius: 18px;
+            box-shadow: 0 10px 35px rgba(13, 110, 253, .06);
+            transition: all .35s ease
+        }
+
+        .achievement-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, .12)
+        }
+
+        .achievement-card h2 {
+            font-size: 45px;
+            font-weight: 800;
+            background: linear-gradient(90deg, #ffb300, #ff5722);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent
+        }
+
+        .achievement-card h3 {
+            color: #0d47a1;
+            font-size: 16px;
+            font-weight: 700
+        }
+
+        @media(max-width:1200px) {
+            .achievement-container {
+                grid-template-columns: repeat(2, 1fr)
+            }
+        }
+
+        @media(max-width:991px) {
+            .section-heading {
+                font-size: 34px
+            }
+        }
+
+        @media(max-width:768px) {
+            .achievement-section {
+                padding: 50px 16px
+            }
+
+            .achievement-container {
+                width: 100%;
+                grid-template-columns: 1fr;
+                justify-items: center;
+                gap: 16px
+            }
+
+            .achievement-card {
+                width: 92%;
+                max-width: 360px;
+                margin: 0 auto;
+                padding: 22px 15px;
+                box-sizing: border-box
+            }
+
+            .achievement-card h2 {
+                font-size: 32px
+            }
+        }
+
+        /* ===== REVIEW SECTION CSS ===== */
+        .review-section {
+            background: #f4f6fb;
+            padding: 50px 20px;
+            text-align: center
+        }
+
+        .review-section .main-heading {
+            font-size: 52px;
+            font-weight: 800;
+            color: #0d47a1;
+            margin-bottom: 12px;
+            line-height: 1.2
+        }
+
+        .review-section .main-heading .blue {
+            color: #0d47a1
+        }
+
+        .review-section .main-heading .orange-grad {
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text
+        }
+
+        .review-section .sub-heading {
+            color: #666;
+            font-size: 15px;
+            font-weight: 600;
+            max-width: 600px;
+            margin: 0 auto 50px;
+            line-height: 1.7
+        }
+
+        .review-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+            max-width: 1200px;
+            margin: 0 auto
+        }
+
+        .review-card {
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, .06);
+            transition: all .35s ease;
+            text-align: left;
+            border: 1px solid #eee
+        }
+
+        .review-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, .12)
+        }
+
+        .review-img-box {
+            position: relative;
+            height: 90px;
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            display: flex;
+            align-items: flex-end;
+            justify-content: center
+        }
+
+        .review-img-box img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 4px solid #fff;
+            object-fit: cover;
+            transform: translateY(40px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, .15)
+        }
+
+        .review-content {
+            padding: 50px 22px 24px
+        }
+
+        .review-content h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #141E30;
+            text-align: center
+        }
+
+        .review-content .place {
+            font-size: 13px;
+            font-weight: 700;
+            color: #FF8C00;
+            text-align: center;
+            margin-top: 3px
+        }
+
+        .stars {
+            color: #FFD700;
+            font-size: 15px;
+            text-align: center;
+            margin: 12px 0;
+            letter-spacing: 3px
+        }
+
+        .review-content .text {
+            color: #666;
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.7;
+            text-align: center
+        }
+
+        @media(max-width:991px) {
+            .review-container {
+                grid-template-columns: repeat(2, 1fr)
+            }
+
+            .review-section .main-heading {
+                font-size: 34px
+            }
+        }
+
+        @media(max-width:768px) {
+            .review-container {
+                grid-template-columns: 1fr;
+                justify-items: center
+            }
+
+            .review-section {
+                padding: 50px 16px 60px
+            }
+
+            .review-section .main-heading {
+                font-size: 28px
+            }
+
+            .review-card {
+                width: 92%;
+                max-width: 360px
+            }
+        }
+
+        /* ===== FAQ SECTION CSS ===== */
+        .faq-section {
+            padding: 50px 20px;
+            background: #f4f6fb
+        }
+
+        .faq-container {
+            max-width: 900px;
+            margin: 0 auto
+        }
+
+        .faq-header {
+            text-align: center;
+            margin-bottom: 35px
+        }
+
+        .faq-header h2 {
+            font-size: 52px;
+            font-weight: 800;
+            color: #0d47a1
+        }
+
+        .faq-header h2 span {
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent
+        }
+
+        .faq-header .desc {
+            font-size: 15px;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+            font-weight: 600;
+            line-height: 1.7
+        }
+
+        .faq-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 15px
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 18px 20px;
+            background: #fff;
+            border: 1px solid #e0e6f0;
+            border-radius: 14px;
+            color: #0d47a1;
+            font-weight: 700;
+            display: flex;
+            justify-content: space-between;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: left
+        }
+
+        .faq-icon {
+            width: 28px;
+            height: 28px;
+            background: #f4f6fb;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: .3s;
+            font-weight: 700;
+            flex-shrink: 0
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            color: #fff
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: .3s;
+            background: #fff;
+            border: 1px solid #e0e6f0;
+            border-top: none;
+            border-radius: 0 0 14px 14px;
+            margin-top: -1px
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 300px;
+            padding: 0 20px 20px
+        }
+
+        .faq-answer p {
+            font-size: 15px;
+            color: #666;
+            line-height: 1.7;
+            border-top: 1px solid #f0f2f7;
+            padding-top: 15px;
+            margin: 0;
+            font-weight: 600
+        }
+
+        @media(max-width:991px) {
+            .faq-header h2 {
+                font-size: 34px
+            }
+        }
+
+        /* ===== FOOTER CSS ===== */
+        .footer {
+            background: linear-gradient(135deg, #141E30, #243B55, #1B2735);
+            color: #fff;
+            padding: 45px 8% 15px
+        }
+
+        .footer-container {
+            display: grid;
+            grid-template-columns: 1.4fr .8fr 1.3fr .8fr;
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto
+        }
+
+        .footer-box h2 {
+            font-size: 48px;
+            font-weight: 800
+        }
+
+        .footer-box h2 span {
+            color: #FFD700
+        }
+
+        .footer-desc {
+            color: #ddd;
+            font-size: 15px;
+            line-height: 1.7;
+            font-weight: 600;
+            max-width: 340px
+        }
+
+        .footer-box h3 {
+            color: #FFD700;
+            margin-bottom: 15px;
+            font-weight: 700
+        }
+
+        .footer-box a {
+            color: #ddd;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 10px;
+            font-size: 14px;
+            font-weight: 600
+        }
+
+        .footer-box a:hover {
+            color: #FFD700
+        }
+
+        .social {
+            display: flex;
+            gap: 12px
+        }
+
+        .social a {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-decoration: none
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255, 255, 255, .15);
+            color: #bbb;
+            font-size: 14px;
+            font-weight: 600
+        }
+
+        .contact-box .c-item {
+            display: flex;
+            gap: 8px;
+            color: #ddd;
+            font-size: 14px;
+            margin-bottom: 10px;
+            font-weight: 600
+        }
+
+        @media(max-width:768px) {
+            .footer-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+                justify-items: center;
+                gap: 30px
+            }
+
+            .footer-desc {
+                margin: 0 auto;
+                text-align: center
+            }
+
+            .contact-box .c-item {
+                justify-content: center
+            }
+        }
+
+        /* ===== STICKY WHATSAPP & CALL CSS ===== */
+        .sticky-container {
+            position: fixed;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 9999;
+            align-items: center;
+            justify-content: center
+        }
+
+        .sticky-whatsapp a {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #25D366;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30px;
+            color: #fff;
+            text-decoration: none;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, .25)
+        }
+
+        .sticky-call a {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #007AFF;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 26px;
+            color: #fff;
+            text-decoration: none;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, .25)
+        }
+
+        @media(max-width:768px) {
+            .sticky-container {
+                right: 10px;
+                top: 50%;
+                transform: translateY(-50%);
+                gap: 12px
+            }
+
+            .sticky-whatsapp a {
+                width: 55px;
+                height: 55px;
+                font-size: 26px
+            }
+
+            .sticky-call a {
+                width: 55px;
+                height: 55px;
+                font-size: 22px
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ===== HEADER START ===== -->
+    <div class="Box1">
+        <div class="Logo">✈️ Travel<span>Ease</span></div><button class="menu-toggle"
+            id="menuToggle"><span></span><span></span><span></span></button>
+        <div class="Navbaar" id="mainNav">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/about/">About</a></li>
+                <li class="dropdown-item"><a class="dropdown-trigger">Packages <svg class="arrow-icon"
+                            viewBox="0 0 24 24">
+                            <path d="M7 10l5 5 5-5z" />
+                        </svg></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/domestic/">Domestic Package</a></li>
+                        <li><a href="/international/">International Packages</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown-item"><a class="dropdown-trigger">Service <svg class="arrow-icon"
+                            viewBox="0 0 24 24">
+                            <path d="M7 10l5 5 5-5z" />
+                        </svg></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/flight-booking/">Flight Booking</a></li>
+                        <li><a href="/hotel/">Hotel Booking</a></li>
+                    </ul>
+                </li>
+                <li><a href="/gallery/">Gallery</a></li>
+                <li><a href="/contact/">Contact</a></li>
+                <li class="dropdown-item"><a class="dropdown-trigger">Account <svg class="arrow-icon"
+                            viewBox="0 0 24 24">
+                            <path d="M7 10l5 5 5-5z" />
+                        </svg></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/login/">Login</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ===== SLIDER START ===== -->
+    <div class="slider-container">
+        <div class="slider">
+            <div class="slide"><img src="{% static 'home/Image/slider1.webp' %}" alt="Kashmir">
+                <div class="slide-content">
+                    <h2>Explore Kashmir</h2>
+                    <p>Nature's Paradise Awaits You</p>
+                </div>
+            </div>
+            <div class="slide"><img src="{% static 'home/Image/slider2.webp' %}" alt="Dubai">
+                <div class="slide-content">
+                    <h2>Discover Dubai</h2>
+                    <p>Luxury Beyond Imagination</p>
+                </div>
+            </div>
+            <div class="slide"><img src="{% static 'home/Image/slider3.webp' %}" alt="Maldives">
+                <div class="slide-content">
+                    <h2>Escape to Maldives</h2>
+                    <p>Relax in Tropical Paradise.</p>
+                </div>
+            </div>
+            <div class="slide"><img src="{% static 'home/Image/slider4.webp' %}" alt="Switzerland">
+                <div class="slide-content">
+                    <h2>Visit Switzerland</h2>
+                    <p>Experience Alpine Beauty.</p>
+                </div>
+            </div>
+            <div class="slide"><img src="{% static 'home/Image/slider5.webp' %}" alt="Goa">
+                <div class="slide-content">
+                    <h2>Feel Goa Vibes</h2>
+                    <p>Sun, Sand & Sea Awaits.</p>
+                </div>
+            </div>
+        </div>
+        <div class="dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+
+    <!-- ===== HERO TITLE START ===== -->
+    <section class="hero">
+        <h1>Explore <span>Your Future Package</span></h1>
+        <p style="font-size:15px;font-weight:600;color:#666;line-height:1.7;">Exclusive deals on 15+ dream destinations.
+        </p>
+    </section>
+
+    <section class="container" id="packageContainer">
+
+        <!-- 1st Card Start -->
+        <div class="card">
+            <div class="card-img"><img src="{% static 'home/Image/Home1.webp' %}" alt="Manali">
+                <div class="future-tag">🏆 Best Seller</div>
+                <div class="rating-badge">⭐ 4.9</div>
+            </div>
+            <div class="card-content">
+                <h3>Manali Tour Package</h3>
+                <div class="days">⏰ 7 Days • 6 Nights</div>
+                <div class="price">₹12,999 <span>/ Per Person</span></div>
+                <ul class="itinerary">
+                    <li><b>Day 1:</b> Mall Road + Hadimba Temple</li>
+                    <li><b>Day 2:</b> Solang Valley</li>
+                    <li><b>Day 3:</b> Rohtang Pass</li>
+                    <li class="extra-day"><b>Day 4:</b> Vashisth Temple</li>
+                    <li class="extra-day"><b>Day 5:</b> Old Manali</li>
+                    <li class="extra-day"><b>Day 6:</b> Naggar Castle</li>
+                    <li class="extra-day"><b>Day 7:</b> Jogini Waterfall</li>
+                </ul>
+                <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button></div>
+            </div>
+        </div>
+        <!-- 1st Card End -->
+
+        <!-- 2nd Card Start -->
+        <div class="card">
+            <div class="card-img"><img src="{% static 'home/Image/Home2.webp' %}" alt="Shimla">
+                <div class="future-tag">🏆 Best Seller</div>
+                <div class="rating-badge">⭐ 4.8</div>
+            </div>
+            <div class="card-content">
+                <h3>Shimla Tour Package</h3>
+                <div class="days">⏰ 5 Days • 4 Nights</div>
+                <div class="price">₹9,499 <span>/ Per Person</span></div>
+                <ul class="itinerary">
+                    <li><b>Day 1:</b> The Ridge + Mall Road</li>
+                    <li><b>Day 2:</b> Kufri + Chini Bungalow</li>
+                    <li><b>Day 3:</b> Jakhoo Temple</li>
+                    <li class="extra-day"><b>Day 4:</b> Naldehra + Tattapani</li>
+                    <li class="extra-day"><b>Day 5:</b> Departure</li>
+                </ul>
+                <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button></div>
+            </div>
+        </div>
+        <!-- 2nd Card End -->
+
+        <!-- 3rd Card Start -->
+        <div class="card">
+            <div class="card-img"><img src="{% static 'home/Image/Home3.webp' %}" alt="Kashmir">
+                <div class="future-tag">🏆 Best Seller</div>
+                <div class="rating-badge">⭐ 4.9</div>
+            </div>
+            <div class="card-content">
+                <h3>Kashmir Tour Package</h3>
+                <div class="days">⏰ 8 Days • 7 Nights</div>
+                <div class="price">₹18,999 <span>/ Per Person</span></div>
+                <ul class="itinerary">
+                    <li><b>Day 1:</b> Srinagar + Dal Lake</li>
+                    <li><b>Day 2:</b> Gulmarg Gondola</li>
+                    <li><b>Day 3:</b> Pahalgam</li>
+                    <li class="extra-day"><b>Day 4:</b> Sonamarg</li>
+                    <li class="extra-day"><b>Day 5:</b> Mughal Gardens</li>
+                    <li class="extra-day"><b>Day 6:</b> Shankaracharya Temple</li>
+                    <li class="extra-day"><b>Day 7:</b> Shopping</li>
+                    <li class="extra-day"><b>Day 8:</b> Departure</li>
+                </ul>
+                <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button></div>
+            </div>
+        </div>
+        <!-- 3rd Card End -->
+
+        <!-- 4th Card Start -->
+        <div class="card">
+            <div class="card-img"><img src="{% static 'home/Image/Home4.webp' %}" alt="Leh Ladakh">
+                <div class="future-tag">🏆 Best Seller</div>
+                <div class="rating-badge">⭐ 4.7</div>
+            </div>
+            <div class="card-content">
+                <h3>Ladakh Adventure Tour</h3>
+                <div class="days">⏰ 7 Days • 6 Nights</div>
+                <div class="price">₹24,999 <span>/ Per Person</span></div>
+                <ul class="itinerary">
+                    <li><b>Day 1:</b> Leh Arrival + Local</li>
+                    <li><b>Day 2:</b> Khardung La Pass</li>
+                    <li><b>Day 3:</b> Nubra Valley</li>
+                    <li class="extra-day"><b>Day 4:</b> Turtuk Village</li>
+                    <li class="extra-day"><b>Day 5:</b> Pangong Lake</li>
+                    <li class="extra-day"><b>Day 6:</b> Magnetic Hill</li>
+                    <li class="extra-day"><b>Day 7:</b> Departure</li>
+                </ul>
+                <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button></div>
+            </div>
+        </div>
+        <!-- 4th Card End -->
+
+        <!-- 5th Card Start -->
+        <div class="card">
+            <div class="card-img"><img src="{% static 'home/Image/Home5.webp' %}" alt="Goa">
+                <div class="future-tag">🏆 Best Seller</div>
+                <div class="rating-badge">⭐ 4.8</div>
+            </div>
+            <div class="card-content">
+                <h3>Goa Tour Package</h3>
+                <div class="days">⏰ 5 Days • 4 Nights</div>
+                <div class="price">₹9,999 <span>/ Per Person</span></div>
+                <ul class="itinerary">
+                    <li><b>Day 1:</b> Baga Beach + Nightlife</li>
+                    <li><b>Day 2:</b> North Goa Tour</li>
+                    <li><b>Day 3:</b> South Goa Tour</li>
+                    <li class="extra-day"><b>Day 4:</b> Water Sports + Cruise</li>
+                    <li class="extra-day"><b>Day 5:</b> Departure</li>
+                </ul>
+                <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button></div>
+            </div>
+        </div>
+        <!-- 5th Card End -->
+
+        <!-- 6th Card Start -->
+        <div class="card">
+            <div class="card-img"><img src="{% static 'home/Image/Home6.webp' %}" alt="Jaipur">
+                <div class="future-tag">🏆 Best Seller</div>
+                <div class="rating-badge">⭐ 4.6</div>
+            </div>
+            <div class="card-content">
+                <h3>Jaipur Tour Package</h3>
+                <div class="days">⏰ 5 Days • 4 Nights</div>
+                <div class="price">₹7,499 <span>/ Per Person</span></div>
+                <ul class="itinerary">
+                    <li><b>Day 1:</b> Amer Fort + Palace</li>
+                    <li><b>Day 2:</b> City Palace + Jantar Mantar</li>
+                    <li><b>Day 3:</b> Hawa Mahal + Bazaar</li>
+                    <li class="extra-day"><b>Day 4:</b> Nahargarh Fort</li>
+                    <li class="extra-day"><b>Day 5:</b> Departure</li>
+                </ul>
+                <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button></div>
+            </div>
+        </div>
+        <!-- 6th Card End -->
+
+        <!-- 7th Card Start -->
+        <div class="card">
+            <div class="card-img"><img src="{% static 'home/Image/Home7.webp' %}" alt="Udaipur">
+                <div class="future-tag">🏆 Best Seller</div>
+                <div class="rating-badge">⭐ 4.7</div>
+            </div>
+            <div class="card-content">
+                <h3>Udaipur Tour Package</h3>
+                <div class="days">⏰ 5 Days • 4 Nights</div>
+                <div class="price">₹8,299 <span>/ Per Person</span></div>
+                <ul class="itinerary">
+                    <li><b>Day 1:</b> City Palace</li>
+                    <li><b>Day 2:</b> Jagdish Temple</li>
+                    <li><b>Day 3:</b> Lake Pichola Boat Ride</li>
+                    <li class="extra-day"><b>Day 4:</b> Sajjangarh + Fateh Sagar</li>
+                    <li class="extra-day"><b>Day 5:</b> Departure</li>
+                </ul>
+                <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button></div>
+            </div>
+        </div>
+        <!-- 7th Card End -->
+
+        <!-- 8th Card Start -->
+        <div class="card">
+            <div class="card-img"><img src="{% static 'home/Image/Home8.webp' %}" alt="Mussoorie">
+                <div class="future-tag">🏆 Best Seller</div>
+                <div class="rating-badge">⭐ 4.5</div>
+            </div>
+            <div class="card-content">
+                <h3>Mussoorie Tour Package</h3>
+                <div class="days">⏰ 5 Days • 4 Nights</div>
+                <div class="price">₹6,999 <span>/ Per Person</span></div>
+                <ul class="itinerary">
+                    <li><b>Day 1:</b> Mall Road</li>
+                    <li><b>Day 2:</b> Gun Hill</li>
+                    <li><b>Day 3:</b> Company Garden</li>
+                    <li class="extra-day"><b>Day 4:</b> Kempty Fall + Lal Tibba</li>
+                    <li class="extra-day"><b>Day 5:</b> Departure</li>
+                </ul>
+                <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button></div>
+            </div>
+        </div>
+        <!-- 8th Card End -->
+
+        <!-- 9th Card Start -->
+        <div class="card">
+            <div class="card-img"><img src="{% static 'home/Image/Home9.webp' %}" alt="Nainital">
+                <div class="future-tag">🏆 Best Seller</div>
+                <div class="rating-badge">⭐ 4.6</div>
+            </div>
+            <div class="card-content">
+                <h3>Nainital Tour Package</h3>
+                <div class="days">⏰ 5 Days • 4 Nights</div>
+                <div class="price">₹5,999 <span>/ Per Person</span></div>
+                <ul class="itinerary">
+                    <li><b>Day 1:</b> Naini Lake + Mall Road</li>
+                    <li><b>Day 2:</b> Snow View Point</li>
+                    <li><b>Day 3:</b> Bhimtal + Sattal</li>
+                    <li class="extra-day"><b>Day 4:</b> Mukteshwar Temple</li>
+                    <li class="extra-day"><b>Day 5:</b> Departure</li>
+                </ul>
+                <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button></div>
+            </div>
+        </div>
+        <!-- 9th Card End -->
+
+        <!-- HIDDEN 6 CARDS - DISCOVER PE DIKHEGA -->
+
+        <!-- 10th Card Start -->
+        <div class="card hide-card">
+            <div class="card-img"><img src="{% static 'home/Image/Home10.webp' %}" alt="Andaman">
+                <div class="future-tag">🏆 Best Seller</div>
+                <div class="rating-badge">⭐ 4.8</div>
+            </div>
+            <div class="card-content">
+                <h3>Andaman Tour Package</h3>
+                <div class="days">⏰ 6 Days • 5 Nights</div>
+                <div class="price">₹22,999 <span>/ Per Person</span></div>
+                <ul class="itinerary">
+                    <li><b>Day 1:</b> Port Blair + Cellular Jail</li>
+                    <li><b>Day 2:</b> Ross Island</li>
+                    <li><b>Day 3:</b> Havelock + Radhanagar Beach</li>
+                    <li class="extra-day"><b>Day 4:</b> Elephanta Beach Snorkeling</li>
+                    <li class="extra-day"><b>Day 5:</b> Neil Island</li>
+                    <li class="extra-day"><b>Day 6:</b> Departure</li>
+                </ul>
+                <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button></div>
+            </div>
+        </div>
+        <!-- 10th Card End -->
+
+        <!-- 11th Card Start -->
+        <div class="card hide-card">
+            <div class="card-img"><img src="{% static 'home/Image/Home11.webp' %}" alt="Dubai">
+                <div class="future-tag">🏆 Best Seller</div>
+                <div class="rating-badge">⭐ 4.9</div>
+            </div>
+            <div class="card-content">
+                <h3>Dubai Tour Package</h3>
+                <div class="days">⏰ 6 Days • 5 Nights</div>
+                <div class="price">₹45,999 <span>/ Per Person</span></div>
+                <ul class="itinerary">
+                    <li><b>Day 1:</b> Dubai City Tour</li>
+                    <li><b>Day 2:</b> Burj Khalifa + Dubai Mall</li>
+                    <li><b>Day 3:</b> Desert Safari</li>
+                    <li class="extra-day"><b>Day 4:</b> Abu Dhabi + Ferrari World</li>
+                    <li class="extra-day"><b>Day 5:</b> Palm Jumeirah</li>
+                    <li class="extra-day"><b>Day 6:</b> Departure</li>
+                </ul>
+                <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button></div>
+            </div>
+        </div>
+        <!-- 11th Card End -->
+
+        <!-- 12th Card Start -->
+        <div class="card hide-card">
+            <div class="card-img"><img src="{% static 'home/Image/Home12.webp' %}" alt="Bali">
+                <div class="future-tag">🏆 Best Seller</div>
+                <div class="rating-badge">⭐ 4.8</div>
+            </div>
+            <div class="card-content">
+                <h3>Bali Tour Package</h3>
+                <div class="days">⏰ 5 Days • 4 Nights</div>
+                <div class="price">₹39,999 <span>/ Per Person</span></div>
+                <ul class="itinerary">
+                    <li><b>Day 1:</b> Ubud + Monkey Forest</li>
+                    <li><b>Day 2:</b> Tanah Lot Temple</li>
+                    <li><b>Day 3:</b> Nusa Penida Island</li>
+                    <li class="extra-day"><b>Day 4:</b> Water Sports</li>
+                    <li class="extra-day"><b>Day 5:</b> Departure</li>
+                </ul>
+                <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button></div>
+            </div>
+        </div>
+        <!-- 12th Card End -->
+
+        <!-- 13th Card Start -->
+        <div class="card hide-card">
+            <div class="card-img"><img src="{% static 'home/Image/Home13.webp' %}" alt="Maldives">
+                <div class="future-tag">🏆 Best Seller</div>
+                <div class="rating-badge">⭐ 5.0</div>
+            </div>
+            <div class="card-content">
+                <h3>Maldives Tour Package</h3>
+                <div class="days">⏰ 5 Days • 4 Nights</div>
+                <div class="price">₹65,999 <span>/ Per Person</span></div>
+                <ul class="itinerary">
+                    <li><b>Day 1:</b> Water Villa Check-in</li>
+                    <li><b>Day 2:</b> Snorkeling</li>
+                    <li><b>Day 3:</b> Island Hopping</li>
+                    <li class="extra-day"><b>Day 4:</b> Spa + Private Dinner</li>
+                    <li class="extra-day"><b>Day 5:</b> Departure</li>
+                </ul>
+                <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button></div>
+            </div>
+        </div>
+        <!-- 13th Card End -->
+
+        <!-- 14th Card Start -->
+        <div class="card hide-card">
+            <div class="card-img"><img src="{% static 'home/Image/Home14.webp' %}" alt="Singapore">
+                <div class="future-tag">🏆 Best Seller</div>
+                <div class="rating-badge">⭐ 4.8</div>
+            </div>
+            <div class="card-content">
+                <h3>Singapore Tour Package</h3>
+                <div class="days">⏰ 5 Days • 4 Nights</div>
+                <div class="price">₹35,999 <span>/ Per Person</span></div>
+                <ul class="itinerary">
+                    <li><b>Day 1:</b> City Tour + Marina Bay</li>
+                    <li><b>Day 2:</b> Sentosa Island</li>
+                    <li><b>Day 3:</b> Gardens by the Bay</li>
+                    <li class="extra-day"><b>Day 4:</b> Jurong Bird Park</li>
+                    <li class="extra-day"><b>Day 5:</b> Departure</li>
+                </ul>
+                <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button></div>
+            </div>
+        </div>
+        <!-- 14th Card End -->
+
+        <!-- 15th Card Start -->
+        <div class="card hide-card">
+            <div class="card-img"><img src="{% static 'home/Image/Home15.webp' %}" alt="Thailand">
+                <div class="future-tag">🏆 Best Seller</div>
+                <div class="rating-badge">⭐ 4.7</div>
+            </div>
+            <div class="card-content">
+                <h3>Thailand Tour Package</h3>
+                <div class="days">⏰ 6 Days • 5 Nights</div>
+                <div class="price">₹32,999 <span>/ Per Person</span></div>
+                <ul class="itinerary">
+                    <li><b>Day 1:</b> Bangkok City Tour</li>
+                    <li><b>Day 2:</b> Floating Market</li>
+                    <li><b>Day 3:</b> Pattaya + Coral Island</li>
+                    <li class="extra-day"><b>Day 4:</b> Alcazar Show</li>
+                    <li class="extra-day"><b>Day 5:</b> Temple + Shopping</li>
+                    <li class="extra-day"><b>Day 6:</b> Departure</li>
+                </ul>
+                <div class="btn-group"><button class="btn" onclick="toggleDays(this)">View Itinerary ⬇️</button></div>
+            </div>
+        </div>
+        <!-- 15th Card End -->
+
+    </section>
+
+    <!-- ===== DISCOVER BUTTON ===== -->
+    <div class="explore-btn"><button type="button" id="exploreBtn">Discover All Packages ✈️</button></div>
+
+    <!-- ===== PREMIUM SERVICES START ===== -->
+    <section class="services-section">
+        <div class="services-header">
+            <h2>Our <span>Premium Services</span></h2>
+            <p class="s-desc">Crafting unforgettable luxury journeys tailored to your dreams</p>
+        </div>
+        <div class="services-container">
+            <div class="service-card">
+                <div class="icon-box">🧭</div>
+                <h3>Bespoke Journeys</h3>
+                <p>Handcrafted itineraries, private guides, VIP access & hidden gems.</p>
+            </div>
+            <div class="service-card">
+                <div class="icon-box">✈️</div>
+                <h3>Private Jet & Charter</h3>
+                <p>On-demand jets, helicopter transfers & first-class worldwide.</p>
+            </div>
+            <div class="service-card">
+                <div class="icon-box">🏖️</div>
+                <h3>Luxury Stays & Resorts</h3>
+                <p>5-Star resorts, private villas & overwater bungalows upgrade.</p>
+            </div>
+            <div class="service-card">
+                <div class="icon-box">🤵</div>
+                <h3>24/7 Concierge</h3>
+                <p>Personal butler for dining, tickets, yachts - anytime anywhere.</p>
+            </div>
+            <div class="service-card">
+                <div class="icon-box">📜</div>
+                <h3>VIP Visa & Passport</h3>
+                <p>Express visa, meet & greet, fast-track immigration - VIP entry.</p>
+            </div>
+            <div class="service-card">
+                <div class="icon-box">🚗</div>
+                <h3>Luxury Transport</h3>
+                <p>Mercedes, BMW chauffeur, yacht charters for ultimate comfort.</p>
+            </div>
+            <div class="service-card">
+                <div class="icon-box">🛥️</div>
+                <h3>Private Yacht & Cruise</h3>
+                <p>Private yacht in Goa, Maldives, Dubai - sunset & party cruise.</p>
+            </div>
+            <div class="service-card">
+                <div class="icon-box">🍽️</div>
+                <h3>Gourmet Dining</h3>
+                <p>Michelin restaurants, private chef dinner & exclusive events access.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== WHY CHOOSE US START ===== -->
+    <section class="why-choose-section">
+        <h1 class="why-heading"><span class="blue">Why Choose</span> <span class="orange">TravelEase</span></h1>
+        <p class="why-subheading">Trusted by thousands of travelers for a reason. Here’s what makes us different.</p>
+        <div class="why-container">
+            <div class="why-card">
+                <div class="why-icon">✈️</div>
+                <h3>Best Price Guarantee</h3>
+                <p>Lowest prices on flights & hotels. Found cheaper? We’ll match it.</p>
+            </div>
+            <div class="why-card">
+                <div class="why-icon">🛡️</div>
+                <h3>Safe & Secure Booking</h3>
+                <p>100% secure payments and verified partners. Fully protected.</p>
+            </div>
+            <div class="why-card">
+                <div class="why-icon">📞</div>
+                <h3>24/7 Customer Support</h3>
+                <p>Real experts available round the clock before, during & after trip.</p>
+            </div>
+            <div class="why-card">
+                <div class="why-icon">🎯</div>
+                <h3>Customized Packages</h3>
+                <p>Solo to Group - personalized trips as per your budget & choice.</p>
+            </div>
+            <div class="why-card">
+                <div class="why-icon">⭐</div>
+                <h3>10K+ Happy Travelers</h3>
+                <p>Trusted by 10,000+ customers with 4.9★ real reviews.</p>
+            </div>
+            <div class="why-card">
+                <div class="why-icon">🌍</div>
+                <h3>500+ Destinations</h3>
+                <p>Hill stations to beaches, India to abroad - 500+ locations.</p>
+            </div>
+            <div class="why-card">
+                <div class="why-icon">💸</div>
+                <h3>No Hidden Charges</h3>
+                <p>What you see is what you pay. 100% transparency, zero surprises.</p>
+            </div>
+            <div class="why-card">
+                <div class="why-icon">⚡</div>
+                <h3>Instant Booking</h3>
+                <p>2-minute confirmation + Free cancellation on most packages.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== ACHIEVEMENT START ===== -->
+    <section class="achievement-section">
+        <h1 class="section-heading"><span class="blue">Our</span> <span class="orange">Achievements</span></h1>
+        <p class="section-subheading">Numbers that reflect our journey, trust, and commitment.</p>
+        <div class="achievement-container">
+            <div class="achievement-card">
+                <h2>10K+</h2>
+                <h3>Happy Travelers</h3>
+            </div>
+            <div class="achievement-card">
+                <h2>500+</h2>
+                <h3>Tour Packages</h3>
+            </div>
+            <div class="achievement-card">
+                <h2>300+</h2>
+                <h3>Hotel Partners</h3>
+            </div>
+            <div class="achievement-card">
+                <h2>24/7</h2>
+                <h3>Customer Support</h3>
+            </div>
+            <div class="achievement-card">
+                <h2>98%</h2>
+                <h3>Customer Satisfaction</h3>
+            </div>
+            <div class="achievement-card">
+                <h2>4.9★</h2>
+                <h3>Customer Rating</h3>
+            </div>
+            <div class="achievement-card">
+                <h2>10+</h2>
+                <h3>Years Experience</h3>
+            </div>
+            <div class="achievement-card">
+                <h2>20K+</h2>
+                <h3>Trips Completed</h3>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== REVIEW SECTION START  ===== -->
+    <section class="review-section">
+        <h2 class="main-heading"><span class="blue">What Our</span> <span class="orange-grad">Customers Say</span></h2>
+        <p class="sub-heading">Thousands of happy travelers trust TravelEase for their unforgettable journeys.</p>
+        <div class="review-container">
+            <div class="review-card">
+                <div class="review-img-box"><img src="https://i.pravatar.cc/150?img=12" alt="Rahul">
+                </div>
+                <div class="review-content">
+                    <h4>Rahul Sharma</h4>
+                    <p class="place">Goa Trip</p>
+                    <div class="stars">★★★★★</div>
+                    <p class="text">"TravelEase ne meri Goa trip ko yaadgaar bana diya! Hotel aur Flight booking ekdum
+                        smooth thi."</p>
+                </div>
+            </div>
+            <div class="review-card">
+                <div class="review-img-box"><img src="https://i.pravatar.cc/150?img=47" alt="Priya">
+                </div>
+                <div class="review-content">
+                    <h4>Priya Singh</h4>
+                    <p class="place">Manali Package</p>
+                    <div class="stars">★★★★★</div>
+                    <p class="text">"Best service ever! Manali package me sab kuch perfect tha. Staff bahut supportive
+                        hai."</p>
+                </div>
+            </div>
+            <div class="review-card">
+                <div class="review-img-box"><img src="https://i.pravatar.cc/150?img=33" alt="Aman"></div>
+                <div class="review-content">
+                    <h4>Aman Verma</h4>
+                    <p class="place">Dubai Tour</p>
+                    <div class="stars">★★★★★</div>
+                    <p class="text">"International tour ka pehla experience tha, TravelEase ne sab handle kar liya."</p>
+                </div>
+            </div>
+            <div class="review-card">
+                <div class="review-img-box"><img src="https://i.pravatar.cc/150?img=44" alt="Neha">
+                </div>
+                <div class="review-content">
+                    <h4>Neha Gupta</h4>
+                    <p class="place">Kashmir Trip</p>
+                    <div class="stars">★★★★★</div>
+                    <p class="text">"Kashmir ki beauty aur TravelEase ki service dono amazing!"</p>
+                </div>
+            </div>
+            <div class="review-card">
+                <div class="review-img-box"><img src="https://i.pravatar.cc/150?img=11" alt="Vikash">
+                </div>
+                <div class="review-content">
+                    <h4>Vikash Kumar</h4>
+                    <p class="place">Thailand Tour</p>
+                    <div class="stars">★★★★★</div>
+                    <p class="text">"Budget me best international package mila. Highly recommend!"</p>
+                </div>
+            </div>
+            <div class="review-card">
+                <div class="review-img-box"><img src="https://i.pravatar.cc/150?img=32" alt="Anjali">
+                </div>
+                <div class="review-content">
+                    <h4>Anjali Mishra</h4>
+                    <p class="place">Bali Honeymoon</p>
+                    <div class="stars">★★★★★</div>
+                    <p class="text">"Honeymoon ke liye perfect destination aur perfect planning."</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FAQ SECTION START ===== -->
+    <section class="faq-section">
+        <div class="faq-container">
+            <div class="faq-header">
+                <h2>Frequently <span>Asked Questions</span></h2>
+                <p class="desc">Everything you need to know about booking your luxury journey with us</p>
+            </div>
+            <div class="faq-wrapper">
+                <div class="faq-item"><button class="faq-question"><span>How far in advance should I book my luxury
+                            trip?</span><span class="faq-icon">+</span></button>
+                    <div class="faq-answer">
+                        <p>We recommend booking 3-6 months in advance for peak seasons and private jet charters.
+                            However, our team can arrange last-minute luxury trips within 72 hours based on
+                            availability.</p>
+                    </div>
+                </div>
+                <div class="faq-item"><button class="faq-question"><span>Are your prices negotiable? Do you offer
+                            payment plans?</span><span class="faq-icon">+</span></button>
+                    <div class="faq-answer">
+                        <p>Yes! We offer flexible payment plans and best price guarantee. Found a lower price? We'll
+                            beat it and add exclusive perks. Speak to your travel curator for details.</p>
+                    </div>
+                </div>
+                <div class="faq-item"><button class="faq-question"><span>What if I need to cancel or change my
+                            booking?</span><span class="faq-icon">+</span></button>
+                    <div class="faq-answer">
+                        <p>Your comfort is priority. We offer free changes up to 14 days before travel. Cancellations
+                            are handled case-by-case with our partners to get you maximum refunds and credits.</p>
+                    </div>
+                </div>
+                <div class="faq-item"><button class="faq-question"><span>Do you provide 24/7 support during my
+                            trip?</span><span class="faq-icon">+</span></button>
+                    <div class="faq-answer">
+                        <p>Absolutely. Every client gets a dedicated travel curator + 24/7 emergency hotline. Lost
+                            passport, flight delay, medical emergency - we handle everything instantly.</p>
+                    </div>
+                </div>
+                <div class="faq-item"><button class="faq-question"><span>How do you ensure privacy and security for VIP
+                            clients?</span><span class="faq-icon">+</span></button>
+                    <div class="faq-answer">
+                        <p>We use bank-level encryption for all bookings. NDAs available for high-profile clients.
+                            Private jet terminals, discreet hotels, and security coordination can be arranged on
+                            request.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER START ===== -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-box">
+                <h2>✈️ Travel<span>Ease</span></h2>
+                <p class="footer-desc">Your trusted travel partner for unforgettable journeys across India and the
+                    world.</p>
+            </div>
+            <div class="footer-box">
+                <h3>Quick Links</h3><a href="/">Home</a><a href="/about/">About</a><a href="/domestic/">Packages</a><a
+                    href="/flight-booking/">Services</a><a href="/contact/">Contact</a>
+            </div>
+            <div class="footer-box contact-box">
+                <h3>Contact</h3>
+                <div class="c-item"><span>📍</span><span>Ballia, India</span></div>
+                <div class="c-item"><span>📞</span><span>+91 7618007640</span></div>
+                <div class="c-item"><span>✉️</span><span>abhikumar761800@gmail.com</span></div>
+            </div>
+            <div class="footer-box">
+                <h3>Follow Us</h3>
+                <div class="social"><a href="#"><i class="fa-solid fa-globe"></i></a><a href="#"><i
+                            class="fa-brands fa-facebook-f"></i></a><a href="#"><i
+                            class="fa-brands fa-instagram"></i></a></div>
+            </div>
+        </div>
+        <div class="footer-bottom">© 2026 TravelEase | All Rights Reserved.</div>
+    </footer>
+
+    <!-- ===== STICKY BUTTONS START ===== -->
+    <div class="sticky-container">
+        <div class="sticky-whatsapp"><a href="https://wa.me/917618007640" target="_blank"><i
+                    class="fa-brands fa-whatsapp"></i></a></div>
+        <div class="sticky-call"><a href="tel:+917618007640"><i class="fa-solid fa-phone"></i></a></div>
+    </div>
+
+    <script>
+        // ===== PACKAGE ITINERARY TOGGLE JS =====
+        function toggleDays(btn) { const c = btn.closest(".card"); const e = c.querySelectorAll(".extra-day"); if (btn.classList.contains("active")) { e.forEach(d => d.style.display = "none"); btn.innerHTML = "View Itinerary ⬇️"; btn.classList.remove("active") } else { e.forEach(d => d.style.display = "block"); btn.innerHTML = "Hide Itinerary ⬆️"; btn.classList.add("active") } }
+
+        // ===== SHOW 9 ON LOAD, 15 ON DISCOVER JS =====
+        let allShow = false;
+        const pkgContainer = document.getElementById("packageContainer");
+        const exploreBtn = document.getElementById("exploreBtn");
+
+        exploreBtn.addEventListener("click", function () {
+            const cards = pkgContainer.querySelectorAll(".card");
+            if (!allShow) {
+                // Discover pe 15 dikhao
+                cards.forEach(c => c.classList.remove("hide-card"));
+                exploreBtn.innerHTML = "Back to Featured Packages ⬆️";
+                allShow = true;
+            } else {
+                // Wapas 9 dikhao - 9 ke baad wale hide karo
+                cards.forEach((c, i) => { if (i >= 9) c.classList.add("hide-card") });
+                exploreBtn.innerHTML = "Discover All Packages ✈️";
+                allShow = false;
+                document.querySelector(".hero").scrollIntoView({ behavior: "smooth" });
+            }
+        });
+
+        // ===== FAQ TOGGLE JS =====
+        document.querySelectorAll(".faq-question").forEach(q => { q.addEventListener("click", () => { const item = q.closest(".faq-item"); document.querySelectorAll(".faq-item").forEach(o => { if (o !== item) o.classList.remove("active") }); item.classList.toggle("active") }) });
+
+        // ===== MOBILE MENU JS =====
+        const menuToggle = document.getElementById("menuToggle"); const mainNav = document.getElementById("mainNav");
+        function closeMobile() { mainNav.classList.remove("active"); menuToggle.classList.remove("active"); document.querySelectorAll(".dropdown-item").forEach(i => i.classList.remove("dropdown-open")) }
+        menuToggle.addEventListener("click", (e) => { e.stopPropagation(); if (mainNav.classList.contains("active")) { closeMobile() } else { mainNav.classList.add("active"); menuToggle.classList.add("active") } });
+        document.querySelectorAll(".dropdown-trigger").forEach(t => { t.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); const p = t.closest(".dropdown-item"); const isOpen = p.classList.contains("dropdown-open"); document.querySelectorAll(".dropdown-item").forEach(i => { if (i !== p) i.classList.remove("dropdown-open") }); if (isOpen) { p.classList.remove("dropdown-open") } else { p.classList.add("dropdown-open") } }); });
+        document.addEventListener("click", (e) => { if (!e.target.closest(".Box1")) { document.querySelectorAll(".dropdown-item").forEach(i => i.classList.remove("dropdown-open")); } if (window.innerWidth <= 991 && !mainNav.contains(e.target) && !menuToggle.contains(e.target)) { closeMobile(); } });
+        window.addEventListener("resize", () => { if (window.innerWidth > 991) closeMobile(); });
+    </script>
+</body>
+</html>

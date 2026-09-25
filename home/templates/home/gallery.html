@@ -1,0 +1,1014 @@
+{% extends 'home/master.html' %}
+{% load static %}
+{% block content %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+    /* ========== COMMON CSS ========== */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif
+    }
+
+    body {
+        overflow-x: hidden
+    }
+
+    /* ========== GALLERY WRAP CSS ========== */
+    .gallery {
+        width: 90%;
+        margin: 60px auto
+    }
+
+    /* ========== HEADING CSS - HOME JAISA ========== */
+    .main-heading {
+        text-align: center;
+        margin-bottom: 40px
+    }
+
+    .main-heading h1 {
+        font-size: 52px;
+        font-weight: 800;
+        color: #0d47a1;
+        line-height: 1.2
+    }
+
+    .main-heading h1 span {
+        background: linear-gradient(90deg, #ffb300, #ff7300);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent
+    }
+
+    .main-heading p {
+        color: #666 !important;
+        font-size: 15px !important;
+        font-weight: 600 !important;
+        line-height: 1.7 !important;
+        margin-top: 10px;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto
+    }
+
+    /* ========== FILTER BUTTONS CSS ========== */
+    .filter-buttons {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 40px
+    }
+
+    .filter-buttons button {
+        padding: 12px 28px;
+        border: none;
+        border-radius: 50px;
+        background: #fff;
+        color: #0d47a1;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+        transition: .3s
+    }
+
+    .filter-buttons button.active {
+        background: linear-gradient(135deg, #ffb300, #ff7300);
+        color: #fff
+    }
+
+    /* ========== GALLERY CARD CSS ========== */
+    .gallery-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px
+    }
+
+    .gallery-card {
+        position: relative;
+        overflow: hidden;
+        border-radius: 22px;
+        height: 320px;
+        background: #fff;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, .10);
+        cursor: pointer;
+        border: 2px solid #eee;
+        transition: .4s
+    }
+
+    .gallery-card:hover {
+        transform: translateY(-8px)
+    }
+
+    .gallery-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: .6s ease;
+        display: block
+    }
+
+    .gallery-card:hover img {
+        transform: scale(1.08);
+        filter: brightness(0.75)
+    }
+
+    .badge {
+        position: absolute;
+        top: 18px;
+        left: 18px;
+        background: linear-gradient(135deg, #ffb300, #ff7300);
+        color: #fff;
+        padding: 6px 16px;
+        border-radius: 50px;
+        font-size: 12px;
+        font-weight: 600;
+        z-index: 5
+    }
+
+    .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.30);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        visibility: hidden;
+        transition: all .4s ease;
+        z-index: 4;
+        text-align: center
+    }
+
+    .gallery-card:hover .overlay {
+        opacity: 1;
+        visibility: visible
+    }
+
+    .overlay h3 {
+        color: #fff;
+        font-size: 36px;
+        font-weight: 800;
+        transform: translateY(30px);
+        transition: .4s ease;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+        line-height: 1.1
+    }
+
+    .overlay p {
+        color: #fff;
+        font-size: 15px !important;
+        font-weight: 500;
+        margin-top: 8px;
+        transform: translateY(30px);
+        transition: .4s .1s ease;
+        text-shadow: 0 1px 6px rgba(0, 0, 0, 0.6);
+        opacity: 0.95
+    }
+
+    .gallery-card:hover .overlay h3,
+    .gallery-card:hover .overlay p {
+        transform: translateY(0)
+    }
+
+    /* ========== PAGINATION CSS ========== */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        margin: 60px auto;
+        flex-wrap: wrap
+    }
+
+    .pagination button {
+        padding: 12px 22px;
+        border: none;
+        border-radius: 50px;
+        background: #fff;
+        color: #0d47a1;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, .08);
+        transition: .3s;
+        min-width: 45px
+    }
+
+    .pagination button.active {
+        background: linear-gradient(135deg, #ff9800, #ff5722);
+        color: #fff;
+        transform: scale(1.08)
+    }
+
+    /* ========== RESPONSIVE CSS ========== */
+    @media(max-width:992px) {
+        .gallery-container {
+            grid-template-columns: repeat(2, 1fr)
+        }
+    }
+
+    @media(max-width:768px) {
+        .gallery-container {
+            grid-template-columns: 1fr
+        }
+
+        .main-heading h1 {
+            font-size: 32px
+        }
+
+        .main-heading p {
+            font-size: 15px !important;
+            color: #666 !important
+        }
+    }
+
+    @media(max-width:600px) {
+        .gallery {
+            width: 92%
+        }
+
+        .gallery-card {
+            height: 280px
+        }
+
+        .pagination {
+            gap: 8px
+        }
+
+        .pagination button {
+            padding: 9px 14px;
+            font-size: 12px;
+            min-width: 38px
+        }
+    }
+</style>
+
+<section class="gallery">
+    <div class="main-heading">
+        <h1>Explore Our <span>TravelEase Gallery</span></h1>
+        <p class="sub-text">Where breathtaking destinations meet unforgettable moments — discover the world through the
+            TravelEase lens</p>
+        <span class="sub-line"></span>
+    </div>
+    <div class="filter-buttons">
+        <button class="active" data-filter="all">All</button>
+        <button data-filter="mountains">Mountains</button>
+        <button data-filter="beach">Beach</button>
+        <button data-filter="adventure">Adventure</button>
+        <button data-filter="heritage">Heritage</button>
+        <button data-filter="nature">Nature</button>
+    </div>
+
+    <div class="gallery-container" id="galleryContainer">
+        <div class="gallery-card" data-category="mountains"><img
+                src="{% static 'home/Image/Gallery/Gallery1.webp' %}"><span class="badge">Mountains</span>
+            <div class="overlay">
+                <h3>Manali</h3>
+                <p>Himachal</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="mountains"><img
+                src="{% static 'home/Image/Gallery/Gallery2.webp' %}"><span class="badge">Mountains</span>
+            <div class="overlay">
+                <h3>Shimla</h3>
+                <p>Himachal</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="mountains"><img
+                src="{% static 'home/Image/Gallery/Gallery3.webp' %}"><span class="badge">Mountains</span>
+            <div class="overlay">
+                <h3>Kashmir</h3>
+                <p>J&K</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="mountains"><img
+                src="{% static 'home/Image/Gallery/Gallery4.webp' %}"><span class="badge">Mountains</span>
+            <div class="overlay">
+                <h3>Leh-Ladakh</h3>
+                <p>Ladakh</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="mountains"><img
+                src="{% static 'home/Image/Gallery/Gallery5.webp' %}"><span class="badge">Mountains</span>
+            <div class="overlay">
+                <h3>Darjeeling</h3>
+                <p>WB</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="mountains"><img
+                src="{% static 'home/Image/Gallery/Gallery6.webp' %}"><span class="badge">Mountains</span>
+            <div class="overlay">
+                <h3>Mussoorie</h3>
+                <p>Uttarakhand</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="mountains"><img
+                src="{% static 'home/Image/Gallery/Gallery7.webp' %}"><span class="badge">Mountains</span>
+            <div class="overlay">
+                <h3>Nainital</h3>
+                <p>Uttarakhand</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="mountains"><img
+                src="{% static 'home/Image/Gallery/Gallery8.webp' %}"><span class="badge">Mountains</span>
+            <div class="overlay">
+                <h3>Auli</h3>
+                <p>Uttarakhand</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="mountains"><img
+                src="{% static 'home/Image/Gallery/Gallery9.webp' %}"><span class="badge">Mountains</span>
+            <div class="overlay">
+                <h3>Spiti Valley</h3>
+                <p>Himachal</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="mountains"><img
+                src="{% static 'home/Image/Gallery/Gallery10.webp' %}"><span class="badge">Mountains</span>
+            <div class="overlay">
+                <h3>Tawang</h3>
+                <p>Arunachal</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="mountains"><img
+                src="{% static 'home/Image/Gallery/Gallery11.webp' %}"><span class="badge">Mountains</span>
+            <div class="overlay">
+                <h3>Gangtok</h3>
+                <p>Sikkim</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="mountains"><img
+                src="{% static 'home/Image/Gallery/Gallery12.webp' %}"><span class="badge">Mountains</span>
+            <div class="overlay">
+                <h3>Kalimpong</h3>
+                <p>WB</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="mountains"><img
+                src="{% static 'home/Image/Gallery/Gallery13.webp' %}"><span class="badge">Mountains</span>
+            <div class="overlay">
+                <h3>Kausani</h3>
+                <p>Uttarakhand</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="mountains"><img
+                src="{% static 'home/Image/Gallery/Gallery14.webp' %}"><span class="badge">Mountains</span>
+            <div class="overlay">
+                <h3>Chopta</h3>
+                <p>Uttarakhand</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="mountains"><img
+                src="{% static 'home/Image/Gallery/Gallery15.webp' %}"><span class="badge">Mountains</span>
+            <div class="overlay">
+                <h3>McLeod Ganj</h3>
+                <p>Himachal</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="mountains"><img
+                src="{% static 'home/Image/Gallery/Gallery16.webp' %}"><span class="badge">Mountains</span>
+            <div class="overlay">
+                <h3>Lansdowne</h3>
+                <p>Uttarakhand</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="mountains"><img
+                src="{% static 'home/Image/Gallery/Gallery17.webp' %}"><span class="badge">Mountains</span>
+            <div class="overlay">
+                <h3>Mount Abu</h3>
+                <p>Rajasthan</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="mountains"><img
+                src="{% static 'home/Image/Gallery/Gallery18.webp' %}"><span class="badge">Mountains</span>
+            <div class="overlay">
+                <h3>Kedarnath</h3>
+                <p>Uttarakhand</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="mountains"><img
+                src="{% static 'home/Image/Gallery/Gallery19.webp' %}"><span class="badge">Mountains</span>
+            <div class="overlay">
+                <h3>Pahalgam</h3>
+                <p>J&K</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="mountains"><img
+                src="{% static 'home/Image/Gallery/Gallery20.webp' %}"><span class="badge">Mountains</span>
+            <div class="overlay">
+                <h3>Chandrashila</h3>
+                <p>Uttarakhand</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="mountains"><img
+                src="{% static 'home/Image/Gallery/Gallery21.webp' %}"><span class="badge">Mountains</span>
+            <div class="overlay">
+                <h3>Sandakphu</h3>
+                <p>WB</p>
+            </div>
+        </div>
+
+        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery22.webp' %}"><span
+                class="badge">Beach</span>
+            <div class="overlay">
+                <h3>Goa</h3>
+                <p>Goa</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery23.webp' %}"><span
+                class="badge">Beach</span>
+            <div class="overlay">
+                <h3>Andaman</h3>
+                <p>Andaman</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery24.webp' %}"><span
+                class="badge">Beach</span>
+            <div class="overlay">
+                <h3>Kovalam</h3>
+                <p>Kerala</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery25.webp' %}"><span
+                class="badge">Beach</span>
+            <div class="overlay">
+                <h3>Gokarna</h3>
+                <p>Karnataka</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery26.webp' %}"><span
+                class="badge">Beach</span>
+            <div class="overlay">
+                <h3>Pondicherry</h3>
+                <p>Puducherry</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery27.webp' %}"><span
+                class="badge">Beach</span>
+            <div class="overlay">
+                <h3>Digha</h3>
+                <p>WB</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery28.webp' %}"><span
+                class="badge">Beach</span>
+            <div class="overlay">
+                <h3>Varkala</h3>
+                <p>Kerala</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery29.webp' %}"><span
+                class="badge">Beach</span>
+            <div class="overlay">
+                <h3>Marina Beach</h3>
+                <p>TN</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery30.webp' %}"><span
+                class="badge">Beach</span>
+            <div class="overlay">
+                <h3>Radhanagar</h3>
+                <p>Andaman</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery31.webp' %}"><span
+                class="badge">Beach</span>
+            <div class="overlay">
+                <h3>Tarkarli</h3>
+                <p>Maharashtra</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery32.webp' %}"><span
+                class="badge">Beach</span>
+            <div class="overlay">
+                <h3>Puri</h3>
+                <p>Odisha</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery33.webp' %}"><span
+                class="badge">Beach</span>
+            <div class="overlay">
+                <h3>Mandarmani</h3>
+                <p>WB</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery34.webp' %}"><span
+                class="badge">Beach</span>
+            <div class="overlay">
+                <h3>Alibaug</h3>
+                <p>Maharashtra</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery35.webp' %}"><span
+                class="badge">Beach</span>
+            <div class="overlay">
+                <h3>Kanyakumari</h3>
+                <p>TN</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery36.webp' %}"><span
+                class="badge">Beach</span>
+            <div class="overlay">
+                <h3>Bekal</h3>
+                <p>Kerala</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery37.webp' %}"><span
+                class="badge">Beach</span>
+            <div class="overlay">
+                <h3>Om Beach</h3>
+                <p>Karnataka</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery38.webp' %}"><span
+                class="badge">Beach</span>
+            <div class="overlay">
+                <h3>Baga Beach</h3>
+                <p>Goa</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery39.webp' %}"><span
+                class="badge">Beach</span>
+            <div class="overlay">
+                <h3>Palolem</h3>
+                <p>Goa</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery40.webp' %}"><span
+                class="badge">Beach</span>
+            <div class="overlay">
+                <h3>Dwarka</h3>
+                <p>Gujarat</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery41.webp' %}"><span
+                class="badge">Beach</span>
+            <div class="overlay">
+                <h3>Mahabalipuram</h3>
+                <p>TN</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="beach"><img src="{% static 'home/Image/Gallery/Gallery42.webp' %}"><span
+                class="badge">Beach</span>
+            <div class="overlay">
+                <h3>Agonda Beach</h3>
+                <p>Goa</p>
+            </div>
+        </div>
+
+        <div class="gallery-card" data-category="adventure"><img
+                src="{% static 'home/Image/Gallery/Gallery43.webp' %}"><span class="badge">Adventure</span>
+            <div class="overlay">
+                <h3>Rishikesh</h3>
+                <p>Uttarakhand</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="adventure"><img
+                src="{% static 'home/Image/Gallery/Gallery44.webp' %}"><span class="badge">Adventure</span>
+            <div class="overlay">
+                <h3>Bir Billing</h3>
+                <p>Himachal</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="adventure"><img
+                src="{% static 'home/Image/Gallery/Gallery45.webp' %}"><span class="badge">Adventure</span>
+            <div class="overlay">
+                <h3>Kuari Pass</h3>
+                <p>Uttarakhand</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="adventure"><img
+                src="{% static 'home/Image/Gallery/Gallery46.webp' %}"><span class="badge">Adventure</span>
+            <div class="overlay">
+                <h3>Markha Valley</h3>
+                <p>Ladakh</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="adventure"><img
+                src="{% static 'home/Image/Gallery/Gallery47.webp' %}"><span class="badge">Adventure</span>
+            <div class="overlay">
+                <h3>Roopkund</h3>
+                <p>Uttarakhand</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="adventure"><img
+                src="{% static 'home/Image/Gallery/Gallery48.webp' %}"><span class="badge">Adventure</span>
+            <div class="overlay">
+                <h3>Jim Corbett</h3>
+                <p>Uttarakhand</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="adventure"><img
+                src="{% static 'home/Image/Gallery/Gallery49.webp' %}"><span class="badge">Adventure</span>
+            <div class="overlay">
+                <h3>Hampta Pass</h3>
+                <p>Himachal</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="adventure"><img
+                src="{% static 'home/Image/Gallery/Gallery50.webp' %}"><span class="badge">Adventure</span>
+            <div class="overlay">
+                <h3>Chadar Trek</h3>
+                <p>Ladakh</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="adventure"><img
+                src="{% static 'home/Image/Gallery/Gallery51.webp' %}"><span class="badge">Adventure</span>
+            <div class="overlay">
+                <h3>Zanskar</h3>
+                <p>Ladakh</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="adventure"><img
+                src="{% static 'home/Image/Gallery/Gallery52.webp' %}"><span class="badge">Adventure</span>
+            <div class="overlay">
+                <h3>Dandeli</h3>
+                <p>Karnataka</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="adventure"><img
+                src="{% static 'home/Image/Gallery/Gallery53.webp' %}"><span class="badge">Adventure</span>
+            <div class="overlay">
+                <h3>Meghalaya Caving</h3>
+                <p>Meghalaya</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="adventure"><img
+                src="{% static 'home/Image/Gallery/Gallery54.webp' %}"><span class="badge">Adventure</span>
+            <div class="overlay">
+                <h3>Sikkim Trek</h3>
+                <p>Sikkim</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="adventure"><img
+                src="{% static 'home/Image/Gallery/Gallery55.webp' %}"><span class="badge">Adventure</span>
+            <div class="overlay">
+                <h3>Sonamarg</h3>
+                <p>J&K</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="adventure"><img
+                src="{% static 'home/Image/Gallery/Gallery56.webp' %}"><span class="badge">Adventure</span>
+            <div class="overlay">
+                <h3>Brahmatal</h3>
+                <p>Uttarakhand</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="adventure"><img
+                src="{% static 'home/Image/Gallery/Gallery57.webp' %}"><span class="badge">Adventure</span>
+            <div class="overlay">
+                <h3>Dudhsagar Trek</h3>
+                <p>Goa</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="adventure"><img
+                src="{% static 'home/Image/Gallery/Gallery58.webp' %}"><span class="badge">Adventure</span>
+            <div class="overlay">
+                <h3>Kheerganga</h3>
+                <p>Himachal</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="adventure"><img
+                src="{% static 'home/Image/Gallery/Gallery59.webp' %}"><span class="badge">Adventure</span>
+            <div class="overlay">
+                <h3>Arunachal</h3>
+                <p>Arunachal</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="adventure"><img
+                src="{% static 'home/Image/Gallery/Gallery60.webp' %}"><span class="badge">Adventure</span>
+            <div class="overlay">
+                <h3>Kedarkantha</h3>
+                <p>Uttarakhand</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="adventure"><img
+                src="{% static 'home/Image/Gallery/Gallery61.webp' %}"><span class="badge">Adventure</span>
+            <div class="overlay">
+                <h3>Scuba Diving</h3>
+                <p>Andaman</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="adventure"><img
+                src="{% static 'home/Image/Gallery/Gallery62.webp' %}"><span class="badge">Adventure</span>
+            <div class="overlay">
+                <h3>Bungee Jumping</h3>
+                <p>Rishikesh</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="adventure"><img
+                src="{% static 'home/Image/Gallery/Gallery63.webp' %}"><span class="badge">Adventure</span>
+            <div class="overlay">
+                <h3>Spiti Bike Trip</h3>
+                <p>Himachal</p>
+            </div>
+        </div>
+
+        <div class="gallery-card" data-category="heritage"><img
+                src="{% static 'home/Image/Gallery/Gallery64.webp' %}"><span class="badge">Heritage</span>
+            <div class="overlay">
+                <h3>Jaipur</h3>
+                <p>Rajasthan</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="heritage"><img
+                src="{% static 'home/Image/Gallery/Gallery65.webp' %}"><span class="badge">Heritage</span>
+            <div class="overlay">
+                <h3>Udaipur</h3>
+                <p>Rajasthan</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="heritage"><img
+                src="{% static 'home/Image/Gallery/Gallery66.webp' %}"><span class="badge">Heritage</span>
+            <div class="overlay">
+                <h3>Jaisalmer</h3>
+                <p>Rajasthan</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="heritage"><img
+                src="{% static 'home/Image/Gallery/Gallery67.webp' %}"><span class="badge">Heritage</span>
+            <div class="overlay">
+                <h3>Agra</h3>
+                <p>UP</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="heritage"><img
+                src="{% static 'home/Image/Gallery/Gallery68.webp' %}"><span class="badge">Heritage</span>
+            <div class="overlay">
+                <h3>Hampi</h3>
+                <p>Karnataka</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="heritage"><img
+                src="{% static 'home/Image/Gallery/Gallery69.webp' %}"><span class="badge">Heritage</span>
+            <div class="overlay">
+                <h3>Khajuraho</h3>
+                <p>MP</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="heritage"><img
+                src="{% static 'home/Image/Gallery/Gallery70.webp' %}"><span class="badge">Heritage</span>
+            <div class="overlay">
+                <h3>Ajanta Caves</h3>
+                <p>Maharashtra</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="heritage"><img
+                src="{% static 'home/Image/Gallery/Gallery71.webp' %}"><span class="badge">Heritage</span>
+            <div class="overlay">
+                <h3>Ellora Caves</h3>
+                <p>Maharashtra</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="heritage"><img
+                src="{% static 'home/Image/Gallery/Gallery72.webp' %}"><span class="badge">Heritage</span>
+            <div class="overlay">
+                <h3>Fatehpur Sikri</h3>
+                <p>UP</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="heritage"><img
+                src="{% static 'home/Image/Gallery/Gallery73.webp' %}"><span class="badge">Heritage</span>
+            <div class="overlay">
+                <h3>Mysore Palace</h3>
+                <p>Karnataka</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="heritage"><img
+                src="{% static 'home/Image/Gallery/Gallery74.webp' %}"><span class="badge">Heritage</span>
+            <div class="overlay">
+                <h3>Orchha</h3>
+                <p>MP</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="heritage"><img
+                src="{% static 'home/Image/Gallery/Gallery75.webp' %}"><span class="badge">Heritage</span>
+            <div class="overlay">
+                <h3>Gwalior Fort</h3>
+                <p>MP</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="heritage"><img
+                src="{% static 'home/Image/Gallery/Gallery76.webp' %}"><span class="badge">Heritage</span>
+            <div class="overlay">
+                <h3>Chittorgarh</h3>
+                <p>Rajasthan</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="heritage"><img
+                src="{% static 'home/Image/Gallery/Gallery77.webp' %}"><span class="badge">Heritage</span>
+            <div class="overlay">
+                <h3>Konark Temple</h3>
+                <p>Odisha</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="heritage"><img
+                src="{% static 'home/Image/Gallery/Gallery78.webp' %}"><span class="badge">Heritage</span>
+            <div class="overlay">
+                <h3>Mahabalipuram</h3>
+                <p>TN</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="heritage"><img
+                src="{% static 'home/Image/Gallery/Gallery79.webp' %}"><span class="badge">Heritage</span>
+            <div class="overlay">
+                <h3>Sarnath</h3>
+                <p>UP</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="heritage"><img
+                src="{% static 'home/Image/Gallery/Gallery80.webp' %}"><span class="badge">Heritage</span>
+            <div class="overlay">
+                <h3>Varanasi</h3>
+                <p>UP</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="heritage"><img
+                src="{% static 'home/Image/Gallery/Gallery81.webp' %}"><span class="badge">Heritage</span>
+            <div class="overlay">
+                <h3>Mehrangarh Fort</h3>
+                <p>Rajasthan</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="heritage"><img
+                src="{% static 'home/Image/Gallery/Gallery82.webp' %}"><span class="badge">Heritage</span>
+            <div class="overlay">
+                <h3>Amber Fort</h3>
+                <p>Rajasthan</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="heritage"><img
+                src="{% static 'home/Image/Gallery/Gallery83.webp' %}"><span class="badge">Heritage</span>
+            <div class="overlay">
+                <h3>Qutub Minar</h3>
+                <p>Delhi</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="heritage"><img
+                src="{% static 'home/Image/Gallery/Gallery84.webp' %}"><span class="badge">Heritage</span>
+            <div class="overlay">
+                <h3>Red Fort</h3>
+                <p>Delhi</p>
+            </div>
+        </div>
+
+        <div class="gallery-card" data-category="nature"><img
+                src="{% static 'home/Image/Gallery/Gallery85.webp' %}"><span class="badge">Nature</span>
+            <div class="overlay">
+                <h3>Kerala</h3>
+                <p>Kerala</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="nature"><img
+                src="{% static 'home/Image/Gallery/Gallery86.webp' %}"><span class="badge">Nature</span>
+            <div class="overlay">
+                <h3>Munnar</h3>
+                <p>Kerala</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="nature"><img
+                src="{% static 'home/Image/Gallery/Gallery87.webp' %}"><span class="badge">Nature</span>
+            <div class="overlay">
+                <h3>Ooty</h3>
+                <p>TN</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="nature"><img
+                src="{% static 'home/Image/Gallery/Gallery88.webp' %}"><span class="badge">Nature</span>
+            <div class="overlay">
+                <h3>Coorg</h3>
+                <p>Karnataka</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="nature"><img
+                src="{% static 'home/Image/Gallery/Gallery89.webp' %}"><span class="badge">Nature</span>
+            <div class="overlay">
+                <h3>Wayanad</h3>
+                <p>Kerala</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="nature"><img
+                src="{% static 'home/Image/Gallery/Gallery90.webp' %}"><span class="badge">Nature</span>
+            <div class="overlay">
+                <h3>Valley of Flowers</h3>
+                <p>Uttarakhand</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="nature"><img
+                src="{% static 'home/Image/Gallery/Gallery91.webp' %}"><span class="badge">Nature</span>
+            <div class="overlay">
+                <h3>Kumarakom</h3>
+                <p>Kerala</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="nature"><img
+                src="{% static 'home/Image/Gallery/Gallery92.webp' %}"><span class="badge">Nature</span>
+            <div class="overlay">
+                <h3>Alleppey</h3>
+                <p>Kerala</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="nature"><img
+                src="{% static 'home/Image/Gallery/Gallery93.webp' %}"><span class="badge">Nature</span>
+            <div class="overlay">
+                <h3>Silent Valley</h3>
+                <p>Kerala</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="nature"><img
+                src="{% static 'home/Image/Gallery/Gallery94.webp' %}"><span class="badge">Nature</span>
+            <div class="overlay">
+                <h3>Coonoor</h3>
+                <p>TN</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="nature"><img
+                src="{% static 'home/Image/Gallery/Gallery95.webp' %}"><span class="badge">Nature</span>
+            <div class="overlay">
+                <h3>Yercaud</h3>
+                <p>TN</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="nature"><img
+                src="{% static 'home/Image/Gallery/Gallery96.webp' %}"><span class="badge">Nature</span>
+            <div class="overlay">
+                <h3>Cherrapunji</h3>
+                <p>Meghalaya</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="nature"><img
+                src="{% static 'home/Image/Gallery/Gallery97.webp' %}"><span class="badge">Nature</span>
+            <div class="overlay">
+                <h3>Mawlynnong</h3>
+                <p>Meghalaya</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="nature"><img
+                src="{% static 'home/Image/Gallery/Gallery98.webp' %}"><span class="badge">Nature</span>
+            <div class="overlay">
+                <h3>Ziro Valley</h3>
+                <p>Arunachal</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="nature"><img
+                src="{% static 'home/Image/Gallery/Gallery99.webp' %}"><span class="badge">Nature</span>
+            <div class="overlay">
+                <h3>Dzukou Valley</h3>
+                <p>Nagaland</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="nature"><img
+                src="{% static 'home/Image/Gallery/Gallery100.webp' %}"><span class="badge">Nature</span>
+            <div class="overlay">
+                <h3>Loktak Lake</h3>
+                <p>Manipur</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="nature"><img
+                src="{% static 'home/Image/Gallery/Gallery101.webp' %}"><span class="badge">Nature</span>
+            <div class="overlay">
+                <h3>Ranikhet</h3>
+                <p>Uttarakhand</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="nature"><img
+                src="{% static 'home/Image/Gallery/Gallery102.webp' %}"><span class="badge">Nature</span>
+            <div class="overlay">
+                <h3>Athirappilly Falls</h3>
+                <p>Kerala</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="nature"><img
+                src="{% static 'home/Image/Gallery/Gallery103.webp' %}"><span class="badge">Nature</span>
+            <div class="overlay">
+                <h3>Nohkalikai Falls</h3>
+                <p>Meghalaya</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="nature"><img
+                src="{% static 'home/Image/Gallery/Gallery104.webp' %}"><span class="badge">Nature</span>
+            <div class="overlay">
+                <h3>Pangong Lake</h3>
+                <p>Ladakh</p>
+            </div>
+        </div>
+        <div class="gallery-card" data-category="nature"><img
+                src="{% static 'home/Image/Gallery/Gallery105.webp' %}"><span class="badge">Nature</span>
+            <div class="overlay">
+                <h3>Tirthan Valley</h3>
+                <p>Himachal</p>
+            </div>
+        </div>
+    </div>
+    <div class="pagination" id="pagination"></div>
+</section>
+
+<script>
+    const galleryContainer = document.getElementById("galleryContainer"); const pagination = document.getElementById("pagination"); const filterButtons = document.querySelectorAll(".filter-buttons button"); let allCards = Array.from(document.querySelectorAll(".gallery-card")); let grouped = { mountains: [], beach: [], adventure: [], heritage: [], nature: [] }; allCards.forEach(c => { grouped[c.dataset.category].push(c) }); let mixedOrder = []; for (let i = 0; i < 21; i++) { if (grouped.mountains[i]) mixedOrder.push(grouped.mountains[i]); if (grouped.beach[i]) mixedOrder.push(grouped.beach[i]); if (grouped.adventure[i]) mixedOrder.push(grouped.adventure[i]); if (grouped.heritage[i]) mixedOrder.push(grouped.heritage[i]); if (grouped.nature[i]) mixedOrder.push(grouped.nature[i]) } let currentCards = mixedOrder; let perPage = 21; let currentPage = 1; function renderPage(page) { currentPage = page; galleryContainer.innerHTML = ""; let start = (page - 1) * perPage; let end = start + perPage; currentCards.slice(start, end).forEach(c => { c.style.display = "block"; galleryContainer.appendChild(c) }); renderPagination(); window.scrollTo({ top: 0, behavior: "smooth" }) } function renderPagination() { let totalPages = Math.ceil(currentCards.length / perPage); pagination.innerHTML = ""; let prev = document.createElement("button"); prev.innerHTML = "‹ Previous"; prev.disabled = currentPage === 1; prev.onclick = () => { if (currentPage > 1) renderPage(currentPage - 1) }; pagination.appendChild(prev); for (let i = 1; i <= totalPages; i++) { let btn = document.createElement("button"); btn.innerText = i; if (i === currentPage) btn.classList.add("active"); btn.onclick = () => renderPage(i); pagination.appendChild(btn) } let next = document.createElement("button"); next.innerHTML = "Next ›"; next.disabled = currentPage === totalPages; next.onclick = () => { if (currentPage < totalPages) renderPage(currentPage + 1) }; pagination.appendChild(next) } currentCards = mixedOrder; renderPage(1); filterButtons.forEach(btn => { btn.addEventListener("click", () => { filterButtons.forEach(b => b.classList.remove("active")); btn.classList.add("active"); let f = btn.dataset.filter; if (f === "all") { currentCards = mixedOrder; pagination.style.display = "flex"; renderPage(1) } else { currentCards = grouped[f]; galleryContainer.innerHTML = ""; currentCards.forEach(c => { c.style.display = "block"; galleryContainer.appendChild(c) }); pagination.style.display = "none" } }) });
+</script>
+{% endblock %}

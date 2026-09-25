@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Montserrat',sans-serif} body{padding-top:70px;background:#f4f6fb}
+
+/* ===== NAVBAR CSS START - FIXED ===== */
+.Box1{height:70px;width:100%;background:linear-gradient(135deg,#141E30,#243B55,#1B2735);display:flex;align-items:center;justify-content:space-between;padding:0 45px;position:fixed;top:0;left:0;z-index:99999;box-shadow:0 12px 30px rgba(0,0,0,.25)}
+.Logo{color:#fff;font-size:32px;font-weight:800} .Logo span{color:#FFD700}
+.menu-toggle{display:none!important;width:45px;height:45px;border:none;background:rgba(255,255,255,.10);border-radius:10px;cursor:pointer;flex-direction:column;gap:5px;align-items:center;justify-content:center} .menu-toggle span{display:block;width:23px;height:3px;background:#fff;border-radius:5px;transition:.3s}
+.menu-toggle.active span:nth-child(1){transform:translateY(8px) rotate(45deg)} .menu-toggle.active span:nth-child(2){opacity:0} .menu-toggle.active span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+.Navbaar ul{list-style:none;display:flex;gap:2px;align-items:center} .Navbaar>ul>li{position:relative} .Navbaar>ul>li>a{color:#fff;font-size:17px;font-weight:700;padding:12px;text-decoration:none;border-radius:8px;display:flex;align-items:center;gap:5px} .Navbaar>ul>li>a:hover{background:rgba(255,255,255,.08);color:#FFD700} .arrow-icon{width:12px;height:20px;fill:#fff;transition:.3s} .dropdown-item.dropdown-open .arrow-icon{transform:rotate(180deg);fill:#FFD700}
+.dropdown-menu{position:absolute;top:52px;left:0;width:300px;min-width:300px;background:linear-gradient(135deg,#141E30,#243B55,#1B2735);border-radius:12px;padding:8px;display:none!important;flex-direction:column;z-index:999999;box-shadow:0 15px 35px rgba(0,0,0,.3)} .dropdown-item.dropdown-open>.dropdown-menu{display:flex!important} .dropdown-menu li{list-style:none;width:100%} .dropdown-menu li a{display:block;color:#fff;font-size:17px;font-weight:700;padding:12px 18px;text-decoration:none;border-radius:8px;width:100%;white-space:nowrap!important} .dropdown-menu li a:hover{color:#FFD700;background:rgba(255,255,255,.08)}
+@media(min-width:992px){.dropdown-item:hover>.dropdown-menu{display:flex!important}}
+@media(max-width:991px){.Box1{padding:0 22px} .Logo{font-size:28px} .menu-toggle{display:flex!important} .Navbaar{position:absolute;top:80px;right:20px;width:min(320px,calc(100vw - 40px));max-height:calc(100vh - 100px);overflow-y:auto;background:linear-gradient(135deg,#141E30,#243B55,#1B2735);border-radius:15px;padding:10px;opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-10px);transition:.3s} .Navbaar.active{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0)} .Navbaar ul{flex-direction:column;align-items:stretch;gap:4px} .Navbaar>ul>li{width:100%} .Navbaar>ul>li>a{width:100%;justify-content:space-between;font-size:14px;padding:12px 14px} .dropdown-menu{position:static!important;width:100%!important;min-width:100%!important;display:none!important;background:rgba(0,0,0,.20)!important;border-radius:10px!important;border-left:2px solid #FFD700} .dropdown-item.dropdown-open>.dropdown-menu{display:flex!important} .dropdown-menu li a{font-size:14px;white-space:nowrap!important}}
+
+/* ===== FOOTER CSS START ===== */
+.footer{background:linear-gradient(135deg,#141E30,#243B55,#1B2735);color:#fff;padding:45px 8% 15px} .footer-container{display:grid;grid-template-columns:1.4fr .8fr 1.3fr .8fr;gap:30px;max-width:1200px;margin:0 auto} .footer-box h2{font-size:48px;font-weight:800} .footer-box h2 span{color:#FFD700} .footer-desc{color:#ddd;font-size:15px;line-height:1.7;font-weight:600;max-width:340px} .footer-box h3{color:#FFD700;margin-bottom:15px;font-weight:700} .footer-box a{color:#ddd;text-decoration:none;display:block;margin-bottom:10px;font-size:14px;font-weight:600} .footer-box a:hover{color:#FFD700} .social{display:flex;gap:12px} .social a{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none} .footer-bottom{text-align:center;margin-top:30px;padding-top:15px;border-top:1px solid rgba(255,255,255,.15);color:#bbb;font-size:14px;font-weight:600} .contact-box .c-item{display:flex;gap:8px;color:#ddd;font-size:14px;margin-bottom:10px;font-weight:600} @media(max-width:768px){.footer-container{grid-template-columns:1fr;text-align:center;justify-items:center;gap:30px} .footer-desc{margin:0 auto} .contact-box .c-item{justify-content:center}}
+
+/* ===== STICKY CSS START ===== */
+.sticky-container{position:fixed;right:15px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:15px;z-index:9999} .sticky-whatsapp a{width:60px;height:60px;border-radius:50%;background:#25D366;display:flex;justify-content:center;align-items:center;font-size:30px;color:#fff;text-decoration:none;box-shadow:0 8px 25px rgba(0,0,0,.25)} .sticky-call a{width:60px;height:60px;border-radius:50%;background:#007AFF;display:flex;justify-content:center;align-items:center;font-size:26px;color:#fff;text-decoration:none;box-shadow:0 8px 25px rgba(0,0,0,.25)} @media(max-width:768px){.sticky-container{right:10px;gap:12px} .sticky-whatsapp a{width:55px;height:55px;font-size:26px} .sticky-call a{width:55px;height:55px;font-size:22px}}
+</style>
+</head>
+<body>
+
+<!-- ==================== NAVBAR START ==================== -->
+<div class="Box1">
+    <div class="Logo">✈️ Travel<span>Ease</span></div>
+    <button class="menu-toggle" id="menuToggle"><span></span><span></span><span></span></button>
+    <div class="Navbaar" id="mainNav">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/about/">About</a></li>
+            <li class="dropdown-item"><a class="dropdown-trigger">Packages <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></a><ul class="dropdown-menu"><li><a href="/domestic/">Domestic Package</a></li><li><a href="/international/">International Package</a></li></ul></li>
+            <li class="dropdown-item"><a class="dropdown-trigger">Service <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></a><ul class="dropdown-menu"><li><a href="/flight-booking/">Flight Booking</a></li><li><a href="/hotel/">Hotel Booking</a></li></ul></li>
+            <li><a href="/gallery/">Gallery</a></li>
+            <li><a href="/contact/">Contact</a></li>
+            <li class="dropdown-item"><a class="dropdown-trigger">Account <svg class="arrow-icon" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></a><ul class="dropdown-menu"><li><a href="/login/">Login</a></li></ul></li>
+        </ul>
+    </div>
+</div>
+
+{% block content %}{% endblock %}
+
+<!-- ==================== FOOTER START ==================== -->
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-box"><h2>✈️ Travel<span>Ease</span></h2><p class="footer-desc">Your trusted travel partner for unforgettable journeys across India and the world.</p></div>
+        <div class="footer-box"><h3>Quick Links</h3><a href="/">Home</a><a href="/about/">About</a><a href="/domestic/">Packages</a><a href="/flight-booking/">Services</a><a href="/contact/">Contact</a></div>
+        <div class="footer-box contact-box"><h3>Contact</h3><div class="c-item"><span>📍</span><span>Ballia, India</span></div><div class="c-item"><span>📞</span><span>+91 7618007640</span></div><div class="c-item"><span>✉️</span><span>abhikumar761800@gmail.com</span></div></div>
+        <div class="footer-box"><h3>Follow Us</h3><div class="social"><a href="#"><i class="fa-solid fa-globe"></i></a><a href="#"><i class="fa-brands fa-facebook-f"></i></a><a href="#"><i class="fa-brands fa-instagram"></i></a></div></div>
+    </div>
+    <div class="footer-bottom">© 2026 TravelEase | All Rights Reserved.</div>
+</footer>
+
+
+<!-- ==================== STICKY START ==================== -->
+<div class="sticky-container">
+    <div class="sticky-whatsapp"><a href="https://wa.me/917618007640" target="_blank"><i class="fa-brands fa-whatsapp"></i></a></div>
+    <div class="sticky-call"><a href="tel:+917618007640"><i class="fa-solid fa-phone"></i></a></div>
+</div>
+
+
+<script>
+// ===== NAVBAR JS START =====
+const menuToggle=document.getElementById("menuToggle"); const mainNav=document.getElementById("mainNav");
+function closeMobile(){mainNav.classList.remove("active");menuToggle.classList.remove("active");document.querySelectorAll(".dropdown-item").forEach(i=>i.classList.remove("dropdown-open"))}
+menuToggle.addEventListener("click",(e)=>{e.stopPropagation();if(mainNav.classList.contains("active")){closeMobile()}else{mainNav.classList.add("active");menuToggle.classList.add("active")}});
+document.querySelectorAll(".dropdown-trigger").forEach(t=>{t.addEventListener("click",(e)=>{e.preventDefault();e.stopPropagation();const p=t.closest(".dropdown-item");const isOpen=p.classList.contains("dropdown-open");document.querySelectorAll(".dropdown-item").forEach(i=>{if(i!==p)i.classList.remove("dropdown-open")});if(isOpen){p.classList.remove("dropdown-open")}else{p.classList.add("dropdown-open")}});});
+document.addEventListener("click",(e)=>{if(!e.target.closest(".Box1")){document.querySelectorAll(".dropdown-item").forEach(i=>i.classList.remove("dropdown-open"));}if(window.innerWidth<=991 && !mainNav.contains(e.target) && !menuToggle.contains(e.target)){closeMobile();}});
+
+</script>
+</body>
+</html>

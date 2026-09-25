@@ -1,0 +1,900 @@
+{% extends 'home/master.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flight Booking</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    /* ========== COMMON CSS ========== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif
+    }
+
+    body {
+      background: #f5f7fb;
+      overflow-x: hidden
+    }
+
+    /* ========== BOOKING HEADER CSS ========== */
+    .booking-header {
+      padding: 60px 0 15px;
+      text-align: center
+    }
+
+    .booking-header h1 {
+      font-size: 52px;
+      font-weight: 800
+    }
+
+    .first-word {
+      color: #0D47A1
+    }
+
+    .rest-words {
+      background: linear-gradient(90deg, #FFB300, #FF7200);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent
+    }
+
+    .booking-header p {
+      font-size: 15px !important;
+      color: #666 !important;
+      margin-top: 6px;
+      font-weight: 600 !important;
+      line-height: 1.7 !important;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto
+    }
+
+    /* ========== PAGE CONTAINER & CARD CSS ========== */
+    .page-container {
+      max-width: 1050px;
+      margin: 25px auto 60px;
+      padding: 0 15px
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 10px 35px rgba(0, 0, 0, .06);
+      overflow: hidden
+    }
+
+    .card-body {
+      padding: 25px 28px
+    }
+
+    .form-block {
+      padding: 22px 0;
+      border-bottom: 1px solid #eef2f7
+    }
+
+    .block-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: #12345b;
+      margin-bottom: 18px;
+      display: flex;
+      gap: 10px;
+      align-items: center
+    }
+
+    .block-title span {
+      width: 32px;
+      height: 32px;
+      background: #fff3e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column
+    }
+
+    .form-group.full {
+      grid-column: 1/-1
+    }
+
+    .form-group label {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 6px
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px 13px;
+      border: 1px solid #d9e0e8;
+      border-radius: 9px;
+      font-size: 13px;
+      outline: none;
+      background: #fff;
+      color: #333
+    }
+
+    .form-group select {
+      color: #6b7280
+    }
+
+    .trip-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 18px
+    }
+
+    .trip-tabs input {
+      display: none
+    }
+
+    .trip-tabs label {
+      padding: 9px 18px;
+      border: 1px solid #dce2e9;
+      border-radius: 20px;
+      font-size: 13px;
+      cursor: pointer
+    }
+
+    .trip-tabs input:checked+label {
+      background: linear-gradient(90deg, #ffb300, #ff7200);
+      color: #fff;
+      border-color: #ff7200;
+      font-weight: 600
+    }
+
+    .location-row {
+      display: grid;
+      grid-template-columns: 1fr 45px 1fr;
+      gap: 12px;
+      align-items: end
+    }
+
+    .swap-btn {
+      width: 42px;
+      height: 42px;
+      border: 0;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ffb300, #ff7200);
+      color: #fff;
+      cursor: pointer
+    }
+
+    .passenger-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px
+    }
+
+    .passenger-box {
+      border: 1px solid #e3e8ef;
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center
+    }
+
+    .counter {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      align-items: center
+    }
+
+    .counter button {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 1px solid #ff9a28;
+      background: #fff;
+      color: #ff7200;
+      cursor: pointer
+    }
+
+    .fare-box {
+      background: #fffaf0;
+      border: 1px solid #ffe0b2;
+      border-radius: 12px;
+      padding: 16px
+    }
+
+    .fare-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 7px 0;
+      font-size: 13px;
+      border-bottom: 1px dashed #ffe0b2
+    }
+
+    .fare-row.total {
+      font-weight: 800;
+      font-size: 16px;
+      color: #ff6a00;
+      border-bottom: 0;
+      padding-top: 12px
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(90deg, #ffb300, #ff7200);
+      color: #fff;
+      border: 0;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 15px;
+      cursor: pointer;
+      margin-top: 20px
+    }
+
+    /* ========== PAYMENT MODAL CSS ========== */
+    .payment-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 22, 50, .75);
+      backdrop-filter: blur(10px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 15px;
+      z-index: 9999;
+      overflow-y: auto
+    }
+
+    .payment-overlay.active {
+      display: flex
+    }
+
+    .payment-modal {
+      width: 100%;
+      max-width: 520px;
+      background: #fff;
+      border-radius: 24px;
+      overflow: hidden;
+      margin: auto 0
+    }
+
+    .payment-header {
+      background: linear-gradient(135deg, #004AAD, #1d6fff);
+      padding: 18px;
+      text-align: center;
+      color: #fff;
+      position: relative
+    }
+
+    .close-payment {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 32px;
+      height: 32px;
+      border: 0;
+      background: rgba(255, 255, 255, .25);
+      color: #fff;
+      border-radius: 50%;
+      cursor: pointer
+    }
+
+    .box-body {
+      padding: 20px;
+      max-height: 85vh;
+      overflow-y: auto
+    }
+
+    .ptotal {
+      background: linear-gradient(135deg, #eef4ff, #fff7ed);
+      border: 1px solid #dbe7ff;
+      padding: 12px 14px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 14px
+    }
+
+    .ptotal strong {
+      color: #ff6a00;
+      font-size: 20px
+    }
+
+    .method {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 14px;
+      background: #fff;
+      cursor: pointer;
+      margin-bottom: 10px;
+      text-align: left
+    }
+
+    .method.active {
+      border-color: #16a34a;
+      background: #f0fdf4
+    }
+
+    .badge {
+      margin-left: auto;
+      background: #16a34a;
+      color: #fff;
+      font-size: 9px;
+      padding: 4px 9px;
+      border-radius: 20px;
+      font-weight: 700
+    }
+
+    .upi-section {
+      border: 2px solid #e2e8f0;
+      padding: 14px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      background: #fff
+    }
+
+    .bar {
+      width: 100%;
+      height: 6px;
+      background: #e2e8f0;
+      border-radius: 10px;
+      overflow: hidden;
+      margin: 12px 0
+    }
+
+    .fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #004AAD, #1d6fff);
+      transition: width.6s
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    /* ========== VOUCHER MODAL CSS ========== */
+    .voucher-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(12, 22, 38, .75);
+      display: none;
+      justify-content: center;
+      padding: 20px;
+      z-index: 10000;
+      overflow: auto
+    }
+
+    .voucher-overlay.active {
+      display: flex
+    }
+
+    .voucher-modal {
+      width: 100%;
+      max-width: 800px;
+      background: #fff;
+      border-radius: 16px;
+      margin: auto 0;
+      overflow: hidden
+    }
+
+    .voucher-top {
+      padding: 16px 20px;
+      background: linear-gradient(90deg, #0D47A1, #1565C0);
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center
+    }
+
+    .voucher-content {
+      padding: 20px
+    }
+
+    .v-detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px
+    }
+
+    .v-item {
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 10px 12px
+    }
+
+    .v-item small {
+      font-size: 11px;
+      color: #666 !important;
+      display: block
+    }
+
+    .v-item strong {
+      font-size: 13px;
+      color: #111827
+    }
+
+    /* ========== RESPONSIVE CSS ========== */
+    @media(max-width:700px) {
+      .form-grid {
+        grid-template-columns: 1fr
+      }
+
+      .location-row {
+        grid-template-columns: 1fr
+      }
+
+      .swap-btn {
+        display: none
+      }
+
+      .passenger-grid {
+        grid-template-columns: 1fr
+      }
+
+      .v-detail-grid {
+        grid-template-columns: 1fr
+      }
+
+      .booking-header h1 {
+        font-size: 32px
+      }
+    }
+
+    @media print {
+
+      .voucher-top button,
+      .no-print {
+        display: none !important
+      }
+
+      body * {
+        visibility: hidden
+      }
+
+      .voucher-modal,
+      .voucher-modal * {
+        visibility: visible
+      }
+
+      .voucher-modal {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%
+      }
+    }
+  </style>
+</head>
+</head>
+
+<body>
+  <header class="booking-header">
+    <h1><span class="first-word">Book Your Flite</span> <span class="rest-words">With TravelEase</span>✈️</h1>
+    <p>Complete your journey details and book your flight securely</p>
+  </header>
+  <main class="page-container">
+    <form id="flightBookingForm">
+      <section class="card">
+        <div class="card-body">
+
+          <div class="form-block">
+            <div class="block-title"><span>✈️</span>1. Journey Details</div>
+            <div class="trip-tabs">
+              <input type="radio" id="roundTrip" name="trip" value="round" checked><label for="roundTrip">Round
+                Trip</label>
+              <input type="radio" id="oneWay" name="trip" value="oneway"><label for="oneWay">One Way</label>
+              <input type="radio" id="multiCity" name="trip" value="multi"><label for="multiCity">Multi City</label>
+            </div>
+            <div class="location-row">
+              <div class="form-group"><label>From *</label>
+                <select id="fromCity" required>
+                  <option value="" selected disabled>Select From</option>
+                  <option>Delhi (DEL)</option>
+                  <option>Mumbai (BOM)</option>
+                  <option>Bangalore (BLR)</option>
+                  <option>Kolkata (CCU)</option>
+                  <option>Chennai (MAA)</option>
+                  <option>Hyderabad (HYD)</option>
+                  <option>Lucknow (LKO)</option>
+                  <option>Patna (PAT)</option>
+                  <option>Varanasi (VNS)</option>
+                  <option>Jaipur (JAI)</option>
+                </select>
+              </div>
+              <button type="button" class="swap-btn" onclick="swapCities()">⇄</button>
+              <div class="form-group"><label>To *</label>
+                <select id="toCity" required>
+                  <option value="" selected disabled>Select To</option>
+                  <option>Delhi (DEL)</option>
+                  <option>Mumbai (BOM)</option>
+                  <option>Bangalore (BLR)</option>
+                  <option>Kolkata (CCU)</option>
+                  <option>Chennai (MAA)</option>
+                  <option>Hyderabad (HYD)</option>
+                  <option>Lucknow (LKO)</option>
+                  <option>Patna (PAT)</option>
+                  <option>Varanasi (VNS)</option>
+                  <option>Jaipur (JAI)</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-grid" style="margin-top:16px;">
+              <div class="form-group"><label>Departure Date *</label><input type="date" id="departureDate" required>
+              </div>
+              <div class="form-group"><label>Return Date</label><input type="date" id="returnDate"></div>
+              <div class="form-group"><label>Departure Time</label>
+                <select id="departureTime">
+                  <option value="" selected disabled>Select Time</option>
+                  <option>Any Time</option>
+                  <option>Morning</option>
+                  <option>Afternoon</option>
+                  <option>Evening</option>
+                  <option>Night</option>
+                </select>
+              </div>
+              <div class="form-group"><label>Travel Class *</label>
+                <select id="travelClass" required>
+                  <option value="" selected disabled>Select Class</option>
+                  <option value="economy">Economy</option>
+                  <option value="premium">Premium Economy</option>
+                  <option value="business">Business</option>
+                  <option value="first">First Class</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-block">
+            <div class="block-title"><span>👥</span>2. Passenger Details</div>
+            <div class="passenger-grid">
+              <div class="passenger-box">
+                <h4>Adults</h4>
+                <div class="counter"><button type="button" onclick="changePassenger('adults',-1)">−</button><span
+                    id="adults">1</span><button type="button" onclick="changePassenger('adults',1)">+</button></div>
+              </div>
+              <div class="passenger-box">
+                <h4>Children</h4>
+                <div class="counter"><button type="button" onclick="changePassenger('children',-1)">−</button><span
+                    id="children">0</span><button type="button" onclick="changePassenger('children',1)">+</button></div>
+              </div>
+              <div class="passenger-box">
+                <h4>Infants</h4>
+                <div class="counter"><button type="button" onclick="changePassenger('infants',-1)">−</button><span
+                    id="infants">0</span><button type="button" onclick="changePassenger('infants',1)">+</button></div>
+              </div>
+            </div>
+            <div class="form-grid" style="margin-top:16px;">
+              <div class="form-group"><label>Gender</label><select id="gender">
+                  <option value="" selected disabled>Select Gender</option>
+                  <option>Male</option>
+                  <option>Female</option>
+                  <option>Other</option>
+                </select></div>
+              <div class="form-group"><label>First Name *</label><input id="firstName" type="text"
+                  placeholder="Select First Name" required></div>
+              <div class="form-group"><label>Last Name *</label><input id="lastName" type="text"
+                  placeholder="Select Last Name" required></div>
+            </div>
+          </div>
+
+          <div class="form-block">
+            <div class="block-title"><span>📝</span>3. Preferences & Contact</div>
+            <div class="form-grid">
+              <div class="form-group"><label>Email *</label><input id="email" type="email" placeholder="Select Email"
+                  required></div>
+              <div class="form-group"><label>Phone *</label><input id="phone" type="tel" placeholder="Select Phone"
+                  required></div>
+              <div class="form-group"><label>Meal Preference</label><select id="meal">
+                  <option value="" selected disabled>Select Meal</option>
+                  <option>Standard Meal</option>
+                  <option>Vegetarian Meal</option>
+                  <option>Vegan Meal</option>
+                  <option>Jain Meal</option>
+                </select></div>
+              <div class="form-group"><label>Seat Preference</label><select id="seat">
+                  <option value="" selected disabled>Select Seat</option>
+                  <option>Window Seat</option>
+                  <option>Aisle Seat</option>
+                  <option>Middle Seat</option>
+                </select></div>
+              <div class="form-group"><label>Baggage Preference</label><select id="baggage">
+                  <option value="" selected disabled>Select Baggage</option>
+                  <option>15kg - Free</option>
+                  <option>20kg - ₹500</option>
+                  <option>25kg - ₹1000</option>
+                  <option>30kg - ₹1500</option>
+                </select></div>
+              <div class="form-group"><label>Address</label><input id="address" type="text"
+                  placeholder="Select Address"></div>
+            </div>
+          </div>
+
+          <div class="form-block" style="border-bottom:0;">
+            <div class="block-title"><span>💰</span>4. Fare Summary</div>
+            <div class="fare-box">
+              <div class="fare-row"><span>Base Fare (<span id="distanceText">0 km</span>)</span><span
+                  id="baseFare">₹0</span></div>
+              <div class="fare-row"><span>Passenger-wise fare</span><span id="paxFare">₹0</span></div>
+              <div class="fare-row"><span>Class charge</span><span id="classCharge">₹0</span></div>
+              <div class="fare-row"><span>Taxes / Fees</span><span id="taxes">₹0</span></div>
+              <div class="fare-row total"><span>Grand Total</span><span id="grandTotal">₹0</span></div>
+            </div>
+            <button type="submit" class="submit-btn">Continue to Payment →</button>
+          </div>
+
+        </div>
+      </section>
+    </form>
+  </main>
+
+  <div class="payment-overlay" id="paymentOverlay">
+    <div class="payment-modal">
+      <div class="payment-header"><button class="close-payment" onclick="closePayment()">✕</button>
+        <h2>Secure Payment</h2>
+        <p>100% Safe & Encrypted</p>
+      </div>
+      <div class="box-body">
+        <div id="paymentSelection">
+          <div class="ptotal"><span>You Pay</span><strong id="modalTotal">₹0</strong></div>
+          <button class="method active" onclick="openUPIOptions()"><span style="font-size:20px">📱</span>
+            <div><b>UPI Payment</b><br><small>GPay, PhonePe, Paytm - 2 Options</small></div><span
+              class="badge">RECOMMENDED</span>
+          </button>
+          <button class="method" onclick="showWorkProgress('Credit / Debit Card')"><span
+              style="font-size:20px">💳</span>
+            <div><b>Credit / Debit Card</b></div><span style="margin-left:auto">›</span>
+          </button>
+          <button class="method" onclick="showWorkProgress('Net Banking')"><span style="font-size:20px">🏦</span>
+            <div><b>Net Banking</b></div><span style="margin-left:auto">›</span>
+          </button>
+          <button class="method" onclick="showWorkProgress('Wallet')"><span style="font-size:20px">👛</span>
+            <div><b>Wallet</b></div><span style="margin-left:auto">›</span>
+          </button>
+        </div>
+
+        <div id="upiOptions" style="display:none">
+          <div class="ptotal"><span>Amount</span><strong id="upiAmount1">₹0</strong></div>
+          <div class="upi-section">
+            <b>UPI ID Se Pay</b>
+            <input id="userUpi" placeholder="Enter UPI ID (example@upi)"
+              style="width:100%;padding:12px;border:1.5px solid #e2e8f0;border-radius:10px;margin-top:8px">
+            <button onclick="verifyUpi()"
+              style="width:100%;margin-top:10px;padding:13px;background:#004AAD;color:#fff;border:0;border-radius:12px;font-weight:700">Verify
+              & Pay →</button>
+          </div>
+          <div class="upi-section">
+            <b>QR Code Se Pay</b>
+            <button id="genQrBtn" onclick="generateQR()"
+              style="width:100%;margin-top:10px;padding:13px;background:#16a34a;color:#fff;border:0;border-radius:12px;font-weight:700">Generate
+              QR Code</button>
+            <div id="qrResult" style="display:none;text-align:center;margin-top:12px">
+              <img id="qrImg"
+                style="width:220px;height:220px;border:1px solid #eee;padding:8px;border-radius:16px;background:#fff;margin:0 auto;display:block">
+              <button onclick="confirmQrPayment()"
+                style="width:100%;margin-top:12px;padding:13px;background:#16a34a;color:#fff;border:0;border-radius:12px;font-weight:700">✅
+                I Have Paid - Confirm</button>
+            </div>
+          </div>
+          <button onclick="backToMethods()"
+            style="width:100%;padding:10px;border:1px solid #ddd;background:#fff;border-radius:10px">← Back to
+            Methods</button>
+        </div>
+
+        <div id="workProgressBox" style="display:none;text-align:center;padding:20px">
+          <div style="font-size:48px">🚧</div>
+          <h3 style="color:#d97706;margin-top:8px">Work in Progress!</h3>
+          <p id="workMsg" style="font-size:13px;color:#475569;margin-top:6px"></p>
+          <div
+            style="background:#fff7ed;border:1px solid #ffedd5;padding:10px;border-radius:10px;margin-top:12px;font-size:12px;color:#92400e;text-align:left">
+            ⚠️ <b>Warning:</b> <span id="workMethodName"></span> payment abhi live nahi hai. Security reason se sirf UPI
+            payment available hai. Please UPI se payment kare.
+          </div>
+          <button onclick="openUPIOptions()"
+            style="width:100%;margin-top:14px;padding:13px;background:linear-gradient(135deg,#ff9800,#ff5722);color:#fff;border:0;border-radius:12px;font-weight:800">Pay
+            with UPI →</button>
+          <button onclick="backToMethods()"
+            style="width:100%;margin-top:8px;padding:10px;border:1px solid #e2e8f0;background:#fff;border-radius:10px">←
+            Back</button>
+        </div>
+
+        <div id="processingBox" style="display:none;text-align:center;padding:30px 20px">
+          <div
+            style="width:60px;height:60px;border:4px solid #e2e8f0;border-top-color:#004AAD;border-radius:50%;margin:0 auto 16px;animation:spin.8s linear infinite">
+          </div>
+          <h3>Payment Verifying...</h3>
+          <div class="bar">
+            <div class="fill" id="progFill"></div>
+          </div>
+        </div>
+
+        <div id="successScreen" style="display:none;text-align:center;padding:30px 20px">
+          <div
+            style="width:65px;height:65px;margin:0 auto 15px;border-radius:50%;background:#eaf8ef;color:#219653;display:flex;align-items:center;justify-content:center;font-size:32px;">
+            ✓</div>
+          <h2>Payment Successful</h2>
+          <p>Booking ID: <strong id="bookingId"></strong></p>
+          <button onclick="openVoucher()"
+            style="width:100%;margin-top:16px;padding:13px;background:#ff7200;color:#fff;border:0;border-radius:12px;font-weight:800">🎫
+            View Full Booking Details (Proof)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="voucher-overlay" id="voucherOverlay">
+    <div class="voucher-modal">
+      <div class="voucher-top">
+        <div>
+          <div style="font-size:18px;font-weight:800">TravelEase - Booking Proof</div><small id="vBookingIdTop"></small>
+        </div>
+        <button onclick="closeVoucher()"
+          style="width:32px;height:32px;border:0;background:rgba(255,255,255,.25);color:#fff;border-radius:50%;cursor:pointer">✕</button>
+      </div>
+      <div class="voucher-content">
+        <div
+          style="background:#fff7ed;border:1px solid #ffe0b2;padding:12px;border-radius:10px;display:flex;justify-content:space-between;margin-bottom:16px;">
+          <div><small>Grand Total Paid</small>
+            <div id="vTotal" style="font-size:22px;font-weight:800;color:#ff6a00"></div>
+          </div>
+          <div style="text-align:right"><small>Payment Method</small>
+            <div id="vPaymentMethod" style="font-weight:700"></div><small id="vDate"></small>
+          </div>
+        </div>
+        <h4 style="margin-bottom:10px;">✈️ Journey Details</h4>
+        <div class="v-detail-grid">
+          <div class="v-item"><small>From → To</small><strong id="vRoute">-</strong></div>
+          <div class="v-item"><small>Trip Type</small><strong id="vTrip">-</strong></div>
+          <div class="v-item"><small>Departure Date</small><strong id="vDepDate">-</strong></div>
+          <div class="v-item"><small>Return Date</small><strong id="vRetDate">-</strong></div>
+          <div class="v-item"><small>Departure Time</small><strong id="vDepTime">-</strong></div>
+          <div class="v-item"><small>Travel Class</small><strong id="vClass">-</strong></div>
+          <div class="v-item"><small>Distance</small><strong id="vDistance">-</strong></div>
+        </div>
+        <h4 style="margin:16px 0 10px;">👥 Passenger & Contact</h4>
+        <div class="v-detail-grid">
+          <div class="v-item"><small>Passengers</small><strong id="vPax">-</strong></div>
+          <div class="v-item"><small>Gender</small><strong id="vGender">-</strong></div>
+          <div class="v-item"><small>First Name</small><strong id="vFName">-</strong></div>
+          <div class="v-item"><small>Last Name</small><strong id="vLName">-</strong></div>
+          <div class="v-item"><small>Email</small><strong id="vEmail">-</strong></div>
+          <div class="v-item"><small>Phone</small><strong id="vPhone">-</strong></div>
+          <div class="v-item"><small>Meal</small><strong id="vMeal">-</strong></div>
+          <div class="v-item"><small>Seat</small><strong id="vSeat">-</strong></div>
+          <div class="v-item"><small>Baggage</small><strong id="vBaggage">-</strong></div>
+          <div class="v-item"><small>Address</small><strong id="vAddress">-</strong></div>
+        </div>
+        <h4 style="margin:16px 0 10px;">💰 Fare Breakup</h4>
+        <div class="fare-box">
+          <div class="fare-row"><span>Base Fare</span><span id="vBase">₹0</span></div>
+          <div class="fare-row"><span>Passenger-wise</span><span id="vPaxFare">₹0</span></div>
+          <div class="fare-row"><span>Class Charge</span><span id="vClassCharge">₹0</span></div>
+          <div class="fare-row"><span>Taxes</span><span id="vTaxes">₹0</span></div>
+          <div class="fare-row total"><span>Grand Total</span><span id="vGrand">₹0</span></div>
+        </div>
+        <div class="no-print" style="display:flex;gap:10px;margin-top:20px;">
+          <button onclick="window.print()"
+            style="flex:1;padding:12px;background:#004AAD;color:#fff;border:0;border-radius:10px;font-weight:700">🖨️
+            Print Proof</button>
+          <button onclick="newBooking()"
+            style="flex:1;padding:12px;background:#16a34a;color:#fff;border:0;border-radius:10px;font-weight:700">➕ New
+            Booking</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const MY_UPI = "9889576557@upi";
+    const airports = { delhi: { code: "DEL", lat: 28.5562, lon: 77.1 }, mumbai: { code: "BOM", lat: 19.0896, lon: 72.8656 }, bangalore: { code: "BLR", lat: 13.1986, lon: 77.7066 }, kolkata: { code: "CCU", lat: 22.6547, lon: 88.4467 }, chennai: { code: "MAA", lat: 12.9941, lon: 80.1709 }, hyderabad: { code: "HYD", lat: 17.2403, lon: 78.4294 }, lucknow: { code: "LKO", lat: 26.7606, lon: 80.8893 }, patna: { code: "PAT", lat: 25.5913, lon: 85.088 }, varanasi: { code: "VNS", lat: 25.4524, lon: 82.8593 }, jaipur: { code: "JAI", lat: 26.8242, lon: 75.8122 } };
+    function getAirportKey(v) { if (!v) return null; v = v.toLowerCase(); for (let k in airports) { if (v.includes(k)) return k; } return null; }
+    function haversine(lat1, lon1, lat2, lon2) { const R = 6371; const dLat = (lat2 - lat1) * Math.PI / 180; const dLon = (lon2 - lon1) * Math.PI / 180; const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2; return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); }
+    let currentFare = 0, currentDistance = 0, base = 0, paxFare = 0, classExtra = 0, tax = 0, payMethod = "UPI";
+    function calculateFare() {
+      let fromV = document.getElementById("fromCity").value; let toV = document.getElementById("toCity").value;
+      let classV = document.getElementById("travelClass").value;
+      let adults = parseInt(document.getElementById("adults").innerText) || 1; let children = parseInt(document.getElementById("children").innerText) || 0; let infants = parseInt(document.getElementById("infants").innerText) || 0;
+      let baggage = document.getElementById("baggage").value;
+      let fromK = getAirportKey(fromV); let toK = getAirportKey(toV);
+      if (!fromK || !toK || fromK === toK) { base = 0; paxFare = 0; classExtra = 0; tax = 0; currentFare = 0; currentDistance = 0; updateFareUI(); return; }
+      let d = haversine(airports[fromK].lat, airports[fromK].lon, airports[toK].lat, airports[toK].lon); currentDistance = Math.round(d);
+      base = Math.round(1200 + d * 4.5);
+      let paxMult = adults + (children * 0.75) + (infants * 0.10);
+      paxFare = Math.round(base * paxMult);
+      classExtra = 0; if (classV === "premium") classExtra = Math.round(base * 0.4); if (classV === "business") classExtra = Math.round(base * 1.2); if (classV === "first") classExtra = Math.round(base * 2);
+      let baggageExtra = 0; if (baggage.includes("20kg")) baggageExtra = 500; if (baggage.includes("25kg")) baggageExtra = 1000; if (baggage.includes("30kg")) baggageExtra = 1500;
+      classExtra += baggageExtra;
+      tax = Math.round((paxFare + classExtra) * 0.12);
+      currentFare = paxFare + classExtra + tax;
+      updateFareUI();
+    }
+    function updateFareUI() {
+      document.getElementById("distanceText").innerText = currentDistance + " km";
+      document.getElementById("baseFare").innerText = "₹" + base.toLocaleString("en-IN");
+      document.getElementById("paxFare").innerText = "₹" + paxFare.toLocaleString("en-IN");
+      document.getElementById("classCharge").innerText = "₹" + classExtra.toLocaleString("en-IN");
+      document.getElementById("taxes").innerText = "₹" + tax.toLocaleString("en-IN");
+      document.getElementById("grandTotal").innerText = "₹" + currentFare.toLocaleString("en-IN");
+      document.getElementById("modalTotal").innerText = "₹" + currentFare.toLocaleString("en-IN");
+      document.getElementById("upiAmount1").innerText = "₹" + currentFare.toLocaleString("en-IN");
+    }
+    function changePassenger(t, v) { let el = document.getElementById(t); let c = parseInt(el.innerText); let min = t === "adults" ? 1 : 0; c += v; if (c < min) c = min; el.innerText = c; calculateFare(); }
+    function swapCities() { let f = document.getElementById("fromCity"); let t = document.getElementById("toCity"); let tmp = f.value; f.value = t.value; t.value = tmp; calculateFare(); }
+    ["fromCity", "toCity", "travelClass", "baggage"].forEach(id => { document.getElementById(id).addEventListener("change", calculateFare); });
+    document.getElementById("flightBookingForm").addEventListener("submit", e => {
+      e.preventDefault();
+      if (!document.getElementById("fromCity").value || !document.getElementById("toCity").value) { alert("Select From & To"); return; }
+      if (currentFare <= 0) { alert("Select valid cities"); return; }
+      document.getElementById("paymentOverlay").classList.add("active");
+    });
+    function closePayment() { document.getElementById("paymentOverlay").classList.remove("active"); hideAll(); document.getElementById("paymentSelection").style.display = "block"; document.getElementById("qrResult").style.display = "none"; document.getElementById("genQrBtn").style.display = "block"; document.getElementById("progFill").style.width = "0%"; }
+    function hideAll() { ['paymentSelection', 'upiOptions', 'workProgressBox', 'processingBox', 'successScreen'].forEach(id => { let el = document.getElementById(id); if (el) el.style.display = "none"; }); }
+    function backToMethods() { hideAll(); document.getElementById("paymentSelection").style.display = "block"; }
+    function openUPIOptions() { payMethod = "UPI"; hideAll(); document.getElementById("upiOptions").style.display = "block"; }
+    function showWorkProgress(m) { payMethod = m; hideAll(); document.getElementById("workProgressBox").style.display = "block"; document.getElementById("workMethodName").innerText = m; document.getElementById("workMsg").innerText = m + " payment is currently under maintenance due to security update."; }
+    function generateQR() { if (currentFare <= 0) { alert("Invalid fare"); return; } let link = `upi://pay?pa=${MY_UPI}&am=${currentFare}&cu=INR&tn=Flight Booking`; document.getElementById("qrImg").src = "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=" + encodeURIComponent(link); document.getElementById("qrResult").style.display = "block"; document.getElementById("genQrBtn").style.display = "none"; }
+    function verifyUpi() { let u = document.getElementById("userUpi").value.trim(); if (!u.includes("@")) { alert("Enter valid UPI ID"); return; } payMethod = "UPI ID: " + u; startProgress(); }
+    function confirmQrPayment() { payMethod = "UPI QR Code"; startProgress(); }
+    function startProgress() { hideAll(); document.getElementById("processingBox").style.display = "block"; let s = 0; let iv = setInterval(() => { s++; document.getElementById("progFill").style.width = (s * 33) + "%"; if (s == 3) { clearInterval(iv); setTimeout(showSuccess, 800); } }, 1000); }
+    function showSuccess() {
+      hideAll(); document.getElementById("successScreen").style.display = "block";
+      let bid = "TE-FLT-" + Math.floor(100000 + Math.random() * 900000);
+      document.getElementById("bookingId").innerText = bid;
+      fillVoucher(bid);
+    }
+    function fillVoucher(bid) {
+      document.getElementById("vBookingIdTop").innerText = "Booking ID: " + bid;
+      document.getElementById("vTotal").innerText = "₹" + currentFare.toLocaleString("en-IN");
+      document.getElementById("vPaymentMethod").innerText = payMethod;
+      document.getElementById("vDate").innerText = new Date().toLocaleString();
+      document.getElementById("vRoute").innerText = document.getElementById("fromCity").value + " → " + document.getElementById("toCity").value;
+      document.getElementById("vTrip").innerText = document.querySelector('input[name="trip"]:checked').value;
+      document.getElementById("vDepDate").innerText = document.getElementById("departureDate").value || "-";
+      document.getElementById("vRetDate").innerText = document.getElementById("returnDate").value || "One Way";
+      document.getElementById("vDepTime").innerText = document.getElementById("departureTime").value || "-";
+      document.getElementById("vClass").innerText = document.getElementById("travelClass").value || "-";
+      document.getElementById("vDistance").innerText = currentDistance + " km";
+      document.getElementById("vPax").innerText = document.getElementById("adults").innerText + " Adult, " + document.getElementById("children").innerText + " Child, " + document.getElementById("infants").innerText + " Infant";
+      document.getElementById("vGender").innerText = document.getElementById("gender").value || "-";
+      document.getElementById("vFName").innerText = document.getElementById("firstName").value || "-";
+      document.getElementById("vLName").innerText = document.getElementById("lastName").value || "-";
+      document.getElementById("vEmail").innerText = document.getElementById("email").value || "-";
+      document.getElementById("vPhone").innerText = document.getElementById("phone").value || "-";
+      document.getElementById("vMeal").innerText = document.getElementById("meal").value || "-";
+      document.getElementById("vSeat").innerText = document.getElementById("seat").value || "-";
+      document.getElementById("vBaggage").innerText = document.getElementById("baggage").value || "-";
+      document.getElementById("vAddress").innerText = document.getElementById("address").value || "-";
+      document.getElementById("vBase").innerText = "₹" + base.toLocaleString("en-IN");
+      document.getElementById("vPaxFare").innerText = "₹" + paxFare.toLocaleString("en-IN");
+      document.getElementById("vClassCharge").innerText = "₹" + classExtra.toLocaleString("en-IN");
+      document.getElementById("vTaxes").innerText = "₹" + tax.toLocaleString("en-IN");
+      document.getElementById("vGrand").innerText = "₹" + currentFare.toLocaleString("en-IN");
+    }
+    function openVoucher() { document.getElementById("voucherOverlay").classList.add("active"); }
+    function closeVoucher() { document.getElementById("voucherOverlay").classList.remove("active"); }
+    function newBooking() { location.reload(); }
+    calculateFare();
+  </script>
+</body>
+
+</html>
+{% endblock %}
