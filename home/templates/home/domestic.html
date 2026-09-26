@@ -10,12 +10,11 @@
   {% load static %}
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    /* ========== COMMON CSS - COLOR SAME AS HOME ========== */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Montserrat', sans-serif
+      font-family: 'Poppins', sans-serif
     }
 
     body {
@@ -23,9 +22,8 @@
       overflow-x: hidden
     }
 
-    /* ========== HERO SECTION CSS ========== */
     .hero {
-      padding: 60px 20px 20px;
+      padding: 60px 0 20px;
       text-align: center;
       background: #f4f6fb
     }
@@ -46,7 +44,7 @@
     .hero p {
       font-size: 15px !important;
       color: #666 !important;
-      line-height: 1.7 !important;
+      line-height: 1.7;
       max-width: 800px;
       margin: 0 auto;
       font-weight: 600 !important
@@ -61,7 +59,10 @@
       line-height: 1.7 !important
     }
 
-    /* ========== PACKAGE CARD CSS ========== */
+    .hero p.line2 {
+      margin-top: 5px
+    }
+
     .container {
       width: 95%;
       max-width: 1400px;
@@ -81,8 +82,8 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, .08);
       display: flex;
       flex-direction: column;
-      height: 750px;
-      min-height: 750px;
+      height: 700px;
+      min-height: 700px;
       position: relative;
       transition: height 0.35s ease, transform .45s ease, box-shadow .45s ease
     }
@@ -150,11 +151,11 @@
     }
 
     .card-content h3 {
-      font-size: 20px !important;
+      font-size: 25px;
       font-weight: 700;
       line-height: 1.3;
       min-height: 65px;
-      color: #0d47a1 !important
+      color: #0d47a1
     }
 
     .days {
@@ -172,7 +173,7 @@
     }
 
     .price {
-      font-size: 26px !important;
+      font-size: 32px;
       font-weight: 800;
       color: #ff5722;
       margin-bottom: 18px
@@ -246,7 +247,10 @@
       background: linear-gradient(135deg, #ff9800, #ff5722);
       text-decoration: none;
       text-align: center;
-      display: inline-block;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 6px !important;
       white-space: nowrap !important;
       min-width: 0 !important;
       line-height: 1 !important;
@@ -263,7 +267,6 @@
       display: block
     }
 
-    /* ========== PACKAGE PAGINATION ========== */
     .package-navigation {
       width: 95%;
       max-width: 1400px;
@@ -290,16 +293,21 @@
       transition: .3s
     }
 
+    .package-navigation button:hover,
     .package-navigation button.active {
       background: linear-gradient(135deg, #ff9800, #ff5722);
       color: #fff;
-      transform: scale(1.08)
+      transform: translateY(-3px)
     }
 
-    /* ========== WHY CHOOSE US ========== */
+    .package-navigation button:disabled {
+      opacity: .35;
+      cursor: not-allowed
+    }
+
     .why-choose-section {
       background: #f4f6fb;
-      padding: 20px 20px 30px;
+      padding: 60px 20px 40px;
       text-align: center
     }
 
@@ -307,7 +315,8 @@
       margin-bottom: 10px;
       font-size: 52px;
       font-weight: 800;
-      color: #0d47a1
+      color: #0d47a1;
+      line-height: 1.2
     }
 
     .why-heading span {
@@ -318,33 +327,34 @@
 
     .why-subheading {
       max-width: 750px;
-      margin: 0 auto 35px;
-      font-size: 15px !important;
-      color: #666 !important;
-      font-weight: 600
+      margin: 0 auto 40px;
+      font-size: 15px;
+      color: #666;
+      font-weight: 600;
+      line-height: 1.7
     }
 
     .why-container {
       max-width: 1200px;
-      margin: auto;
+      margin: 0 auto;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 25px
     }
 
     .why-card {
-      background: white;
+      background: #fff;
       padding: 30px 20px;
       border-radius: 18px;
       text-align: center;
       box-shadow: 0 10px 35px rgba(13, 110, 253, .06);
-      border: 1px solid white;
+      border: 1px solid #fff;
       transition: .4s
     }
 
     .why-card:hover {
       transform: translateY(-8px);
-      box-shadow: 0 10px 40px rgba(0, 0, 0, .2)
+      box-shadow: 0 10px 40px rgba(0, 0, 0, .15)
     }
 
     .why-icon {
@@ -361,13 +371,12 @@
     }
 
     .why-card p {
-      font-size: 15px !important;
-      color: #666 !important;
+      font-size: 15px;
+      color: #666;
       line-height: 1.6;
       font-weight: 600
     }
 
-    /* ===== REVIEW SECTION ===== */
     .review-section {
       background: #f4f6fb;
       padding: 50px 20px;
@@ -389,7 +398,8 @@
     .review-section .main-heading .orange-grad {
       background: linear-gradient(135deg, #ff9800, #ff5722);
       -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent
+      -webkit-text-fill-color: transparent;
+      background-clip: text
     }
 
     .review-section .sub-heading {
@@ -478,7 +488,6 @@
       text-align: center
     }
 
-    /* ========== FAQ SECTION - COLOR FIXED ========== */
     .faq-section {
       width: 100%;
       padding: 50px 8%;
@@ -492,14 +501,14 @@
 
     .faq-header {
       text-align: center;
-      margin-bottom: 35px
+      margin-bottom: 60px
     }
 
     .faq-header h2 {
       font-size: 52px;
       font-weight: 800;
       color: #0d47a1;
-      margin-bottom: 10px;
+      margin-bottom: 20px;
       line-height: 1.2
     }
 
@@ -520,7 +529,7 @@
     .faq-wrapper {
       display: flex;
       flex-direction: column;
-      gap: 15px
+      gap: 18px
     }
 
     .faq-item {
@@ -533,68 +542,80 @@
 
     .faq-question {
       width: 100%;
-      padding: 18px 20px;
-      background: #fff;
+      padding: 22px 25px;
+      background: white;
       border: 1px solid #e0e6f0;
       border-radius: 14px;
       color: #0d47a1;
-      font-weight: 700;
+      font-size: 16px;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
       display: flex;
       justify-content: space-between;
-      cursor: pointer;
-      font-size: 16px;
-      text-align: left
+      align-items: center;
+      transition: .3s ease
+    }
+
+    .faq-question:hover {
+      transform: translateY(-2px)
     }
 
     .faq-icon {
-      width: 28px;
-      height: 28px;
-      background: #f4f6fb;
+      width: 32px;
+      height: 32px;
+      background: #f9f6f6;
+      color: #0d47a1;
+      font-size: 20px;
+      font-weight: 400;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: .3s;
-      font-weight: 700;
-      flex-shrink: 0;
-      color: #0d47a1
+      transition: .4s ease;
+      min-width: 32px
     }
 
     .faq-item.active .faq-icon {
       transform: rotate(45deg);
       background: linear-gradient(135deg, #ff9800, #ff5722);
-      color: #fff
+      color: white
     }
 
     .faq-answer {
       max-height: 0;
       overflow: hidden;
-      transition: .3s;
-      background: #fff;
+      transition: max-height .4s ease, padding .4s ease;
+      background: white;
       border: 1px solid #e0e6f0;
       border-top: none;
-      border-radius: 0 0 14px 14px;
+      border-radius: 14px 14px;
       margin-top: -1px
     }
 
     .faq-item.active .faq-answer {
       max-height: 300px;
-      padding: 0 20px 20px
+      padding: 0 25px 22px 25px
     }
 
     .faq-answer p {
       font-size: 15px !important;
       color: #666 !important;
-      line-height: 1.7;
+      line-height: 1.8;
       border-top: 1px solid #f0f2f7;
-      padding-top: 15px;
+      padding-top: 18px;
       margin: 0;
       font-weight: 600
     }
 
-    /* ========== RESPONSIVE ========== */
     @media(max-width:1200px) {
       .why-container {
+        grid-template-columns: repeat(2, 1fr)
+      }
+    }
+
+    @media(max-width:992px) {
+      .container {
         grid-template-columns: repeat(2, 1fr)
       }
     }
@@ -605,16 +626,16 @@
       }
 
       .review-section .main-heading {
-        font-size: 34px
+        font-size: 34px !important
       }
 
       .faq-header h2 {
-        font-size: 34px
+        font-size: 34px !important
       }
     }
 
-    @media(max-width:992px) {
-      .container {
+    @media(max-width:900px) {
+      .reviews-grid {
         grid-template-columns: repeat(2, 1fr)
       }
     }
@@ -630,7 +651,7 @@
       }
 
       .review-section .main-heading {
-        font-size: 28px
+        font-size: 28px !important
       }
 
       .review-card {
@@ -639,7 +660,7 @@
       }
 
       .faq-section {
-        padding: 50px 5%
+        padding: 70px 5%
       }
     }
 
@@ -657,43 +678,53 @@
       }
 
       .hero h1 {
-        font-size: 32px
+        font-size: 32px !important
       }
 
-      /* WHY CHOOSE 1 CARD IN MOBILE */
       .why-container {
-        grid-template-columns: 1fr !important;
-        justify-items: center !important;
+        grid-template-columns: 1fr;
+        justify-items: center
       }
 
       .why-card {
-        width: 92% !important;
-        max-width: 360px !important;
+        width: 92%;
+        max-width: 360px
       }
 
-      /* FONT SAME IN MOBILE */
-      .why-subheading,
-      .why-card p,
-      .why-card h3,
-      .review-content .text,
-      .faq-answer p,
-      .sub-heading,
-      .faq-header .desc {
-        font-size: 15px !important;
-        font-weight: 600 !important;
+      .why-heading {
+        font-size: 32px !important
+      }
+
+      .package-navigation {
+        gap: 8px
+      }
+
+      .package-navigation button {
+        padding: 9px 14px;
+        font-size: 12px;
+        min-width: 38px
+      }
+
+      .reviews-grid {
+        grid-template-columns: 1fr
       }
     }
 
     @media(max-width:380px) {
+      .package-navigation {
+        gap: 6px
+      }
+
+      .package-navigation button {
+        padding: 8px 12px;
+        font-size: 11px;
+        min-width: 34px
+      }
 
       .btn,
       .btn-book {
         font-size: 11px !important;
         padding: 11px 6px !important;
-      }
-
-      .btn-group {
-        gap: 8px !important;
       }
     }
   </style>

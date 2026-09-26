@@ -9,6 +9,7 @@
   <title>TravelEase - International Packages</title>
   {% load static %}
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
   <style>
     * {
       margin: 0;
@@ -248,7 +249,12 @@
       background: linear-gradient(135deg, #ff9800, #ff5722);
       text-decoration: none;
       text-align: center;
-      display: inline-block
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      white-space: nowrap;
+      line-height: 1.2;
     }
 
     .btn:hover,
@@ -3659,7 +3665,6 @@
       return true;
     }
 
-    /* 15 - 15 - 15 Number Pagination */
     document.addEventListener('DOMContentLoaded', function () {
       const allCards = document.querySelectorAll('.container .card');
       const paginationBox = document.getElementById('packagePagination');
@@ -3668,7 +3673,7 @@
       const perPage = 15;
       let currentPageNum = 1;
 
-      function showPageNum(page) {
+      function showPageNum(page, scrollTop = true) {
         currentPageNum = page;
         let start = (page - 1) * perPage;
         let end = start + perPage;
@@ -3676,7 +3681,9 @@
           card.style.display = (idx >= start && idx < end) ? "flex" : "none";
         });
         renderPageNumbers();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        if (scrollTop) {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
       }
 
       function renderPageNumbers() {
@@ -3689,7 +3696,6 @@
         prev.onclick = () => { if (currentPageNum > 1) showPageNum(currentPageNum - 1); };
         paginationBox.appendChild(prev);
 
-        // CHANGE YAHI HAI - Mobile pe 3, Desktop pe 7
         let maxVisible = window.innerWidth < 600 ? 3 : totalPages;
         let startPage = Math.max(1, currentPageNum - 1);
         if (currentPageNum === totalPages) {
@@ -3713,11 +3719,17 @@
         paginationBox.appendChild(next);
       }
 
-      showPageNum(1);
-      window.addEventListener('resize', () => showPageNum(1));
+      showPageNum(1, false);
+
+      let resizeTimer;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          renderPageNumbers();
+        }, 200);
+      });
     });
 
-    /*==============FQ=============*/
     const faqItems = document.querySelectorAll('.faq-item');
     faqItems.forEach(item => {
       const question = item.querySelector('.faq-question');
